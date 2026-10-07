@@ -9,6 +9,7 @@
 #define GL_CLAMP_TO_EDGE 0x812F   // Windows' gl.h is OpenGL 1.1 and lacks this
 #endif
 
+vector<unsigned char> tilesetPixels;
 GLuint tilesetTex = 0;
 int texW = 0;
 int texH = 0;
@@ -49,11 +50,13 @@ bool loadTileset()
 
 	if (!tilesetTex) { glGenTextures(1, &tilesetTex); }
 	glBindTexture(GL_TEXTURE_2D, tilesetTex);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);   // crisp pixels
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+
+	tilesetPixels.assign(pixels, pixels + (size_t)w * h * 4);
 
 	stbi_image_free(pixels);
 	return true;
