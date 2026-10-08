@@ -9,3 +9,4 @@ extern int ground[MAP_TILES_X * MAP_TILES_Y];
 extern int ceiling[MAP_TILES_X * MAP_TILES_Y];
 
 void GenerateMap();
+void ResetMap();

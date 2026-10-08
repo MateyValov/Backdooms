@@ -1,5 +1,6 @@
 C:\Users\matey\Documents\University\CG\Backdooms\Backdooms.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Backdooms.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Engine\Controller.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Controller.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Engine\ImageLoader.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\ImageLoader.obj
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Engine\Map.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Map.obj
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Engine\Renderer.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Renderer.obj
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Objects\Map.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Map.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Objects\Player.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Player.obj

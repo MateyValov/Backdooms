@@ -2,7 +2,11 @@
 
 #include <iostream>
 
-int walls[] =
+int walls[MAP_TILES_X * MAP_TILES_Y];
+int ground[MAP_TILES_X * MAP_TILES_Y];
+int ceiling[MAP_TILES_X * MAP_TILES_Y];
+
+static const int WALLS_BASE[] =
 {
 	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 	1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,
@@ -27,7 +31,7 @@ int walls[] =
 	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 };
 
-int ground[] =
+static const int GROUND_BASE[] =
 {
 	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 	0,3,3,3,0,3,3,3,0,3,3,3,0,3,3,3,0,3,3,3,0,
@@ -52,7 +56,7 @@ int ground[] =
 	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 };
 
-int ceiling[] =
+static const int CEILING_BASE[] =
 {
 	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 	0,4,4,4,0,4,4,4,0,4,4,4,0,4,4,4,0,4,4,4,0,
@@ -79,5 +83,12 @@ int ceiling[] =
 
 void GenerateMap()
 {
-	printf("generating");
+	ResetMap();
+}
+
+void ResetMap()
+{
+	memcpy(walls, WALLS_BASE, sizeof(WALLS_BASE));
+	memcpy(ground, GROUND_BASE, sizeof(GROUND_BASE));
+	memcpy(ceiling, CEILING_BASE, sizeof(CEILING_BASE));
 }
