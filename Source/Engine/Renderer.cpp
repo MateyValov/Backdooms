@@ -10,38 +10,28 @@
 #include "../Objects/Player.h"
 #include "../Objects/Map.h"
 
-unsigned char floorBuf[VIEW_W * VIEW_H * 4];
-GLuint floorBufTex = 0;
 
-Image gui;
-Image overlay;
-Image healthBar;
-Image ammoBar;
-Image PlayerIcon;
-
-float dist(float ax, float ay, float bx, float by, float ang)
+bool Renderer::loadTextures()
 {
-	return (sqrt((bx - ax) * (bx - ax) + (by - ay) * (by - ay)));
+	imageLoader = new ImageLoader;
+
+	if (!imageLoader->loadTileset()) { return 1; }
+
+	if (!imageLoader->loadImage("Textures/UI.bmp", gui)) { return 1; }
+	if (!imageLoader->loadImage("Textures/BarOverlay.png", overlay)) { return 1; }
+	if (!imageLoader->loadImage("Textures/Bar.bmp", healthBar)) { return 1; }
+	if (!imageLoader->loadImage("Textures/Bar.bmp", ammoBar)) { return 1; }
+	if (!imageLoader->loadImage("Textures/Player.png", PlayerIcon)) { return 1; }
+
+	return 0;
 }
 
-float degToRad(float a)
-{
-	return a * PI / 180;
-}
-
-float FixAng(float a)
-{
-	if (a >= 360) { a -= 360; }
-	if (a < 0) { a += 360; }
-	return a;
-}
-
-void drawWalls()
+void Renderer::drawWalls(MapArray walls, Transform viewpoint)
 {
 	int mx, my, mp, dof;
 	float rx = 0, ry = 0, xo = 0, yo = 0;
 
-	float ra = FixAng(PLAYER_ANGLE + FOV_DEGREES / 2.0f - RAY_STEP / 2);
+	float ra = FixAng(viewpoint.angle + FOV_DEGREES / 2.0f - RAY_STEP / 2);
 
 	for (int r = 0; r < RAY_COUNT; r++)
 	{
@@ -49,58 +39,58 @@ void drawWalls()
 
 		// ---- vertical grid lines ----
 		dof = 0;
-		float disV = 1000000, vx = PLAYER_X, vy = PLAYER_Y;
+		float disV = 1000000, vx = viewpoint.position.x, vy = viewpoint.position.y;
 		int vTile = 0;
 		float Tan = tan(raRad);
 		if (cos(raRad) > 0.001)        // looking right
 		{
-			rx = (((int)PLAYER_X >> 6) << 6) + TILE_SIZE;
-			ry = (PLAYER_X - rx) * Tan + PLAYER_Y;
+			rx = (((int)viewpoint.position.x >> 6) << 6) + TILE_SIZE;
+			ry = (viewpoint.position.x - rx) * Tan + viewpoint.position.y;
 			xo = TILE_SIZE;  yo = -xo * Tan;
 		}
 		else if (cos(raRad) < -0.001)  // looking left
 		{
-			rx = (((int)PLAYER_X >> 6) << 6) - 0.0001;
-			ry = (PLAYER_X - rx) * Tan + PLAYER_Y;
+			rx = (((int)viewpoint.position.x >> 6) << 6) - 0.0001;
+			ry = (viewpoint.position.x - rx) * Tan + viewpoint.position.y;
 			xo = -TILE_SIZE; yo = -xo * Tan;
 		}
-		else { rx = PLAYER_X; ry = PLAYER_Y; dof = MAX_RAY_STEPS; }   // straight up/down
+		else { rx = viewpoint.position.x; ry = viewpoint.position.y; dof = MAX_RAY_STEPS; }   // straight up/down
 
 		while (dof < MAX_RAY_STEPS)
 		{
 			mx = (int)rx >> 6; my = (int)ry >> 6; mp = my * MAP_TILES_X + mx;
 			if (mx >= 0 && mx < MAP_TILES_X && my >= 0 && my < MAP_TILES_Y && walls[mp] > 0)
 			{
-				vx = rx; vy = ry; vTile = walls[mp]; disV = dist(PLAYER_X, PLAYER_Y, vx, vy, ra); dof = MAX_RAY_STEPS;
+				vx = rx; vy = ry; vTile = walls[mp]; disV = dist(viewpoint.position.x, viewpoint.position.y, vx, vy, ra); dof = MAX_RAY_STEPS;
 			}
 			else { rx += xo; ry += yo; dof++; }
 		}
 
 		// ---- horizontal grid lines ----
 		dof = 0;
-		float disH = 1000000, hx = PLAYER_X, hy = PLAYER_Y;
+		float disH = 1000000, hx = viewpoint.position.x, hy = viewpoint.position.y;
 		int hTile = 0;
 		Tan = 1.0 / Tan;
 		if (sin(raRad) > 0.001)        // looking up
 		{
-			ry = (((int)PLAYER_Y >> 6) << 6) - 0.0001;
-			rx = (PLAYER_Y - ry) * Tan + PLAYER_X;
+			ry = (((int)viewpoint.position.y >> 6) << 6) - 0.0001;
+			rx = (viewpoint.position.y - ry) * Tan + viewpoint.position.x;
 			yo = -TILE_SIZE; xo = -yo * Tan;
 		}
 		else if (sin(raRad) < -0.001)  // looking down
 		{
-			ry = (((int)PLAYER_Y >> 6) << 6) + TILE_SIZE;
-			rx = (PLAYER_Y - ry) * Tan + PLAYER_X;
+			ry = (((int)viewpoint.position.y >> 6) << 6) + TILE_SIZE;
+			rx = (viewpoint.position.y - ry) * Tan + viewpoint.position.x;
 			yo = TILE_SIZE;  xo = -yo * Tan;
 		}
-		else { rx = PLAYER_X; ry = PLAYER_Y; dof = MAX_RAY_STEPS; }   // straight left/right
+		else { rx = viewpoint.position.x; ry = viewpoint.position.y; dof = MAX_RAY_STEPS; }   // straight left/right
 
 		while (dof < MAX_RAY_STEPS)
 		{
 			mx = (int)rx >> 6; my = (int)ry >> 6; mp = my * MAP_TILES_X + mx;
 			if (mx >= 0 && mx < MAP_TILES_X && my >= 0 && my < MAP_TILES_Y && walls[mp] > 0)
 			{
-				hx = rx; hy = ry; hTile = walls[mp]; disH = dist(PLAYER_X, PLAYER_Y, hx, hy, ra); dof = MAX_RAY_STEPS;
+				hx = rx; hy = ry; hTile = walls[mp]; disH = dist(viewpoint.position.x, viewpoint.position.y, hx, hy, ra); dof = MAX_RAY_STEPS;
 			}
 			else { rx += xo; ry += yo; dof++; }
 		}
@@ -124,7 +114,7 @@ void drawWalls()
 		}
 
 		// ---- fisheye correction ----
-		float ca = FixAng(PLAYER_ANGLE - ra);
+		float ca = FixAng(viewpoint.angle - ra);
 		disT = disT * cos(degToRad(ca));
 
 		// ---- textured wall column ----
@@ -156,7 +146,7 @@ void drawWalls()
 	}
 }
 
-static void sampleTile(unsigned char* out, int tile, float u, float v, const unsigned char* fallback)
+void Renderer::sampleTile(unsigned char* out, int tile, float u, float v, const unsigned char* fallback)
 {
 	if (tile > 0 && !tilesetPixels.empty())
 	{
@@ -173,17 +163,26 @@ static void sampleTile(unsigned char* out, int tile, float u, float v, const uns
 	}
 }
 
-void buildFloorAndCeiling()
+void Renderer::initFloorBuffer()
+{
+	glGenTextures(1, &floorBufTex);
+	glBindTexture(GL_TEXTURE_2D, floorBufTex);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, VIEW_W, VIEW_H, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+}
+
+void Renderer::drawFloorAndRoof(MapArray floor, MapArray roof, Transform viewpoint)
 {
 	static const unsigned char FLOOR_COLOUR[3] = { 40, 40, 40 };
-	static const unsigned char CEILING_COLOUR[3] = { 60, 60, 75 };
+	static const unsigned char ROOF_COLOUR[3] = { 60, 60, 75 };
 
 	// Ray direction for every pixel column, worked out once per frame.
 	static float rdx[VIEW_W], rdy[VIEW_W], invCos[VIEW_W];
 	for (int x = 0; x < VIEW_W; x++)
 	{
 		float theta = FOV_DEGREES / 2.0f - (x + 0.5f) * ((float)FOV_DEGREES / VIEW_W);   // degrees off the view direction, positive = left
-		float a = degToRad(PLAYER_ANGLE + theta);
+		float a = degToRad(viewpoint.angle + theta);
 		rdx[x] = cos(a);
 		rdy[x] = -sin(a);
 		invCos[x] = 1.0f / cos(degToRad(theta));
@@ -198,8 +197,8 @@ void buildFloorAndCeiling()
 		for (int x = 0; x < VIEW_W; x++)
 		{
 			float t = perp * invCos[x];               // distance along this column's ray
-			float wx = PLAYER_X + rdx[x] * t;
-			float wy = PLAYER_Y + rdy[x] * t;
+			float wx = viewpoint.position.x + rdx[x] * t;
+			float wy = viewpoint.position.y + rdy[x] * t;
 			int cellX = (int)floorf(wx / TILE_SIZE);
 			int cellY = (int)floorf(wy / TILE_SIZE);
 
@@ -210,30 +209,16 @@ void buildFloorAndCeiling()
 			{
 				float u = wx / TILE_SIZE - cellX;
 				float v = wy / TILE_SIZE - cellY;
-				sampleTile(fp, ground[cellY * MAP_TILES_X + cellX], u, v, FLOOR_COLOUR);
-				sampleTile(cp, ceiling[cellY * MAP_TILES_X + cellX], u, v, CEILING_COLOUR);
+				sampleTile(fp, floor[cellY * MAP_TILES_X + cellX], u, v, FLOOR_COLOUR);
+				sampleTile(cp, roof[cellY * MAP_TILES_X + cellX], u, v, ROOF_COLOUR);
 			}
 			else
 			{
 				sampleTile(fp, 0, 0, 0, FLOOR_COLOUR);
-				sampleTile(cp, 0, 0, 0, CEILING_COLOUR);
+				sampleTile(cp, 0, 0, 0, ROOF_COLOUR);
 			}
 		}
 	}
-}
-
-void initFloorBuffer()
-{
-	glGenTextures(1, &floorBufTex);
-	glBindTexture(GL_TEXTURE_2D, floorBufTex);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, VIEW_W, VIEW_H, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-}
-
-void drawFloorAndCeiling()
-{
-	buildFloorAndCeiling();
 
 	glBindTexture(GL_TEXTURE_2D, floorBufTex);
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, VIEW_W, VIEW_H, GL_RGBA, GL_UNSIGNED_BYTE, floorBuf);
@@ -247,4 +232,21 @@ void drawFloorAndCeiling()
 	glTexCoord2f(0, 1); glVertex2f(0, VIEW_H);
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
+}
+
+void Renderer::DrawMap(Map* map, Transform viewpoint)
+{
+	drawFloorAndRoof(map->GetFloor(), map->GetRoof(), viewpoint);
+	drawWalls(map->GetWalls(), viewpoint);
+}
+
+void Renderer::drawUI()
+{
+	imageLoader->drawImage(gui, Vector2(0, VIEW_H));
+
+	imageLoader->drawImage(healthBar, Vector2(PROGRESS_BAR_OFFSET_V, VIEW_H + HEALTH_BAR_OFFSET_H), 0, 0, Color::Red());
+	imageLoader->drawImage(ammoBar, Vector2(PROGRESS_BAR_OFFSET_V, VIEW_H + AMMO_BAR_OFFSET_H), 0, 0, Color::Green());
+
+	imageLoader->drawImage(overlay, Vector2(0, VIEW_H));
+	imageLoader->drawImage(PlayerIcon, Vector2(PLAYER_ICON_OFFSET_H, VIEW_H + PLAYER_ICON_OFFSET_V));
 }

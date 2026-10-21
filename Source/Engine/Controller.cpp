@@ -21,4 +21,5 @@ void updateKeys()
 	Keys.a = physicalKeyDown(SC_A);
 	Keys.s = physicalKeyDown(SC_S);
 	Keys.d = physicalKeyDown(SC_D);
+	Keys.esc = physicalKeyDown(VK_ESCAPE);
 }

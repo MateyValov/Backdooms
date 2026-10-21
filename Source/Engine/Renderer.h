@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ImageLoader.h"
+#include "../Objects/Map.h"
 
 #define PI 3.141593
 
@@ -27,31 +28,30 @@
 #define PLAYER_ICON_OFFSET_V 8
 #define PLAYER_ICON_OFFSET_H 264
 
-extern unsigned char floorBuf[VIEW_W * VIEW_H * 4];
-extern GLuint floorBufTex;
 
-extern Image gui;
-extern Image overlay;
-extern Image healthBar;
-extern Image ammoBar;
-extern Image PlayerIcon;
+class Renderer
+{
+private:
+	ImageLoader* imageLoader;
 
-float dist(float ax, float ay, float bx, float by, float ang);
+	Image gui;
+	Image overlay;
+	Image healthBar;
+	Image ammoBar;
+	Image PlayerIcon;
 
-float degToRad(float a);
+	unsigned char floorBuf[VIEW_W * VIEW_H * 4];
+	GLuint floorBufTex;
 
-float FixAng(float a);
+	void drawWalls(MapArray walls, Transform viewpoint);
+	void drawFloorAndRoof(MapArray floor, MapArray roof, Transform viewpoint);
 
-void drawPlayer();
+public:
+	bool loadTextures();
 
-void drawMap();
+	void DrawMap(Map* map, Transform viewpoint);
+	void drawUI();
 
-void drawWalls();
-
-void sampleTile(unsigned char* out, int tile, float u, float v, const unsigned char* fallback);
-
-void buildFloorAndCeiling();
-
-void initFloorBuffer();
-
-void drawFloorAndCeiling();
+	void sampleTile(unsigned char* out, int tile, float u, float v, const unsigned char* fallback);
+	void initFloorBuffer();
+};

@@ -1,15 +1,26 @@
 #include "Player.h"
+#include "../Engine/Engine.h"
 
-float PLAYER_X;
-float PLAYER_Y;
-float PLAYER_DELTA_X = 0.f;
-float PLAYER_DELTA_Y = 0.f;
-float PLAYER_ANGLE = 0.f;
+#include <math.h>
 
-Player::Player()
+Player::Player() : MovableObject()
 {
 	health = PLAYER_MAX_HEALTH;
 	ammo = PLAYER_MAX_AMMO;
+}
+
+Player::Player(float radius, int movementSpeed, int turnSpeed) : MovableObject(radius, movementSpeed, turnSpeed)
+{
+	health = PLAYER_MAX_HEALTH;
+	ammo = PLAYER_MAX_AMMO;
+}
+
+void Player::Start()
+{
+}
+
+void Player::Update()
+{
 }
 
 int Player::GetHealth()

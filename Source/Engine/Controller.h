@@ -8,7 +8,7 @@
 
 typedef struct
 {
-	int w, a, s, d;
+	int w, a, s, d, esc;
 }ButtonKeys;
 
 typedef struct
@@ -20,5 +20,9 @@ typedef struct
 extern ButtonKeys Keys;
 
 static bool physicalKeyDown(int scancode);
-static bool vkDown(int vk);
 void updateKeys();
+
+class Controller
+{
+
+};

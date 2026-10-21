@@ -1,18 +1,12 @@
 #pragma once
 
+#include "MovableObject.h"
+#include "../Utility/UtilityStructs.h"
+
 #define PLAYER_MAX_HEALTH 8
 #define PLAYER_MAX_AMMO 8
 
-#define PLAYER_SPEED 200   
-#define TURN_SPEED 150 
-
-extern float PLAYER_X;
-extern float PLAYER_Y;
-extern float PLAYER_DELTA_X;
-extern float PLAYER_DELTA_Y;
-extern float PLAYER_ANGLE;
-
-class Player
+class Player : public MovableObject
 {
 private:
 	int health;
@@ -20,6 +14,10 @@ private:
 
 public:
 	Player();
+	Player(float radius, int movementSpeed, int turnSpeed);
+
+	virtual void Start() override;
+	virtual void Update() override;
 
 	int GetHealth();
 	int GetAmmo();
