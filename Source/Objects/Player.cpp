@@ -1,7 +1,6 @@
 #include "Player.h"
-#include "../Engine/Engine.h"
 
-#include <math.h>
+#include "../Structs/MathFuncs.h"
 
 Player::Player() : MovableObject()
 {
@@ -31,4 +30,14 @@ int Player::GetHealth()
 int Player::GetAmmo()
 {
 	return ammo;
+}
+
+void Player::AddHealth(int Amount)
+{
+	health = clamp(health + Amount, 0, PLAYER_MAX_HEALTH);
+}
+
+void Player::AddAmmo(int Amount)
+{
+	ammo = clamp(ammo + Amount, 0, PLAYER_MAX_AMMO);
 }

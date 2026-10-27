@@ -2,6 +2,8 @@
 
 #include "Object.h"
 
+#include "../Structs/Transform.h"
+
 class MovableObject : public Object
 {
 private:

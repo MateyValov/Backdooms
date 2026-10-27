@@ -1,11 +1,13 @@
 #include "Object.h"
 
-#include <math.h>
-
+#include "../Structs/MathFuncs.h"
+#include "../Engine/Engine.h"
+#include "Map.h";
 
 Object::Object()
 {
 	radius = 20.f;
+	hasCollision = false;
 }
 
 Object::Object(float radius)
@@ -13,7 +15,7 @@ Object::Object(float radius)
 	this->radius = radius;
 }
 
-Transform Object::GetTransform() const
+Transform Object::GetTransform()
 {
 	return transform;
 }
@@ -21,6 +23,11 @@ Transform Object::GetTransform() const
 float Object::GetRadius() const
 {
 	return radius;
+}
+
+bool Object::HasCollision() const
+{
+	return hasCollision;
 }
 
 void Object::SetTransform(Transform newTrasform)
@@ -32,9 +39,10 @@ void Object::SetTransform(Transform newTrasform)
 void Object::SetPosition(Vector2 newPosition)
 {
 	transform.position = newPosition;
+	Engine::GetMap()->AcknowledgePosition(this);
 }
 
 void Object::SetAngle(float newAngle)
 {
-	transform.angle = FixAng(newAngle);
+	transform.angle = clampAngle(newAngle);
 }

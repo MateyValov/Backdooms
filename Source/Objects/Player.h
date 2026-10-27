@@ -1,7 +1,6 @@
 #pragma once
 
 #include "MovableObject.h"
-#include "../Utility/UtilityStructs.h"
 
 #define PLAYER_MAX_HEALTH 8
 #define PLAYER_MAX_AMMO 8
@@ -21,4 +20,7 @@ public:
 
 	int GetHealth();
 	int GetAmmo();
+
+	void AddHealth(int Amount);
+	void AddAmmo(int Amount);
 };

@@ -4,24 +4,16 @@
 #include <GL/glut.h>
 #include <math.h>
 
-#include "ImageLoader.h"
-#include "Controller.h"
+//#include "Controller.h"
 
 #include "../Objects/Player.h"
 #include "../Objects/Map.h"
+#include "../Structs/MathFuncs.h"
 
 
 bool Renderer::loadTextures()
 {
-	imageLoader = new ImageLoader;
-
-	if (!imageLoader->loadTileset()) { return 1; }
-
-	if (!imageLoader->loadImage("Textures/UI.bmp", gui)) { return 1; }
-	if (!imageLoader->loadImage("Textures/BarOverlay.png", overlay)) { return 1; }
-	if (!imageLoader->loadImage("Textures/Bar.bmp", healthBar)) { return 1; }
-	if (!imageLoader->loadImage("Textures/Bar.bmp", ammoBar)) { return 1; }
-	if (!imageLoader->loadImage("Textures/Player.png", PlayerIcon)) { return 1; }
+	if (!ImageLoader::loadTileset()) { return 1; }
 
 	return 0;
 }
@@ -31,7 +23,7 @@ void Renderer::drawWalls(MapArray walls, Transform viewpoint)
 	int mx, my, mp, dof;
 	float rx = 0, ry = 0, xo = 0, yo = 0;
 
-	float ra = FixAng(viewpoint.angle + FOV_DEGREES / 2.0f - RAY_STEP / 2);
+	float ra = clampAngle(viewpoint.angle + FOV_DEGREES / 2.0f - RAY_STEP / 2);
 
 	for (int r = 0; r < RAY_COUNT; r++)
 	{
@@ -114,7 +106,7 @@ void Renderer::drawWalls(MapArray walls, Transform viewpoint)
 		}
 
 		// ---- fisheye correction ----
-		float ca = FixAng(viewpoint.angle - ra);
+		float ca = clampAngle(viewpoint.angle - ra);
 		disT = disT * cos(degToRad(ca));
 
 		// ---- textured wall column ----
@@ -142,7 +134,7 @@ void Renderer::drawWalls(MapArray walls, Transform viewpoint)
 		glEnd();
 		glDisable(GL_TEXTURE_2D);
 
-		ra = FixAng(ra - RAY_STEP);
+		ra = clampAngle(ra - RAY_STEP);
 	}
 }
 

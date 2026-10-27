@@ -1,8 +1,9 @@
 #pragma once
 
 #include <array>
+#include <vector>
 
-#include "../Utility/UtilityStructs.h"
+#include "../Structs/Transform.h"
 
 #define MAP_TILES_X 21
 #define MAP_TILES_Y 21
@@ -11,12 +12,19 @@
 using namespace std;
 using MapArray = array<int, MAP_TILES_X* MAP_TILES_Y>;
 
+class Object;
+
 class Map
 {
 private:
 	MapArray walls;
 	MapArray floor;
 	MapArray roof;
+
+	vector<Object*> objects;
+
+	bool IsSolid(int tileX, int tileY) const;
+	bool OverlapsWall(const Vector2& centre, float radius) const;
 
 public:
 	void GenerateMap();
@@ -26,7 +34,5 @@ public:
 	MapArray GetFloor() const;
 	MapArray GetRoof() const;
 
-	bool IsSolid(int tileX, int tileY) const;
-	bool OverlapsWall(const Vector2& centre, float radius) const;
-	Vector2 MoveAndCollide(Vector2 position, Vector2 delta, float radius) const;
+	Vector2 EvaluatePosition(Object* obj);
 };

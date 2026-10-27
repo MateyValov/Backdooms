@@ -7,12 +7,7 @@
 
 int main(int argc, char* argv[])
 {
-	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-	glutInitWindowSize(RESOLUTION_WINDOW_X, RESOLUTION_WINDOW_Y);
-	glutCreateWindow("Backdooms");
-
-	if (Engine::Start() != 0)
+	if (Engine::InitEngine(&argc, argv) != 0)
 	{
 		return 1;
 	}

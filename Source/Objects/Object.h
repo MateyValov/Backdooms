@@ -1,12 +1,13 @@
 #pragma once
 
-#include "../Utility/UtilityStructs.h"
+#include "../Structs/Transform.h"
 
 class Object
 {
 protected:
 	Transform transform;
 	float radius;
+	bool hasCollision;
 
 public:
 	Object();
@@ -15,8 +16,9 @@ public:
 	virtual void Start() = 0;
 	virtual void Update() = 0;
 
-	Transform GetTransform() const;
+	Transform GetTransform();
 	float GetRadius() const;
+	bool HasCollision() const;
 
 	void SetTransform(Transform newTrasform);
 	void SetPosition(Vector2 newPosition);

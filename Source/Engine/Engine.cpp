@@ -2,24 +2,29 @@
 
 #include <GL/freeglut.h>
 
+#include "ImageLoader.h"
 #include "Renderer.h"
 #include "Controller.h"
+#include "Viewport.h"
 
 #include "../Objects/Player.h"
 #include "../Objects/Map.h"
 
-float Engine::lastTime = 0.0f;
-float Engine::deltaTime = 0.0f;
-Renderer* Engine::renderer = nullptr;
-Controller* Engine::controller = nullptr;
-Map* Engine::map = nullptr;
-Player* Engine::player = nullptr;
+//float Engine::lastTime = 0.0f;
+//float Engine::deltaTime = 0.0f;
+//Renderer* Engine::renderer = nullptr;
+//Controller* Engine::controller = nullptr;
+//Map* Engine::map = nullptr;
+//Player* Engine::player = nullptr;
 
-bool Engine::InitEngine()
+bool Engine::InitEngine(int* argc, char** argv)
 {
-	renderer = new Renderer();
+	glutInit(argc, argv);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+	glutInitWindowSize(RESOLUTION_WINDOW_X, RESOLUTION_WINDOW_Y);
+	glutCreateWindow("Backdooms");
 
-	if (renderer->loadTextures() != 0)
+	if (ImageLoader::loadTileset() != 0)
 	{
 		return false;
 	}
@@ -46,6 +51,8 @@ void Engine::Start()
 	map = new Map();
 	player = new Player();
 
+	viewport = new Viewport(Vector2(), RESOLUTION_WINDOW_X, RESOLUTION_WINDOW_Y);
+
 	map->GenerateMap();
 	renderer->initFloorBuffer();
 
@@ -71,16 +78,6 @@ void Engine::Update()
 	{
 		player->Turn(false);
 	}
-
-	Vector2 PlayerPosition = player->GetTransform().position;
-	Vector2 PlayerForward = player->GetTransform().GetForward();
-
-	int xo = PlayerForward.x < 0 ? -player->GetRadius() : player->GetRadius();
-	int yo = PlayerForward.y < 0 ? -player->GetRadius() : player->GetRadius();
-
-	int ipx = PlayerPosition.x / TILE_SIZE, ipx_add_xo = (PlayerPosition.x + xo) / TILE_SIZE, ipx_sub_xo = (PlayerPosition.x - xo) / TILE_SIZE;
-	int ipy = PlayerPosition.y / TILE_SIZE, ipy_add_yo = (PlayerPosition.y + yo) / TILE_SIZE, ipy_sub_yo = (PlayerPosition.y - yo) / TILE_SIZE;
-
 	if (Keys.w == 1)
 	{
 		player->Move(player->GetTransform().GetForward());
@@ -90,23 +87,13 @@ void Engine::Update()
 		player->Move(player->GetTransform().GetForward() * -1.f);
 	}
 
-	/* OLD CODE
-	if (Keys.w == 1)
-	{
-		if (map->GetWalls()[ipy * MAP_TILES_X + ipx_add_xo] == 0) { PLAYER_X += PLAYER_DELTA_X * PLAYER_SPEED * deltaTime; }
-		if (map->GetWalls()[ipy_add_yo * MAP_TILES_X + ipx] == 0) { PLAYER_Y += PLAYER_DELTA_Y * PLAYER_SPEED * deltaTime; }
-	}
-	if (Keys.s == 1)
-	{
-		if (map->GetWalls()[ipy * MAP_TILES_X + ipx_sub_xo] == 0) { PLAYER_X -= PLAYER_DELTA_X * PLAYER_SPEED * deltaTime; }
-		if (map->GetWalls()[ipy_sub_yo * MAP_TILES_X + ipx] == 0) { PLAYER_Y -= PLAYER_DELTA_Y * PLAYER_SPEED * deltaTime; }
-	}*/
-
 	glutPostRedisplay();
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	renderer->DrawMap(map, player->GetTransform());
+	viewport->DrawLevel(map, player->GetTransform());
+
+	//renderer->DrawMap(map, player->GetTransform());
 	renderer->drawUI();
 
 	glutSwapBuffers();

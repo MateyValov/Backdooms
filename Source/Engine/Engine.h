@@ -5,26 +5,29 @@ class Player;
 class Renderer;
 class Controller;
 
-static class Engine
+class Viewport;
+
+class Engine
 {
 private:
 	static float lastTime; 
 	static float deltaTime;
 
-	static Renderer* renderer;
 	static Controller* controller;
 	static Player* player;
 	static Map* map;
+
+	static Viewport* viewport;
 
 	static void Start();
 	static void Update();
 	static void Quit();
 
 public:
-	static bool InitEngine();
+	static bool InitEngine(int* argc, char** argv);
 
 	static Player* GetPlayer();
 	static Map* GetMap();
 
-	static float GetDeltaTime() const;
+	static float GetDeltaTime();
 };

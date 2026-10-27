@@ -3,7 +3,6 @@
 #include "ImageLoader.h"
 #include "../Objects/Map.h"
 
-#define PI 3.141593
 
 #define RESOLUTION_WINDOW_X 640 
 #define RESOLUTION_WINDOW_Y 480
@@ -32,26 +31,18 @@
 class Renderer
 {
 private:
-	ImageLoader* imageLoader;
-
-	Image gui;
-	Image overlay;
-	Image healthBar;
-	Image ammoBar;
-	Image PlayerIcon;
-
 	unsigned char floorBuf[VIEW_W * VIEW_H * 4];
 	GLuint floorBufTex;
 
-	void drawWalls(MapArray walls, Transform viewpoint);
-	void drawFloorAndRoof(MapArray floor, MapArray roof, Transform viewpoint);
+	static void drawWalls(MapArray walls, Transform viewpoint);
+	static void drawFloorAndRoof(MapArray floor, MapArray roof, Transform viewpoint);
 
 public:
 	bool loadTextures();
 
-	void DrawMap(Map* map, Transform viewpoint);
-	void drawUI();
+	static void DrawMap(Map* map, Transform viewpoint);
+	static void drawUI();
 
-	void sampleTile(unsigned char* out, int tile, float u, float v, const unsigned char* fallback);
-	void initFloorBuffer();
+	static void sampleTile(unsigned char* out, int tile, float u, float v, const unsigned char* fallback);
+	static void initFloorBuffer();
 };

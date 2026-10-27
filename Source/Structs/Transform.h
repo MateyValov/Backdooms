@@ -1,21 +1,11 @@
 #pragma once
 
-#include <math.h>
-
-#define PI 3.141593
-
-float dist(float ax, float ay, float bx, float by, float ang);
-
-float degToRad(float a);
-
-float FixAng(float a);
-
 struct Vector2
 {
 	float x = 0.f;
 	float y = 0.f;
 
-	Vector2() = default;           
+	Vector2() = default;
 	Vector2(float x, float y) : x(x), y(y) {}
 
 	Vector2 operator+(const Vector2& o) const { return Vector2(x + o.x, y + o.y); }
@@ -64,19 +54,4 @@ struct Transform
 
 	bool operator==(const Transform& o) const { return position == o.position && angle == o.angle; }
 	bool operator!=(const Transform& o) const { return !(*this == o); }
-};
-
-struct Color
-{
-	float r = 1.f;
-	float g = 1.f;
-	float b = 1.f;
-	float a = 1.f;
-
-	Color() = default;
-	Color(float r, float g, float b, float a) : r(r), g(g), b(b), a(a) {}
-
-	static Color Red();
-	static Color Green();
-	static Color Blue();
 };
