@@ -1,30 +1,38 @@
 #pragma once
 #include <GL/glut.h>
-#include <vector>
+#include <string>
 
-#include "../Structs/Transform.h"
 #include "../Structs/Image.h"
 
 using namespace std;
 
-//extern vector<unsigned char> tilesetPixels;   // RGBA, top row first
-//
-//// Tileset state, filled in by loadTileset().
-//// The tileset is a vertical stack of square tiles: tile size = image width,
-//// tile count = image height / image width.
-//extern GLuint tilesetTex;   // OpenGL texture handle
-//extern int texW;            // image width in pixels (= tile size)
-//extern int texH;            // image height in pixels
-//extern int tileCount;       // number of tiles stacked in the image
-
-bool loadImage(const char* path, Image& out, bool keepPixels = false);
-bool loadTileset(const char* path, int tileCount, Tileset& out, bool keepPixels = false);
-
-class ImageLoader
+namespace Textures
 {
-private:
-	static Tileset TerrainTileset;
+	bool LoadTextures();
 
-public:
+	namespace Atlas
+	{
+#define ATLAS_COLUMNS 8
+#define ATLAS_ROWS 8
+#define ATLAS_COUNT (ATLAS_COLUMNS * ATLAS_ROWS)
 
+		bool Load();
+
+		const Image& GetImage();     
+		int CellSize();              
+		Rect Cell(int index); 
+
+		void Sample(int index, float u, float v, unsigned char rgba[4]);
+	}
+
+	namespace GUI
+	{
+		bool Load();
+
+		const Image& Get(const std::string& path);
+	}
+
+	bool LoadRgba(const char* path, int& width, int& height, std::vector<unsigned char>& rgba);
+	bool CreateImage(Image& out, int width, int height, const unsigned char* rgba, bool keepPixels = false, bool smooth = false);
+	bool LoadImage(const char* path, Image& out, bool keepPixels = false, bool smooth = false);
 };

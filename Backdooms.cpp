@@ -1,7 +1,3 @@
-#include <iostream>
-#include <GL/glut.h>
-
-#include "Source/Engine/Renderer.h"
 #include "Source/Engine/Engine.h"
 
 

@@ -28,21 +28,21 @@
 #define PLAYER_ICON_OFFSET_H 264
 
 
-class Renderer
-{
-private:
-	unsigned char floorBuf[VIEW_W * VIEW_H * 4];
-	GLuint floorBufTex;
-
-	static void drawWalls(MapArray walls, Transform viewpoint);
-	static void drawFloorAndRoof(MapArray floor, MapArray roof, Transform viewpoint);
-
-public:
-	bool loadTextures();
-
-	static void DrawMap(Map* map, Transform viewpoint);
-	static void drawUI();
-
-	static void sampleTile(unsigned char* out, int tile, float u, float v, const unsigned char* fallback);
-	static void initFloorBuffer();
-};
+//class Renderer
+//{
+//private:
+//	unsigned char floorBuf[VIEW_W * VIEW_H * 4];
+//	GLuint floorBufTex;
+//
+//	static void drawWalls(MapArray walls, Transform viewpoint);
+//	static void drawFloorAndRoof(MapArray floor, MapArray roof, Transform viewpoint);
+//
+//public:
+//	bool loadTextures();
+//
+//	static void DrawMap(Map* map, Transform viewpoint);
+//	static void drawUI();
+//
+//	static void sampleTile(unsigned char* out, int tile, float u, float v, const unsigned char* fallback);
+//	static void initFloorBuffer();
+//};

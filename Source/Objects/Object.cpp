@@ -7,15 +7,16 @@
 Object::Object()
 {
 	radius = 20.f;
-	hasCollision = false;
+	hasCollision = true;
 }
 
 Object::Object(float radius)
 {
 	this->radius = radius;
+	hasCollision = true;
 }
 
-Transform Object::GetTransform()
+Transform Object::GetTransform() const
 {
 	return transform;
 }
@@ -38,8 +39,7 @@ void Object::SetTransform(Transform newTrasform)
 
 void Object::SetPosition(Vector2 newPosition)
 {
-	transform.position = newPosition;
-	Engine::GetMap()->AcknowledgePosition(this);
+	transform.position = hasCollision ? Engine::GetMap()->EvaluatePosition(newPosition, radius) : newPosition;
 }
 
 void Object::SetAngle(float newAngle)

@@ -16,7 +16,7 @@ public:
 	virtual void Start() = 0;
 	virtual void Update() = 0;
 
-	Transform GetTransform();
+	Transform GetTransform() const;
 	float GetRadius() const;
 	bool HasCollision() const;
 

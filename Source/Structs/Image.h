@@ -25,8 +25,7 @@ struct Tileset
 {
 	Image image;
 	int tileCount = 1;
-	int tileW = 0;
-	int tileH = 0;
+	int tileSize = 0;
 };
 
 struct Color
@@ -37,6 +36,7 @@ struct Color
 	float a = 1.f;
 
 	Color() = default;
+	Color(float r, float g, float b) : r(r), g(g), b(b) {}
 	Color(float r, float g, float b, float a) : r(r), g(g), b(b), a(a) {}
 
 	static Color Red()

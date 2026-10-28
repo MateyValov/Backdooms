@@ -5,31 +5,31 @@
 #define PI 3.141593
 
 
-float dist(float ax, float ay, float bx, float by, float ang)
+static float dist(float ax, float ay, float bx, float by, float ang)
 {
 	return (sqrt((bx - ax) * (bx - ax) + (by - ay) * (by - ay)));
 }
 
-float degToRad(float a)
+static float degToRad(float a)
 {
 	return a * PI / 180;
 }
 
-float clampAngle(float a)
+static float clampAngle(float a)
 {
 	if (a >= 360) { a -= 360; }
 	if (a < 0) { a += 360; }
 	return a;
 }
 
-float clamp(float n, float min, float max)
+static float clamp(float n, float min, float max)
 {
 	if (n < min) return min;
 	if (n > max) return max;
 	return n;
 }
 
-int clamp(int n, int min, int max)
+static int clamp(int n, int min, int max)
 {
 	if (n < min) return min;
 	if (n > max) return max;

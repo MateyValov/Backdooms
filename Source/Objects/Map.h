@@ -1,16 +1,9 @@
 #pragma once
 
-#include <array>
 #include <vector>
 
 #include "../Structs/Transform.h"
-
-#define MAP_TILES_X 21
-#define MAP_TILES_Y 21
-#define TILE_SIZE 64
-
-using namespace std;
-using MapArray = array<int, MAP_TILES_X* MAP_TILES_Y>;
+#include "../Structs/MapArray.h"
 
 class Object;
 
@@ -34,5 +27,5 @@ public:
 	MapArray GetFloor() const;
 	MapArray GetRoof() const;
 
-	Vector2 EvaluatePosition(Object* obj);
+	Vector2 EvaluatePosition(Vector2 position, float radius);
 };
