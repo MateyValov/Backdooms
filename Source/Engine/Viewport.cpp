@@ -3,8 +3,10 @@
 #include <algorithm>
 #include <cmath>
 
+#include "../Structs/Window.h"
 #include "../Objects/Map.h"  
-#include "ImageLoader.h"
+#include "Rendering.h"
+#include "Textures.h"
 
 #ifndef GL_CLAMP_TO_EDGE
 #define GL_CLAMP_TO_EDGE 0x812F
@@ -24,8 +26,8 @@ namespace
 Viewport::Viewport()
 {
 	origin = Vector2();
-	width = RESOLUTION_WINDOW_X;
-	height = RESOLUTION_WINDOW_Y;
+	width = Window::x;
+	height = Window::y;
 	Setup();
 }
 
@@ -140,7 +142,7 @@ void Viewport::DrawWalls(const MapArray walls, const Transform viewpoint)
 		// ---- draw one single-pixel-wide slice of the texture, stretched over the column ----
 		Rect tex = Textures::Atlas::Cell(hitTile - 1);       // map value 1 is atlas texture 0
 		float uu = std::min(std::max(u, 0.f), 0.9999f);      // stay inside this texture, never touch its neighbour
-		Draw(atlas,
+		Rendering::Draw(atlas,
 			Rect(origin.x + x0, origin.y + top, (float)(x1 - x0), lineH),
 			Rect(tex.x + uu * tex.w, tex.y + cut * tex.h, 0, tex.h * (1 - 2 * cut)),
 			Color(shade, shade, shade));
@@ -223,7 +225,7 @@ void Viewport::DrawFloorAndRoof(const MapArray floor, const MapArray roof, const
 
 	glBindTexture(GL_TEXTURE_2D, floorImage.texture);
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, floorBuf.data());
-	Draw(floorImage, Rect(origin.x, origin.y, (float)width, (float)height), Rect(0, 0, (float)width, (float)height));
+	Rendering::Draw(floorImage, Rect(origin.x, origin.y, (float)width, (float)height), Rect(0, 0, (float)width, (float)height));
 }
 
 void Viewport::DrawLevel(const Map* map, const Transform viewpoint)
@@ -232,45 +234,6 @@ void Viewport::DrawLevel(const Map* map, const Transform viewpoint)
 	DrawWalls(map->GetWalls(), viewpoint);
 }
 
-void Viewport::Draw(const Image& image, const Rect& dest, const Rect& source, const Color& tint)
-{
-	if (image.texture == 0 || image.width <= 0 || image.height <= 0) { return; }
 
-	float u0 = source.x / image.width, u1 = (source.x + source.w) / image.width;
-	float v0 = source.y / image.height, v1 = (source.y + source.h) / image.height;
-
-	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glBindTexture(GL_TEXTURE_2D, image.texture);
-	glColor4f(tint.r, tint.g, tint.b, tint.a);
-
-	glBegin(GL_QUADS);
-	glTexCoord2f(u0, v0); glVertex2f(dest.x, dest.y);
-	glTexCoord2f(u1, v0); glVertex2f(dest.x + dest.w, dest.y);
-	glTexCoord2f(u1, v1); glVertex2f(dest.x + dest.w, dest.y + dest.h);
-	glTexCoord2f(u0, v1); glVertex2f(dest.x, dest.y + dest.h);
-	glEnd();
-
-	glDisable(GL_BLEND);
-	glDisable(GL_TEXTURE_2D);
-}
-
-void Viewport::DrawImage(const Image& image, const Vector2& position, float widthOverride, float heightOverride, const Color& tint)
-{
-	float w = widthOverride > 0 ? widthOverride : (float)image.width;
-	float h = heightOverride > 0 ? heightOverride : (float)image.height;
-	Draw(image, Rect(position.x, position.y, w, h), Rect(0, 0, (float)image.width, (float)image.height), tint);
-}
-
-void Viewport::DrawTile(int index, const Rect& dest, const Color& tint)
-{
-	Draw(Textures::Atlas::GetImage(), dest, Textures::Atlas::Cell(index), tint);
-}
-
-void Viewport::DrawString(const std::string& text, const Vector2& position, float scale, const Color& tint)
-{
-	//skip for now
-}
 
 

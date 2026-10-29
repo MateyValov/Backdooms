@@ -1,28 +1,21 @@
 #pragma once
 
-#define SC_W 0x11
-#define SC_A 0x1E
-#define SC_S 0x1F
-#define SC_D 0x20
+#include <windows.h>
 
-
-typedef struct
+struct ButtonKeys
 {
-	int w, a, s, d, esc;
-}ButtonKeys;
+	int w, a, s, d, q;
+	int up, left, down, right, space;
+	int enter, esc;
+};
 
-typedef struct
+struct PlayerInput
 {
-	int Forward;
-	int Right;
-}MovementInput;
+	int forward, left, right, back, interact;
+};
 
 extern ButtonKeys Keys;
 
-static bool physicalKeyDown(int scancode);
+static bool keyDown(UINT vk);
 void updateKeys();
 
-class Controller
-{
-
-};

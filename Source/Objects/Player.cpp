@@ -1,6 +1,8 @@
 #include "Player.h"
 
 #include "../Structs/MathFuncs.h"
+#include "../Engine/Engine.h"
+#include "Map.h"
 
 Player::Player() : MovableObject()
 {
@@ -40,4 +42,21 @@ void Player::AddHealth(int Amount)
 void Player::AddAmmo(int Amount)
 {
 	ammo = clamp(ammo + Amount, 0, PLAYER_MAX_AMMO);
+}
+
+void Player::InteractPressed()
+{
+	Vector2 TargetPoint = transform.position + transform.GetForward() * (radius * 1.5f);
+
+	int tileX = floor(TargetPoint.x / TILE_SIZE);
+	int tileY = floor(TargetPoint.y / TILE_SIZE);
+
+	printf("Facing tile with index #%d, looking at %.f, %.f\n", 
+		Engine::GetMap()->GetTile(tileX, tileY),
+		TargetPoint.x,
+		TargetPoint.y);
+}
+
+void Player::ShootPressed()
+{
 }

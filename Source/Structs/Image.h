@@ -21,13 +21,6 @@ struct Image
 	std::vector<unsigned char> pixels;
 };
 
-struct Tileset
-{
-	Image image;
-	int tileCount = 1;
-	int tileSize = 0;
-};
-
 struct Color
 {
 	float r = 1.f;

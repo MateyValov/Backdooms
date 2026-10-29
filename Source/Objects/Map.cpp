@@ -1,6 +1,7 @@
 #include "Map.h"
 
 #include "Object.h"
+#include "Player.h"
 
 #include <cfloat>
 #include <cmath>
@@ -8,7 +9,7 @@
 
 static constexpr MapArray WALLS_BASE =
 {
-	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+	1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,
 	1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,
 	1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
 	1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,
@@ -81,6 +82,11 @@ static constexpr MapArray ROOF_BASE =
 	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 };
 
+Map::Map()
+{
+	GenerateMap();
+}
+
 void Map::GenerateMap()
 {
 	ResetMap();
@@ -91,6 +97,7 @@ void Map::ResetMap()
 	walls = WALLS_BASE;
 	floor = FLOOR_BASE;
 	roof = ROOF_BASE;
+	DestroyAllObjects();
 }
 
 MapArray Map::GetWalls() const
@@ -106,6 +113,16 @@ MapArray Map::GetFloor() const
 MapArray Map::GetRoof() const
 {
 	return roof;
+}
+
+Vector2 Map::GetCenter() const
+{
+	return Vector2(Vector2((MAP_TILES_X / 2.f) * TILE_SIZE, (MAP_TILES_Y / 2.f) * TILE_SIZE));
+}
+
+int Map::GetTile(int x, int y) const
+{
+	return walls[y * MAP_TILES_X + x];
 }
 
 bool Map::IsSolid(int tileX, int tileY) const
@@ -210,5 +227,60 @@ Vector2 Map::EvaluatePosition(Vector2 position, float radius)
 	}
 		
 	return best;
+}
+
+void Map::UpdateObjects()
+{
+	size_t count = objects.size();
+	for (size_t i = 0; i < count; ++i)
+	{
+		if (!objects[i].destroyed) 
+		{ 
+			objects[i].object->Update(); 
+		}
+	}
+
+	objects.erase(remove_if(objects.begin(), objects.end(), [](const ObjectEntry& entry) 
+		{ 
+			return entry.destroyed; 
+		}), 
+		objects.end());
+}
+
+void Map::Destroy(Object* object)
+{
+	if (!object) { return; }
+
+	for (ObjectEntry& entry : objects)
+	{
+		if (entry.object.get() == object) 
+		{ 
+			entry.destroyed = true; 
+			return; 
+		}
+	}
+}
+
+void Map::DestroyAllObjects(bool includePlayer)
+{
+	for (ObjectEntry& entry : objects) 
+	{ 
+		if (static_cast<Player*>(entry.object.get()))
+		{
+			continue;
+		}
+			
+		entry.destroyed = true; 
+	}
+}
+
+int Map::ObjectCount() const
+{
+	int n = 0;
+	for (const ObjectEntry& entry : objects) 
+	{ 
+		if (!entry.destroyed) { n++; } 
+	}
+	return n;
 }
 

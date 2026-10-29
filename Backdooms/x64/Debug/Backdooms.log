@@ -1,1 +1,41 @@
-﻿  Backdooms.vcxproj -> C:\Users\matey\Documents\University\CG\Backdooms\x64\Debug\Backdooms.exe
+﻿  Engine.cpp
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\MathFuncs.h(10,14): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Source/Engine/Engine.cpp')
+  
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\MathFuncs.h(15,16): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Source/Engine/Engine.cpp')
+  
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(49,40): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Source/Engine/Engine.cpp')
+  
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(49,21): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Source/Engine/Engine.cpp')
+  
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(54,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Source/Engine/Engine.cpp')
+  
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(54,21): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Source/Engine/Engine.cpp')
+  
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Engine\Engine.cpp(47,12): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+  Viewport.cpp
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\MathFuncs.h(10,14): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Source/Engine/Viewport.cpp')
+  
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\MathFuncs.h(15,16): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Source/Engine/Viewport.cpp')
+  
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(49,40): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Source/Engine/Viewport.cpp')
+  
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(49,21): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Source/Engine/Viewport.cpp')
+  
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(54,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Source/Engine/Viewport.cpp')
+  
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(54,21): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Source/Engine/Viewport.cpp')
+  
+  Generating Code...
+  Backdooms.vcxproj -> C:\Users\matey\Documents\University\CG\Backdooms\x64\Debug\Backdooms.exe

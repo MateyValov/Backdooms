@@ -23,4 +23,7 @@ public:
 
 	void AddHealth(int Amount);
 	void AddAmmo(int Amount);
+
+	void InteractPressed();
+	void ShootPressed();
 };

@@ -1,14 +1,10 @@
 #pragma once
 
-#include <string>
 #include <vector>
 
 #include "../Structs/Image.h"
 #include "../Structs/Transform.h"
 #include "../Structs/MapArray.h"
-
-#define RESOLUTION_WINDOW_X 640 
-#define RESOLUTION_WINDOW_Y 480
 
 #define MAX_RAY_STEPS 20           
 
@@ -52,12 +48,5 @@ public:
 	void InitFloorBuffer();
 
 	void DrawLevel(const Map* map, const Transform viewpoint);
-
-	void Draw(const Image& image, const Rect& dest, const Rect& source, const Color& tint = Color());
-	void DrawImage(const Image& image, const Vector2& position, float widthOverride = 0, float heightOverride = 0, const Color& tint = Color());
-	void DrawTile(int index, const Rect& dest, const Color& tint = Color());
-
-	// skip for now
-	void DrawString(const string& text, const Vector2& position, float scale = 1.f, const Color& tint = Color());
 	
 };

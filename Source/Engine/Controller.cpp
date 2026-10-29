@@ -1,12 +1,9 @@
 #include "Controller.h"
-#include <windows.h>
 
 ButtonKeys Keys;
-MovementInput Input;
 
-static bool physicalKeyDown(int scancode)
+static bool keyDown(UINT vk)
 {
-	UINT vk = MapVirtualKeyA(scancode, MAPVK_VSC_TO_VK);   // which virtual key sits at that position right now
 	return (GetAsyncKeyState(vk) & 0x8000) != 0;
 }
 
@@ -17,9 +14,18 @@ void updateKeys()
 		return;
 	}
 
-	Keys.w = physicalKeyDown(SC_W);
-	Keys.a = physicalKeyDown(SC_A);
-	Keys.s = physicalKeyDown(SC_S);
-	Keys.d = physicalKeyDown(SC_D);
-	Keys.esc = physicalKeyDown(VK_ESCAPE);
+	Keys.w = keyDown('W');
+	Keys.a = keyDown('A');
+	Keys.s = keyDown('S');
+	Keys.d = keyDown('D');
+	Keys.q = keyDown('Q');
+
+	Keys.up = keyDown(VK_UP);
+	Keys.left = keyDown(VK_LEFT);
+	Keys.down = keyDown(VK_DOWN);
+	Keys.right = keyDown(VK_RIGHT);
+	Keys.space = keyDown(VK_SPACE);
+
+	Keys.enter = keyDown(VK_RETURN);
+	Keys.esc = keyDown(VK_ESCAPE);
 }

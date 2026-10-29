@@ -12,6 +12,7 @@ protected:
 public:
 	Object();
 	Object(float radius);
+	virtual ~Object() = default;
 
 	virtual void Start() = 0;
 	virtual void Update() = 0;

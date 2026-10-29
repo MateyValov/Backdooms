@@ -2,33 +2,39 @@
 
 #include <GL/freeglut.h>
 
-#include "ImageLoader.h"
+#include "Textures.h"
 #include "Controller.h"
 #include "Viewport.h"
 
 #include "../Objects/Player.h"
 #include "../Objects/Map.h"
 
+#include "../Structs/Window.h"
+
 static float lastTime;
 static float deltaTime;
 
-static Controller* controller;
 static Map* map;
 
 static Viewport* MainViewport;
 static Player* MainPlayer;
 
+static Viewport* SecondViewport;
+static Player* SecondPlayer;
 
-static void Start()
+
+static void Start(bool isMultiplayer)
 {
-	controller = new Controller();
 	map = new Map();
-	map->GenerateMap();
 
-	MainViewport = new Viewport(Vector2(), RESOLUTION_WINDOW_X, RESOLUTION_WINDOW_Y);
+	MainViewport = new Viewport(Vector2(), Window::x, Window::y / (isMultiplayer ? 2 : 1));
+	MainPlayer = map->Spawn<Player>(map->GetCenter(), 0.f);
 
-	MainPlayer = new Player();
-	MainPlayer->SetPosition(Vector2((MAP_TILES_X / 2.f) * TILE_SIZE, (MAP_TILES_Y / 2.f) * TILE_SIZE));
+	if (isMultiplayer)
+	{
+		SecondViewport = new Viewport(Vector2(0.f, Window::y / 2), Window::x, Window::y / 2);
+		SecondPlayer = map->Spawn<Player>(map->GetCenter(), 0.f);
+	}
 }
 
 static void Quit()
@@ -50,6 +56,7 @@ static void Update()
 		Quit(); 
 		return;
 	}
+
 	if (Keys.a == 1)
 	{
 		MainPlayer->Turn(true);
@@ -66,12 +73,41 @@ static void Update()
 	{
 		MainPlayer->Move(MainPlayer->GetTransform().GetForward() * -1.f);
 	}
+	if (Keys.q == 1)
+	{
+		MainPlayer->InteractPressed();
+	}
+
+	if (Keys.left == 1 && SecondPlayer != nullptr)
+	{
+		SecondPlayer->Turn(true);
+	}
+	if (Keys.right == 1 && SecondPlayer != nullptr)
+	{
+		SecondPlayer->Turn(false);
+	}
+	if (Keys.up == 1 && SecondPlayer != nullptr)
+	{
+		SecondPlayer->Move(SecondPlayer->GetTransform().GetForward());
+	}
+	if (Keys.down == 1 && SecondPlayer != nullptr)
+	{
+		SecondPlayer->Move(SecondPlayer->GetTransform().GetForward() * -1.f);
+	}
+	if (Keys.space == 1)
+	{
+		SecondPlayer->InteractPressed();
+	}
 
 	glutPostRedisplay();
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	MainViewport->DrawLevel(map, MainPlayer->GetTransform());
+	if (SecondViewport != nullptr && SecondPlayer != nullptr)
+	{
+		SecondViewport->DrawLevel(map, SecondPlayer->GetTransform());
+	}
 
 	glutSwapBuffers();
 }
@@ -80,7 +116,7 @@ bool Engine::InitEngine(int* argc, char** argv)
 {
 	glutInit(argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-	glutInitWindowSize(RESOLUTION_WINDOW_X, RESOLUTION_WINDOW_Y);
+	glutInitWindowSize(Window::x, Window::y);
 	glutCreateWindow("Backdooms");
 
 	if (Textures::LoadTextures() == false)
@@ -88,10 +124,10 @@ bool Engine::InitEngine(int* argc, char** argv)
 		return false;
 	}
 
-	Start();
+	Start(true);
 
 	glClearColor(0, 0, 0, 0);
-	gluOrtho2D(0, RESOLUTION_WINDOW_X, RESOLUTION_WINDOW_Y, 0);
+	gluOrtho2D(0, Window::x, Window::y, 0);
 
 	glutDisplayFunc(Update);
 	glutMainLoop();
