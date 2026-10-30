@@ -4,14 +4,13 @@
 #include <cmath>
 
 #include "../Structs/Window.h"
-#include "../Objects/Map.h"  
-#include "Rendering.h"
-#include "Textures.h"
+#include "../Architecture/Map.h"  
+#include "../Modules/Rendering.h"
+#include "../Modules/Textures.h"
 
 #ifndef GL_CLAMP_TO_EDGE
 #define GL_CLAMP_TO_EDGE 0x812F
 #endif
-
 
 namespace
 {
@@ -31,17 +30,20 @@ Viewport::Viewport()
 	Setup();
 }
 
-Viewport::Viewport(Vector2 origin, int width, int height)
+Viewport::Viewport(Vector2 origin, int width, int height, int fov, int maxRaySteps, int columnWidth)
 {
 	this->origin = origin;
 	this->width = width;
 	this->height = height;
+	this->fov = fov;
+	this->MaxRaySteps = maxRaySteps;
+	this->columnWidth = columnWidth;
 	Setup();
 }
 
 void Viewport::Setup()
 {
-	columnCount = (width + COLUMN_W - 1) / COLUMN_W;
+	columnCount = (width + columnWidth - 1) / columnWidth;
 	projDist = (float)height;
 
 	floorBuf.assign((size_t)width * height * 4, 0);
@@ -49,7 +51,7 @@ void Viewport::Setup()
 	// Angle away from the view direction at horizontal position xf (in pixels, 0 = left edge of the viewport).
 	auto angleAt = [&](float xf, float& c, float& s)
 		{
-			float theta = (FOV_DEGREES / 2.0f - xf * ((float)FOV_DEGREES / width)) * PI_F / 180.0f;
+			float theta = (fov / 2.0f - xf * ((float)fov / width)) * PI_F / 180.0f;
 			c = cosf(theta);
 			s = sinf(theta);
 		};
@@ -65,7 +67,7 @@ void Viewport::Setup()
 	colCos.resize(columnCount); colSin.resize(columnCount);
 	for (int c = 0; c < columnCount; ++c)
 	{
-		int x0 = c * COLUMN_W, x1 = std::min(width, x0 + COLUMN_W);
+		int x0 = c * columnWidth, x1 = min(width, x0 + columnWidth);
 		angleAt(0.5f * (x0 + x1), colCos[c], colSin[c]);   // centre of the column
 	}
 }
@@ -116,7 +118,7 @@ void Viewport::DrawWalls(const MapArray walls, const Transform viewpoint)
 			if (sideX < sideY) { t = sideX; sideX += deltaX; mapX += stepX; ++stepsX; hitEastWestFace = true; }
 			else { t = sideY; sideY += deltaY; mapY += stepY; ++stepsY; hitEastWestFace = false; }
 
-			if (stepsX > MAX_RAY_STEPS || stepsY > MAX_RAY_STEPS) { break; }                              // too far away
+			if (stepsX > MaxRaySteps || stepsY > MaxRaySteps) { break; }                              // too far away
 			if (mapX < 0 || mapY < 0 || mapX >= MAP_TILES_X || mapY >= MAP_TILES_Y) { break; }            // left the map
 			int value = walls[mapY * MAP_TILES_X + mapX];
 			if (value > 0) { hitTile = value; break; }
@@ -136,7 +138,7 @@ void Viewport::DrawWalls(const MapArray walls, const Transform viewpoint)
 		if (lineH > height) { cut = (lineH - height) / (2 * lineH); lineH = (float)height; }
 		float top = (height - lineH) / 2;
 
-		int x0 = c * COLUMN_W, x1 = std::min(width, x0 + COLUMN_W);
+		int x0 = c * columnWidth, x1 = min(width, x0 + columnWidth);
 		float shade = hitEastWestFace ? SHADE_EAST_WEST_FACE : SHADE_NORTH_SOUTH_FACE;
 
 		// ---- draw one single-pixel-wide slice of the texture, stretched over the column ----

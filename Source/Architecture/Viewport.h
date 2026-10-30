@@ -5,11 +5,7 @@
 #include "../Structs/Image.h"
 #include "../Structs/Transform.h"
 #include "../Structs/MapArray.h"
-
-#define MAX_RAY_STEPS 20           
-
-#define FOV_DEGREES 60                                     
-#define COLUMN_W 4      
+    
 
 using namespace std;
 
@@ -22,6 +18,10 @@ private:
 
 	int width;
 	int height;
+
+	int MaxRaySteps = 20;
+	int fov = 60;
+	int columnWidth = 4;
 
 	int columnCount;          
 	float projDist;   
@@ -40,7 +40,7 @@ private:
 
 public:
 	Viewport();
-	Viewport(Vector2 origin, int width, int height);
+	Viewport(Vector2 origin, int width, int height, int fov, int maxRaySteps, int columnWidth);
 
 	int GetWidth();
 	int GetHeight();

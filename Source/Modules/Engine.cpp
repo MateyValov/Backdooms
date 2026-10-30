@@ -3,13 +3,15 @@
 #include <GL/freeglut.h>
 
 #include "Textures.h"
-#include "Controller.h"
-#include "Viewport.h"
 
-#include "../Objects/Player.h"
-#include "../Objects/Map.h"
+#include "../Architecture/Controller.h"
+#include "../Architecture/Viewport.h"
+#include "../Architecture/Player.h"
+#include "../Architecture/Map.h"
 
 #include "../Structs/Window.h"
+
+#include "../Architecture/GUI/MainMenu.h"
 
 static float lastTime;
 static float deltaTime;
@@ -22,17 +24,24 @@ static Player* MainPlayer;
 static Viewport* SecondViewport;
 static Player* SecondPlayer;
 
+MainMenu* menu;
 
-static void Start(bool isMultiplayer)
+static void OpenMenu()
 {
+	menu->DrawWidget(Vector2(), Vector2(Window::x, Window::y));
+}
+
+static void StartGame(bool isMultiplayer)
+{
+	menu = new MainMenu();
 	map = new Map();
 
-	MainViewport = new Viewport(Vector2(), Window::x, Window::y / (isMultiplayer ? 2 : 1));
+	MainViewport = new Viewport(Vector2(), Window::x, Window::y / (isMultiplayer ? 2 : 1), 60, 20, 2);
 	MainPlayer = map->Spawn<Player>(map->GetCenter(), 0.f);
 
 	if (isMultiplayer)
 	{
-		SecondViewport = new Viewport(Vector2(0.f, Window::y / 2), Window::x, Window::y / 2);
+		SecondViewport = new Viewport(Vector2(0.f, Window::y / 2), Window::x, Window::y / 2, 60, 20, 2);
 		SecondPlayer = map->Spawn<Player>(map->GetCenter(), 0.f);
 	}
 }
@@ -108,6 +117,7 @@ static void Update()
 	{
 		SecondViewport->DrawLevel(map, SecondPlayer->GetTransform());
 	}
+	OpenMenu();
 
 	glutSwapBuffers();
 }
@@ -124,8 +134,8 @@ bool Engine::InitEngine(int* argc, char** argv)
 		return false;
 	}
 
-	Start(true);
-
+	StartGame(true);
+	
 	glClearColor(0, 0, 0, 0);
 	gluOrtho2D(0, Window::x, Window::y, 0);
 

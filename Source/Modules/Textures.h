@@ -29,7 +29,7 @@ namespace Textures
 	{
 		bool Load();
 
-		const Image& Get(const std::string& path);
+		const Image& Get(const string& path);
 	}
 
 	bool LoadRgba(const char* path, int& width, int& height, std::vector<unsigned char>& rgba);

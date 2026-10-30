@@ -1,8 +1,9 @@
 #include "Object.h"
 
-#include "../Structs/MathFuncs.h"
-#include "../Engine/Engine.h"
 #include "Map.h";
+#include "../Structs/MathFuncs.h"
+#include "../Modules/Engine.h"
+
 
 Object::Object()
 {

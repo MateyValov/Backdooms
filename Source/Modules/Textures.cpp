@@ -276,7 +276,7 @@ namespace Textures {
 			return ok;
 		}
 
-		const Image& Get(const std::string& path)
+		const Image& Get(const string& path)
 		{
 			auto it = guiImages.find(normalize(path));
 			if (it != guiImages.end()) { return it->second; }

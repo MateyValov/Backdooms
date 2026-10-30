@@ -2,7 +2,6 @@
 
 #include "Textures.h"
 
-
 void Rendering::Draw(const Image& image, const Rect& dest, const Rect& source, const Color& tint)
 {
 	if (image.texture == 0 || image.width <= 0 || image.height <= 0) { return; }
@@ -27,10 +26,10 @@ void Rendering::Draw(const Image& image, const Rect& dest, const Rect& source, c
 	glDisable(GL_TEXTURE_2D);
 }
 
-void Rendering::DrawImage(const Image& image, const Vector2& position, float widthOverride, float heightOverride, const Color& tint)
+void Rendering::DrawImage(const Image& image, const Vector2& position, const Vector2& scale, const Color& tint)
 {
-	float w = widthOverride > 0 ? widthOverride : (float)image.width;
-	float h = heightOverride > 0 ? heightOverride : (float)image.height;
+	float w = (float)image.width * scale.x;
+	float h = (float)image.height * scale.y;
 	Draw(image, Rect(position.x, position.y, w, h), Rect(0, 0, (float)image.width, (float)image.height), tint);
 }
 
