@@ -3,7 +3,7 @@
 
 int main(int argc, char* argv[])
 {
-	if (Engine::InitEngine(&argc, argv) != 0)
+	if (Engine::InitEngine(&argc, argv, 640, 480) != 0)
 	{
 		return 1;
 	}

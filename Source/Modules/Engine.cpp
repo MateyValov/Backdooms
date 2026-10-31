@@ -5,30 +5,35 @@
 #include "Textures.h"
 
 #include "../Architecture/Controller.h"
-#include "../Architecture/Viewport.h"
+#include "../Architecture/Camera.h"
 #include "../Architecture/Player.h"
 #include "../Architecture/Map.h"
-
-#include "../Structs/Window.h"
 
 #include "../Architecture/GUI/MainMenu.h"
 
 static float lastTime;
 static float deltaTime;
 
+static int screenWidth;
+static int screenHeight;
+
+static Screenspace Fullscreen;
+static Screenspace TopScreen;
+static Screenspace BottomScreen;
+
 static Map* map;
 
-static Viewport* MainViewport;
+static Camera* MainViewport;
 static Player* MainPlayer;
 
-static Viewport* SecondViewport;
+static Camera* SecondViewport;
 static Player* SecondPlayer;
 
 MainMenu* menu;
 
 static void OpenMenu()
 {
-	menu->DrawWidget(Vector2(), Vector2(Window::x, Window::y));
+	menu->DrawWidget(Fullscreen.TopLeft, Fullscreen.BottomRight);
 }
 
 static void StartGame(bool isMultiplayer)
@@ -36,13 +41,18 @@ static void StartGame(bool isMultiplayer)
 	menu = new MainMenu();
 	map = new Map();
 
-	MainViewport = new Viewport(Vector2(), Window::x, Window::y / (isMultiplayer ? 2 : 1), 60, 20, 2);
-	MainPlayer = map->Spawn<Player>(map->GetCenter(), 0.f);
-
 	if (isMultiplayer)
 	{
-		SecondViewport = new Viewport(Vector2(0.f, Window::y / 2), Window::x, Window::y / 2, 60, 20, 2);
+		MainViewport = new Camera(TopScreen, 60, 20, 2);
+		MainPlayer = map->Spawn<Player>(map->GetCenter(), 0.f);
+
+		SecondViewport = new Camera(BottomScreen, 60, 20, 2);
 		SecondPlayer = map->Spawn<Player>(map->GetCenter(), 0.f);
+	}
+	else
+	{
+		MainViewport = new Camera(Fullscreen, 60, 20, 2);
+		MainPlayer = map->Spawn<Player>(map->GetCenter(), 0.f);
 	}
 }
 
@@ -117,17 +127,21 @@ static void Update()
 	{
 		SecondViewport->DrawLevel(map, SecondPlayer->GetTransform());
 	}
-	OpenMenu();
+	//OpenMenu();
 
 	glutSwapBuffers();
 }
 
-bool Engine::InitEngine(int* argc, char** argv)
+bool Engine::InitEngine(int* argc, char** argv, int screenWidth, int screenHeight)
 {
 	glutInit(argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-	glutInitWindowSize(Window::x, Window::y);
+	glutInitWindowSize(screenWidth, screenHeight);
 	glutCreateWindow("Backdooms");
+
+	Fullscreen = Screenspace(Vector2(), Vector2(screenWidth, screenHeight));
+	TopScreen = Screenspace(Vector2(), Vector2(screenWidth, screenHeight / 2));
+	BottomScreen = Screenspace(Vector2(0.f, screenHeight / 2), Vector2(screenWidth, screenHeight));
 
 	if (Textures::LoadTextures() == false)
 	{
@@ -137,7 +151,7 @@ bool Engine::InitEngine(int* argc, char** argv)
 	StartGame(true);
 	
 	glClearColor(0, 0, 0, 0);
-	gluOrtho2D(0, Window::x, Window::y, 0);
+	gluOrtho2D(0, screenWidth, screenHeight, 0);
 
 	glutDisplayFunc(Update);
 	glutMainLoop();
@@ -158,4 +172,14 @@ Map* Engine::GetMap()
 float Engine::GetDeltaTime()
 {
 	return deltaTime;
+}
+
+Vector2 Engine::GetWindowSize()
+{
+	return Vector2(Fullscreen.x(), Fullscreen.y());
+}
+
+Screenspace Engine::GetFullscreenBounds()
+{
+	return Fullscreen;
 }

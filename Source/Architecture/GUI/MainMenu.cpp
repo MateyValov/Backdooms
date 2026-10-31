@@ -13,4 +13,7 @@ MainMenu::MainMenu()
 	elements.push_back(new GUI_Image(
 		"GUI/maznite_sword.png", Vector2(-120, -240), Vector2(1.5f, 0.8f), BOTTON_RIGHT, Color::Red()
 	));
+	elements.push_back(new GUI_Image(
+		"GUI/maznite_sword.png", Vector2(0.f, 0.f), Vector2(10.f, 10.f), TOP_LEFT, Color()
+	));
 }

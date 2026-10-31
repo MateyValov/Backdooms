@@ -3,21 +3,19 @@
 #include <vector>
 
 #include "../Structs/Image.h"
-#include "../Structs/Transform.h"
 #include "../Structs/MapArray.h"
+#include "../Structs/Transform.h"
+#include "../Structs/Screenspace.h"
     
 
 using namespace std;
 
 class Map;
 
-class Viewport
+class Camera
 {
 private:
-	Vector2 origin;
-
-	int width;
-	int height;
+	Screenspace screenspace;
 
 	int MaxRaySteps = 20;
 	int fov = 60;
@@ -39,11 +37,12 @@ private:
 	void DrawFloorAndRoof(const MapArray floor, const MapArray roof, const Transform viewpoint);
 
 public:
-	Viewport();
-	Viewport(Vector2 origin, int width, int height, int fov, int maxRaySteps, int columnWidth);
+	Camera();
+	Camera(Screenspace screenspace, int fov, int maxRaySteps, int columnWidth);
 
 	int GetWidth();
 	int GetHeight();
+	Screenspace GetScreenspace();
 
 	void InitFloorBuffer();
 

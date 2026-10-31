@@ -7,12 +7,14 @@
 GUI_Image::GUI_Image(string path) : GUI_Element()
 {
 	this->path = path;
+	this->scale = Vector2(1.f, 1.f);
 	image = Textures::GUI::Get(path);
 }
 
 GUI_Image::GUI_Image(string path, Vector2 position) : GUI_Element(position)
 {
 	this->path = path;
+	this->scale = Vector2(1.f, 1.f);
 	image = Textures::GUI::Get(path);
 }
 
@@ -25,8 +27,5 @@ GUI_Image::GUI_Image(string path, Vector2 position, Vector2 scale, Vector2 align
 
 void GUI_Image::Draw(Vector2 TopLeft, Vector2 BottomRight)
 {
-	int screenWidth = BottomRight.x - TopLeft.x;
-	int screenHeight = BottomRight.y - TopLeft.y;
-
-	Rendering::DrawImage(image, GetTruePosition(screenWidth, screenHeight), scale, color);
+	Rendering::DrawImage(image, GetTruePosition(TopLeft, BottomRight), scale, color);
 }

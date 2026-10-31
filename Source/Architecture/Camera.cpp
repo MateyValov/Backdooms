@@ -1,12 +1,12 @@
-#include "Viewport.h"
+#include "Camera.h"
 
 #include <algorithm>
 #include <cmath>
 
-#include "../Structs/Window.h"
 #include "../Architecture/Map.h"  
 #include "../Modules/Rendering.h"
 #include "../Modules/Textures.h"
+#include "../Modules/Engine.h"
 
 #ifndef GL_CLAMP_TO_EDGE
 #define GL_CLAMP_TO_EDGE 0x812F
@@ -22,43 +22,39 @@ namespace
 	const unsigned char CEILING_COLOUR[3] = { 60, 60, 75 };
 }
 
-Viewport::Viewport()
+Camera::Camera()
 {
-	origin = Vector2();
-	width = Window::x;
-	height = Window::y;
+	screenspace = Engine::GetFullscreenBounds();
 	Setup();
 }
 
-Viewport::Viewport(Vector2 origin, int width, int height, int fov, int maxRaySteps, int columnWidth)
+Camera::Camera(Screenspace screenspace, int fov, int maxRaySteps, int columnWidth)
 {
-	this->origin = origin;
-	this->width = width;
-	this->height = height;
+	this->screenspace = screenspace;
 	this->fov = fov;
 	this->MaxRaySteps = maxRaySteps;
 	this->columnWidth = columnWidth;
 	Setup();
 }
 
-void Viewport::Setup()
+void Camera::Setup()
 {
-	columnCount = (width + columnWidth - 1) / columnWidth;
-	projDist = (float)height;
+	columnCount = (GetWidth() + columnWidth - 1) / columnWidth;
+	projDist = (float)GetHeight();
 
-	floorBuf.assign((size_t)width * height * 4, 0);
+	floorBuf.assign((size_t)GetWidth() * GetHeight() * 4, 0);
 
 	// Angle away from the view direction at horizontal position xf (in pixels, 0 = left edge of the viewport).
 	auto angleAt = [&](float xf, float& c, float& s)
 		{
-			float theta = (fov / 2.0f - xf * ((float)fov / width)) * PI_F / 180.0f;
+			float theta = (fov / 2.0f - xf * ((float)fov / GetWidth())) * PI_F / 180.0f;
 			c = cosf(theta);
 			s = sinf(theta);
 		};
 
-	pxCos.resize(width); pxSin.resize(width); pxInvCos.resize(width);
-	pxDirX.resize(width); pxDirY.resize(width);
-	for (int x = 0; x < width; ++x)
+	pxCos.resize(GetWidth()); pxSin.resize(GetWidth()); pxInvCos.resize(GetWidth());
+	pxDirX.resize(GetWidth()); pxDirY.resize(GetWidth());
+	for (int x = 0; x < GetWidth(); ++x)
 	{
 		angleAt(x + 0.5f, pxCos[x], pxSin[x]);     // centre of pixel x
 		pxInvCos[x] = 1.0f / pxCos[x];
@@ -67,27 +63,32 @@ void Viewport::Setup()
 	colCos.resize(columnCount); colSin.resize(columnCount);
 	for (int c = 0; c < columnCount; ++c)
 	{
-		int x0 = c * columnWidth, x1 = min(width, x0 + columnWidth);
+		int x0 = c * columnWidth, x1 = min(GetWidth(), x0 + columnWidth);
 		angleAt(0.5f * (x0 + x1), colCos[c], colSin[c]);   // centre of the column
 	}
 }
 
-int Viewport::GetWidth()
+int Camera::GetWidth()
 {
-	return width;
+	return screenspace.x();
 }
 
-int Viewport::GetHeight()
+int Camera::GetHeight()
 {
-	return height;
+	return screenspace.y();
 }
 
-void Viewport::InitFloorBuffer()
+Screenspace Camera::GetScreenspace()
 {
-	Textures::CreateImage(floorImage, width, height, floorBuf.data(), false, false);
+	return screenspace;
 }
 
-void Viewport::DrawWalls(const MapArray walls, const Transform viewpoint)
+void Camera::InitFloorBuffer()
+{
+	Textures::CreateImage(floorImage, GetWidth(), GetHeight(), floorBuf.data(), false, false);
+}
+
+void Camera::DrawWalls(const MapArray walls, const Transform viewpoint)
 {
 	const Image& atlas = Textures::Atlas::GetImage();
 	const float T = (float)TILE_SIZE;
@@ -135,23 +136,23 @@ void Viewport::DrawWalls(const MapArray walls, const Transform viewpoint)
 		float perp = std::max(t * colCos[c], 0.01f);         // straight-ahead distance: no fisheye
 		float lineH = (TILE_SIZE * projDist) / perp;
 		float cut = 0;                                       // fraction of the wall off-screen at the top and again at the bottom
-		if (lineH > height) { cut = (lineH - height) / (2 * lineH); lineH = (float)height; }
-		float top = (height - lineH) / 2;
+		if (lineH > GetHeight()) { cut = (lineH - GetHeight()) / (2 * lineH); lineH = (float)GetHeight(); }
+		float top = (GetHeight() - lineH) / 2;
 
-		int x0 = c * columnWidth, x1 = min(width, x0 + columnWidth);
+		int x0 = c * columnWidth, x1 = min(GetWidth(), x0 + columnWidth);
 		float shade = hitEastWestFace ? SHADE_EAST_WEST_FACE : SHADE_NORTH_SOUTH_FACE;
 
 		// ---- draw one single-pixel-wide slice of the texture, stretched over the column ----
 		Rect tex = Textures::Atlas::Cell(hitTile - 1);       // map value 1 is atlas texture 0
 		float uu = std::min(std::max(u, 0.f), 0.9999f);      // stay inside this texture, never touch its neighbour
 		Rendering::Draw(atlas,
-			Rect(origin.x + x0, origin.y + top, (float)(x1 - x0), lineH),
+			Rect(screenspace.TopLeft.x + x0, screenspace.TopLeft.y + top, (float)(x1 - x0), lineH),
 			Rect(tex.x + uu * tex.w, tex.y + cut * tex.h, 0, tex.h * (1 - 2 * cut)),
 			Color(shade, shade, shade));
 	}
 }
 
-void Viewport::DrawFloorAndRoof(const MapArray floor, const MapArray roof, const Transform viewpoint)
+void Camera::DrawFloorAndRoof(const MapArray floor, const MapArray roof, const Transform viewpoint)
 {
 	if (!floorImage.texture) { InitFloorBuffer(); }
 
@@ -175,7 +176,7 @@ void Viewport::DrawFloorAndRoof(const MapArray floor, const MapArray roof, const
 	// This frame's ray direction for every pixel column.
 	const float angle = viewpoint.angle * PI_F / 180.0f;
 	const float ca = cosf(angle), sa = sinf(angle);
-	for (int x = 0; x < width; ++x)
+	for (int x = 0; x < GetWidth(); ++x)
 	{
 		pxDirX[x] = ca * pxCos[x] - sa * pxSin[x];
 		pxDirY[x] = -(sa * pxCos[x] + ca * pxSin[x]);
@@ -194,21 +195,21 @@ void Viewport::DrawFloorAndRoof(const MapArray floor, const MapArray roof, const
 			out[3] = 255;
 		};
 
-	const int half = height / 2;
-	for (int y = half; y < height; ++y)                      // the bottom half of the view is floor ...
+	const int half = GetHeight() / 2;
+	for (int y = half; y < GetHeight(); ++y)                      // the bottom half of the view is floor ...
 	{
 		float perp = (T / 2.0f) * projDist / (y + 0.5f - half);   // distance straight ahead that this row sees
-		int yCeiling = height - 1 - y;                       // ... and the mirrored row in the top half is ceiling
+		int yCeiling = GetHeight() - 1 - y;                       // ... and the mirrored row in the top half is ceiling
 
-		for (int x = 0; x < width; ++x)
+		for (int x = 0; x < GetWidth(); ++x)
 		{
 			float t = perp * pxInvCos[x];                    // distance along this column's ray
 			float wx = viewpoint.position.x + pxDirX[x] * t;
 			float wy = viewpoint.position.y + pxDirY[x] * t;
 			int tileX = (int)floorf(wx / T), tileY = (int)floorf(wy / T);
 
-			unsigned char* floorPixel = &floorBuf[((size_t)y * width + x) * 4];
-			unsigned char* ceilingPixel = &floorBuf[((size_t)yCeiling * width + x) * 4];
+			unsigned char* floorPixel = &floorBuf[((size_t)y * GetWidth() + x) * 4];
+			unsigned char* ceilingPixel = &floorBuf[((size_t)yCeiling * GetWidth() + x) * 4];
 
 			if (tileX >= 0 && tileX < MAP_TILES_X && tileY >= 0 && tileY < MAP_TILES_Y)
 			{
@@ -226,11 +227,14 @@ void Viewport::DrawFloorAndRoof(const MapArray floor, const MapArray roof, const
 	}
 
 	glBindTexture(GL_TEXTURE_2D, floorImage.texture);
-	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, floorBuf.data());
-	Rendering::Draw(floorImage, Rect(origin.x, origin.y, (float)width, (float)height), Rect(0, 0, (float)width, (float)height));
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, GetWidth(), GetHeight(), GL_RGBA, GL_UNSIGNED_BYTE, floorBuf.data());
+	Rendering::Draw(
+		floorImage, 
+		Rect(screenspace.TopLeft.x, screenspace.TopLeft.y, (float)GetWidth(), (float)GetHeight()), 
+		Rect(0, 0, (float)GetWidth(), (float)GetHeight()));
 }
 
-void Viewport::DrawLevel(const Map* map, const Transform viewpoint)
+void Camera::DrawLevel(const Map* map, const Transform viewpoint)
 {
 	DrawFloorAndRoof(map->GetFloor(), map->GetRoof(), viewpoint);
 	DrawWalls(map->GetWalls(), viewpoint);

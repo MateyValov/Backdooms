@@ -20,11 +20,11 @@ public:
 	Vector2 alignment = TOP_LEFT;
 	Color color;
 
-	GUI_Element() = default;
+	GUI_Element();
 	GUI_Element(Vector2 position);
 	GUI_Element(Vector2 position, Vector2 alignment, Color color);
 
-	Vector2 GetTruePosition(int screenspaceX, int screenspaceY);
+	Vector2 GetTruePosition(Vector2 TopLeft, Vector2 BottomRight);
 
 	virtual void Draw(Vector2 TopLeft, Vector2 BottomRight) = 0;
 };
