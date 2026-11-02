@@ -4,6 +4,9 @@
 #include <type_traits>
 #include <utility>
 #include <vector>
+#include <functional>
+#include <set>
+#include <unordered_map>
 
 #include "../Structs/Transform.h"
 #include "../Structs/MapArray.h"
@@ -12,6 +15,37 @@ using namespace std;
 
 class Object;
 
+using ObjectPair = std::pair<Object*, Object*>;
+
+struct ObjectEntry
+{
+	unique_ptr<Object> object;
+	bool destroyed = false;
+};
+
+struct Tile 
+{ 
+	int x;
+	int y;
+	int value; 
+
+	int tileIndex() const 
+	{
+		return y * MAP_TILES_X + x;
+	}
+};     
+               
+struct PairLess
+{
+	bool operator()(const ObjectPair& l, const ObjectPair& r) const
+	{
+		less<Object*> lt;
+		if (lt(l.first, r.first)) { return true; }
+		if (lt(r.first, l.first)) { return false; }
+		return lt(l.second, r.second);
+	}
+};
+
 class Map
 {
 private:
@@ -19,15 +53,17 @@ private:
 	MapArray floor;
 	MapArray roof;
 
-	struct ObjectEntry
-	{
-		unique_ptr<Object> object;
-		bool destroyed = false;        
-	};
 	vector<ObjectEntry> objects;
 
 	bool IsSolid(int tileX, int tileY) const;
 	bool OverlapsWall(const Vector2& centre, float radius) const;
+
+	set<ObjectPair, PairLess> touchingPairs;
+	unordered_map<Object*, vector<Tile>> touchingWalls;
+
+	bool IsMarked(const Object* object) const;
+	void RunCollisions();
+	void RemoveDestroyed();
 
 public:
 	Map();
@@ -38,9 +74,11 @@ public:
 	MapArray GetWalls() const;
 	MapArray GetFloor() const;
 	MapArray GetRoof() const;
-	Vector2 GetCenter() const;
+
+	Vector2 GetSpawnpoint() const;
 
 	int GetTile(int x, int y) const;
+	vector<Object*> GetObjects() const;
 
 	Vector2 EvaluatePosition(Vector2 position, float radius);
 

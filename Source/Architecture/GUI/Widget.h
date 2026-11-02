@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "../../Structs/Transform.h"
+#include "../../Structs/Screenspace.h"
 
 using namespace std;
 
@@ -14,5 +15,5 @@ protected:
 	vector<GUI_Element*> elements;
 
 public:
-	void DrawWidget(Vector2 TopLeft, Vector2 BottomRight);
+	void DrawWidget(Screenspace screenspace);
 };

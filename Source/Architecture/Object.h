@@ -9,13 +9,26 @@ protected:
 	float radius;
 	bool hasCollision;
 
+	int textureFront = -1;
+	int textureLeft = -1;
+	int textureRight = -1;
+	int textureBack = -1;
+
 public:
 	Object();
 	Object(float radius);
 	virtual ~Object() = default;
 
-	virtual void Start() = 0;
-	virtual void Update() = 0;
+	virtual void Start() {}
+	virtual void Update() {}
+
+	virtual void OnCollisionEnter(Object* other) {}   
+	virtual void OnCollisionStay(Object* other) {}
+	virtual void OnCollisionExit(Object* other) {}  
+
+	virtual void OnWallEnter(int tileX, int tileY, int wallValue) {}
+	virtual void OnWallStay(int tileX, int tileY, int wallValue) {}
+	virtual void OnWallExit(int tileX, int tileY, int wallValue) {}
 
 	Transform GetTransform() const;
 	float GetRadius() const;
@@ -24,4 +37,8 @@ public:
 	void SetTransform(Transform newTrasform);
 	void SetPosition(Vector2 newPosition);
 	void SetAngle(float newAngle);
+
+	void SetTextureId(int front, int left = -1, int right = -1, int back = -1);
+	int GetTextureId() const;
+	int GetTextureIdForPosition(Vector2 viewerPosition) const; 
 };

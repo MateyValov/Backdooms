@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../../Structs/Screenspace.h"
 #include "../../Structs/Transform.h"
 #include "../../Structs/Image.h"
 
@@ -26,5 +27,5 @@ public:
 
 	Vector2 GetTruePosition(Vector2 TopLeft, Vector2 BottomRight);
 
-	virtual void Draw(Vector2 TopLeft, Vector2 BottomRight) = 0;
+	virtual void Draw(Screenspace screenspace) = 0;
 };

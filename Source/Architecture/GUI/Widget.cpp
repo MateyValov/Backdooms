@@ -2,10 +2,10 @@
 
 #include "GUI_Element.h"
 
-void Widget::DrawWidget(Vector2 TopLeft, Vector2 BottomRight)
+void Widget::DrawWidget(Screenspace screenspace)
 {
 	for (int i = 0; i < elements.size(); i++)
 	{
-		elements[i]->Draw(TopLeft, BottomRight);
+		elements[i]->Draw(screenspace);
 	}
 }

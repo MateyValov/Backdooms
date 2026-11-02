@@ -19,5 +19,5 @@ public:
 	GUI_Image(string path, Vector2 position);
 	GUI_Image(string path, Vector2 position, Vector2 scale, Vector2 alignment, Color color);
 
-	void Draw(Vector2 TopLeft, Vector2 BottomRight) override;
+	void Draw(Screenspace screenspace) override;
 };

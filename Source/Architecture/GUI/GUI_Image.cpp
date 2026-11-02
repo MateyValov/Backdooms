@@ -25,7 +25,7 @@ GUI_Image::GUI_Image(string path, Vector2 position, Vector2 scale, Vector2 align
 	image = Textures::GUI::Get(path);
 }
 
-void GUI_Image::Draw(Vector2 TopLeft, Vector2 BottomRight)
+void GUI_Image::Draw(Screenspace screenspace)
 {
-	Rendering::DrawImage(image, GetTruePosition(TopLeft, BottomRight), scale, color);
+	Rendering::DrawImage(image, GetTruePosition(screenspace.TopLeft, screenspace.BottomRight), scale, color);
 }

@@ -2,28 +2,30 @@
 
 #include "MovableObject.h"
 
-#define PLAYER_MAX_HEALTH 8
-#define PLAYER_MAX_AMMO 8
-
 class Player : public MovableObject
 {
 private:
 	int health;
+	int maxHealth;
+
 	int ammo;
+	int maxAmmo;
 
 public:
 	Player();
-	Player(float radius, int movementSpeed, int turnSpeed);
+	Player(int health, int ammo);
+	Player(int health, int ammo, float radius, int movementSpeed, int turnSpeed);
 
-	virtual void Start() override;
-	virtual void Update() override;
+	void OnCollisionEnter(Object* other) override;
+	void OnWallEnter(int tileX, int tileY, int wallValue) override;
 
-	int GetHealth();
-	int GetAmmo();
+	int GetHealth() const;
+	int GetMaxHealth() const;
+	int GetAmmo() const;
+	int GetMaxAmmo() const;
 
 	void AddHealth(int Amount);
 	void AddAmmo(int Amount);
 
 	void InteractPressed();
-	void ShootPressed();
 };

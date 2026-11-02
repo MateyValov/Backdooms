@@ -4,6 +4,7 @@
 #include <cmath>
 
 #include "../Architecture/Map.h"  
+#include "../Architecture/Object.h"
 #include "../Modules/Rendering.h"
 #include "../Modules/Textures.h"
 #include "../Modules/Engine.h"
@@ -14,7 +15,6 @@
 
 namespace
 {
-	const float PI_F = 3.14159265f;
 	const float SHADE_EAST_WEST_FACE = 0.9f;     // walls seen from the east or west
 	const float SHADE_NORTH_SOUTH_FACE = 0.7f;   // walls seen from the north or south
 
@@ -28,12 +28,13 @@ Camera::Camera()
 	Setup();
 }
 
-Camera::Camera(Screenspace screenspace, int fov, int maxRaySteps, int columnWidth)
+Camera::Camera(Screenspace screenspace, int fov, int maxRaySteps, int columnWidth, float nearClippingDistance)
 {
 	this->screenspace = screenspace;
 	this->fov = fov;
 	this->MaxRaySteps = maxRaySteps;
 	this->columnWidth = columnWidth;
+	this->nearClippingDistance = nearClippingDistance;
 	Setup();
 }
 
@@ -42,12 +43,13 @@ void Camera::Setup()
 	columnCount = (GetWidth() + columnWidth - 1) / columnWidth;
 	projDist = (float)GetHeight();
 
+	wallDepth.assign(columnCount, FLT_MAX);
 	floorBuf.assign((size_t)GetWidth() * GetHeight() * 4, 0);
 
 	// Angle away from the view direction at horizontal position xf (in pixels, 0 = left edge of the viewport).
 	auto angleAt = [&](float xf, float& c, float& s)
 		{
-			float theta = (fov / 2.0f - xf * ((float)fov / GetWidth())) * PI_F / 180.0f;
+			float theta = (fov / 2.0f - xf * ((float)fov / GetWidth())) * PI / 180.0f;
 			c = cosf(theta);
 			s = sinf(theta);
 		};
@@ -93,8 +95,10 @@ void Camera::DrawWalls(const MapArray walls, const Transform viewpoint)
 	const Image& atlas = Textures::Atlas::GetImage();
 	const float T = (float)TILE_SIZE;
 	const float px = viewpoint.position.x, py = viewpoint.position.y;
-	const float angle = viewpoint.angle * PI_F / 180.0f;
+	const float angle = viewpoint.angle * PI / 180.0f;
 	const float ca = cosf(angle), sa = sinf(angle);
+
+	fill(wallDepth.begin(), wallDepth.end(), FLT_MAX);
 
 	for (int c = 0; c < columnCount; ++c)
 	{
@@ -134,6 +138,7 @@ void Camera::DrawWalls(const MapArray walls, const Transform viewpoint)
 
 		// ---- size on screen ----
 		float perp = std::max(t * colCos[c], 0.01f);         // straight-ahead distance: no fisheye
+		wallDepth[c] = perp;                                 // remembered so objects can hide behind this wall
 		float lineH = (TILE_SIZE * projDist) / perp;
 		float cut = 0;                                       // fraction of the wall off-screen at the top and again at the bottom
 		if (lineH > GetHeight()) { cut = (lineH - GetHeight()) / (2 * lineH); lineH = (float)GetHeight(); }
@@ -154,7 +159,10 @@ void Camera::DrawWalls(const MapArray walls, const Transform viewpoint)
 
 void Camera::DrawFloorAndRoof(const MapArray floor, const MapArray roof, const Transform viewpoint)
 {
-	if (!floorImage.texture) { InitFloorBuffer(); }
+	if (!floorImage.texture) 
+	{ 
+		InitFloorBuffer(); 
+	}
 
 	const Image& atlas = Textures::Atlas::GetImage();
 	const unsigned char* atlasPx = atlas.pixels.data();
@@ -174,7 +182,7 @@ void Camera::DrawFloorAndRoof(const MapArray floor, const MapArray roof, const T
 	}
 
 	// This frame's ray direction for every pixel column.
-	const float angle = viewpoint.angle * PI_F / 180.0f;
+	const float angle = viewpoint.angle * PI / 180.0f;
 	const float ca = cosf(angle), sa = sinf(angle);
 	for (int x = 0; x < GetWidth(); ++x)
 	{
@@ -234,10 +242,82 @@ void Camera::DrawFloorAndRoof(const MapArray floor, const MapArray roof, const T
 		Rect(0, 0, (float)GetWidth(), (float)GetHeight()));
 }
 
+void Camera::DrawObjects(const vector<Object*>& objects, const Transform viewpoint)
+{
+	const Image& atlas = Textures::Atlas::GetImage();
+	const float angle = viewpoint.angle * PI / 180.0f;
+	const float fx = cosf(angle), fy = -sinf(angle);     // the view direction on the map (its y axis points down)
+	const float rx = -fy, ry = fx;                       // the direction to the right of it
+
+	struct Visible { Object* object; float depth; float lateral; int texture; };
+	vector<Visible> visible;
+	for (Object* object : objects)
+	{
+		int texture = object->GetTextureIdForPosition(viewpoint.position);
+		if (texture < 0) 
+		{ 
+			continue; 
+		}                               
+
+		Vector2 p = object->GetTransform().position;
+		float dx = p.x - viewpoint.position.x, dy = p.y - viewpoint.position.y;
+		float depth = dx * fx + dy * fy;                              // how far ahead of the camera (negative = behind)
+		if (depth < nearClippingDistance) 
+		{ 
+			continue; 
+		}    
+
+		visible.push_back(Visible{ object, depth, dx * rx + dy * ry, texture });
+	}
+	std::sort(visible.begin(), visible.end(), [](const Visible& a, const Visible& b) { return a.depth > b.depth; });   // far to near
+
+	for (const Visible& v : visible)
+	{
+		// Same scale as the walls: a wall one tile tall and one tile away is projDist * TILE_SIZE / distance pixels tall.
+		float scale = projDist / v.depth;                             // pixels per map unit at this distance
+		float size = 2.0f * v.object->GetRadius() * scale;            // the sprite is a square, as wide and tall as the object's diameter
+		float centreX = (fov / 2.0f + atan2f(v.lateral, v.depth) * 180.0f / PI) * GetWidth() / fov;   // same angle-to-pixel mapping as the walls
+		float left = centreX - size / 2, right = centreX + size / 2;
+		float bottom = GetHeight() / 2.0f + (TILE_SIZE / 2.0f) * scale;    // its feet stand on the floor
+		float top = bottom - size;
+
+		float visibleTop = std::max(top, 0.0f), visibleBottom = min(bottom, (float)GetHeight());   // stay inside the viewport
+		if (size <= 0 || visibleBottom <= visibleTop || right <= 0 || left >= GetWidth()) 
+		{ 
+			continue; 
+		}
+		float v0 = (visibleTop - top) / size, v1 = (visibleBottom - top) / size;                    // which part of the texture that is
+
+		Rect tex = Textures::Atlas::Cell(v.texture);
+		int firstColumn = std::max(0, (int)floorf(left / columnWidth));
+		int lastColumn = std::min(columnCount - 1, (int)floorf((right - 0.001f) / columnWidth));
+		for (int c = firstColumn; c <= lastColumn; ++c)
+		{
+			if (v.depth >= wallDepth[c]) 
+			{ 
+				continue; 
+			}                // a wall is in front of the object in this column
+
+			float x0 = max((float)(c * columnWidth), left), x1 = min((float)min(GetWidth(), (c + 1) * columnWidth), right);
+			if (x1 <= x0) 
+			{ 
+				continue; 
+			}
+			float u = min(max((0.5f * (x0 + x1) - left) / size, 0.0f), 0.9999f);          // where in the texture this strip is
+
+			Rendering::Draw(atlas,
+				Rect(screenspace.TopLeft.x + x0, screenspace.TopLeft.y + visibleTop, x1 - x0, visibleBottom - visibleTop),
+				Rect(tex.x + u * tex.w, tex.y + v0 * tex.h, 0, (v1 - v0) * tex.h),
+				Color());
+		}
+	}
+}
+
 void Camera::DrawLevel(const Map* map, const Transform viewpoint)
 {
 	DrawFloorAndRoof(map->GetFloor(), map->GetRoof(), viewpoint);
 	DrawWalls(map->GetWalls(), viewpoint);
+	DrawObjects(map->GetObjects(), viewpoint);
 }
 
 

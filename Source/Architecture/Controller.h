@@ -7,6 +7,7 @@ struct ButtonKeys
 	int w, a, s, d, q;
 	int up, left, down, right, space;
 	int enter, esc;
+	int one, two, i;
 };
 
 struct PlayerInput

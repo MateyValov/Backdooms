@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Widget.h"
+#include "../../Architecture/GUI/Widget.h"
 
 class MainMenu : public Widget
 {

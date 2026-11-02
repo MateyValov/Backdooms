@@ -2,8 +2,7 @@
 
 #include <math.h>
 
-#define PI 3.141593
-
+const float PI = 3.14159265f;
 
 static float dist(float ax, float ay, float bx, float by, float ang)
 {

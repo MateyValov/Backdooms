@@ -28,4 +28,8 @@ void updateKeys()
 
 	Keys.enter = keyDown(VK_RETURN);
 	Keys.esc = keyDown(VK_ESCAPE);
+
+	Keys.one = keyDown('1');
+	Keys.two = keyDown('2');
+	Keys.i = keyDown('I');
 }

@@ -7,57 +7,80 @@
 
 Player::Player() : MovableObject()
 {
-	health = PLAYER_MAX_HEALTH;
-	ammo = PLAYER_MAX_AMMO;
+	maxHealth = 8;
+	maxAmmo = 8;
+
+	health = maxHealth;
+	ammo = maxAmmo;
+
+	SetTextureId(16,17,18,19);
 }
 
-Player::Player(float radius, int movementSpeed, int turnSpeed) : MovableObject(radius, movementSpeed, turnSpeed)
+Player::Player(int health, int ammo) : MovableObject()
 {
-	health = PLAYER_MAX_HEALTH;
-	ammo = PLAYER_MAX_AMMO;
+	this->maxHealth = health;
+	this->maxAmmo = ammo;
+
+	this->health = maxHealth;
+	this->ammo = maxAmmo;
+
+	SetTextureId(16, 17, 18, 19);
 }
 
-void Player::Start()
+Player::Player(int health, int ammo, float radius, int movementSpeed, int turnSpeed) : MovableObject(radius, movementSpeed, turnSpeed)
 {
+	this->maxHealth = health;
+	this->maxAmmo = ammo;
+
+	this->health = maxHealth;
+	this->ammo = maxAmmo;
+
+	SetTextureId(16, 17, 18, 19);
 }
 
-void Player::Update()
+void Player::OnCollisionEnter(Object* other)
 {
+	printf("COLLIDE");
 }
 
-int Player::GetHealth()
+void Player::OnWallEnter(int tileX, int tileY, int wallValue)
+{
+	if (wallValue == 2)
+	{
+		printf("Time to exit level\n");
+	}
+}
+
+int Player::GetHealth() const
 {
 	return health;
 }
 
-int Player::GetAmmo()
+int Player::GetMaxHealth() const
+{
+	return maxHealth;
+}
+
+int Player::GetAmmo() const
 {
 	return ammo;
 }
 
+int Player::GetMaxAmmo() const
+{
+	return maxAmmo;
+}
+
 void Player::AddHealth(int Amount)
 {
-	health = clamp(health + Amount, 0, PLAYER_MAX_HEALTH);
+	health = clamp(health + Amount, 0, maxHealth);
 }
 
 void Player::AddAmmo(int Amount)
 {
-	ammo = clamp(ammo + Amount, 0, PLAYER_MAX_AMMO);
+	ammo = clamp(ammo + Amount, 0, maxAmmo);
 }
 
 void Player::InteractPressed()
-{
-	Vector2 TargetPoint = transform.position + transform.GetForward() * (radius * 1.5f);
-
-	int tileX = floor(TargetPoint.x / TILE_SIZE);
-	int tileY = floor(TargetPoint.y / TILE_SIZE);
-
-	printf("Facing tile with index #%d, looking at %.f, %.f\n", 
-		Engine::GetMap()->GetTile(tileX, tileY),
-		TargetPoint.x,
-		TargetPoint.y);
-}
-
-void Player::ShootPressed()
-{
+{	
 }

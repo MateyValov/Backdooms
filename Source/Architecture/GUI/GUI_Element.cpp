@@ -27,5 +27,5 @@ Vector2 GUI_Element::GetTruePosition(Vector2 TopLeft, Vector2 BottomRight)
 	int screenH = BottomRight.y - TopLeft.y;
 
 	return Vector2(position.x + (alignment.x + 1) * (screenW / 2) + TopLeft.x,
-		position.x + (alignment.x + 1) * (screenH / 2) + TopLeft.y);
+		position.y + (alignment.y + 1) * (screenH / 2) + TopLeft.y);
 }
