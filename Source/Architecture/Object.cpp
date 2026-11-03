@@ -51,6 +51,10 @@ void Object::SetTransform(Transform newTrasform)
 
 void Object::SetPosition(Vector2 newPosition)
 {
+	if (transform.position == newPosition)
+	{
+		return;
+	}
 	transform.position = hasCollision ? Engine::GetMap()->EvaluatePosition(newPosition, radius) : newPosition;
 }
 

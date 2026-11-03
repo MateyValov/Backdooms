@@ -1,7 +1,6 @@
 #include "Map.h"
 
 #include "Object.h"
-#include "Player.h"
 
 #include <cfloat>
 #include <cmath>
@@ -10,7 +9,7 @@
 #include <unordered_set>
 
 
-static float WallTouchMargin = 2.f;
+static float WallTouchMargin = 1.f;
 
 static MapArray WALLS_BASE =
 {

@@ -3,13 +3,15 @@
 #include <GL/freeglut.h>
 
 #include "Textures.h"
+#include "Input.h"
 
-#include "../Architecture/Controller.h"
 #include "../Architecture/Camera.h"
-#include "../Architecture/Player.h"
 #include "../Architecture/Map.h"
 
 //======================================
+
+#include "../Content/Objects/Player.h"
+#include "../Content/Input/PlayerController.h"
 
 #include "../Content/Objects/Soda.h"
 #include "../Content/Objects/Ammo.h"
@@ -39,11 +41,6 @@ static PlayerHUD* MainPlayerHUD;
 static PlayerHUD* SecondPlayerHUD;
 
 
-static void OpenMenu()
-{
-	//idk
-}
-
 static void StartGame(bool isMultiplayer)
 {
 	map = new Map();
@@ -55,21 +52,19 @@ static void StartGame(bool isMultiplayer)
 
 	map->Spawn<Monster>(Vector2(TILE_SIZE * 10.5f, TILE_SIZE * 2.5f), 0.f);
 
+	MainPlayer = map->Spawn<Player>(map->GetSpawnpoint(), 0.f);
+	MainPlayer->AssignController(new PlayerController('W', 'A', 'S', 'D', 'Q'));
+
+	MainPlayerHUD = new PlayerHUD(MainPlayer);
+	MainViewport = new Camera(isMultiplayer ? TopScreen : Fullscreen, 60, 20, 2, 5.f);
+	
 	if (isMultiplayer)
 	{
-		MainViewport = new Camera(TopScreen, 60, 20, 2, 5.f);
-		MainPlayer = map->Spawn<Player>(map->GetSpawnpoint(), 0.f);
-		MainPlayerHUD = new PlayerHUD(MainPlayer);
-
-		SecondViewport = new Camera(BottomScreen, 60, 20, 2, 1.f);
 		SecondPlayer = map->Spawn<Player>(map->GetSpawnpoint(), 0.f);
+		SecondPlayer->AssignController(new PlayerController(VK_UP, VK_LEFT, VK_DOWN, VK_RIGHT, VK_SPACE));
+		
+		SecondViewport = new Camera(BottomScreen, 60, 20, 2, 1.f);
 		SecondPlayerHUD = new PlayerHUD(SecondPlayer);
-	}
-	else
-	{
-		MainViewport = new Camera(Fullscreen, 60, 20, 2, 5.f);
-		MainPlayer = map->Spawn<Player>(map->GetSpawnpoint(), 0.f);
-		MainPlayerHUD = new PlayerHUD(MainPlayer);
 	}
 }
 
@@ -80,63 +75,11 @@ static void Quit()
 
 static void HandleInput()
 {
-	updateKeys();
+	Input::updateKeys();
 
-	if (Keys.esc == 1)
+	if (Input::GetKeyState(VK_ESCAPE))
 	{
 		Quit();
-		return;
-	}
-
-	if (Keys.a == 1)
-	{
-		MainPlayer->Turn(true);
-	}
-	if (Keys.d == 1)
-	{
-		MainPlayer->Turn(false);
-	}
-	if (Keys.w == 1)
-	{
-		MainPlayer->Move(MainPlayer->GetTransform().GetForward());
-	}
-	if (Keys.s == 1)
-	{
-		MainPlayer->Move(MainPlayer->GetTransform().GetForward() * -1.f);
-	}
-	if (Keys.q == 1)
-	{
-		MainPlayer->InteractPressed();
-	}
-
-	if (Keys.left == 1 && SecondPlayer != nullptr)
-	{
-		SecondPlayer->Turn(true);
-	}
-	if (Keys.right == 1 && SecondPlayer != nullptr)
-	{
-		SecondPlayer->Turn(false);
-	}
-	if (Keys.up == 1 && SecondPlayer != nullptr)
-	{
-		SecondPlayer->Move(SecondPlayer->GetTransform().GetForward());
-	}
-	if (Keys.down == 1 && SecondPlayer != nullptr)
-	{
-		SecondPlayer->Move(SecondPlayer->GetTransform().GetForward() * -1.f);
-	}
-	if (Keys.space == 1)
-	{
-		SecondPlayer->InteractPressed();
-	}
-
-	if (Keys.i == 1)
-	{
-		printf("Player 1: Health - %d, Ammo - %d\n", MainPlayer->GetHealth(), MainPlayer->GetAmmo());
-		if (SecondPlayer != nullptr)
-		{
-			printf("Player 2: Health - %d, Ammo - %d\n", SecondPlayer->GetHealth(), SecondPlayer->GetAmmo());
-		}
 	}
 }
 
@@ -147,9 +90,9 @@ static void Update()
 	lastTime = now;
 	if (deltaTime > 0.05f) { deltaTime = 0.05f; }
 
-	map->UpdateObjects();
 	HandleInput();
-
+	map->UpdateObjects();
+	
 	glutPostRedisplay();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -181,6 +124,7 @@ bool Engine::InitEngine(int* argc, char** argv, int screenWidth, int screenHeigh
 	TopScreen = Screenspace(Vector2(), Vector2(screenWidth, screenHeight / 2));
 	BottomScreen = Screenspace(Vector2(0.f, screenHeight / 2), Vector2(screenWidth, screenHeight));
 
+	Input::InitKeyStates();
 	if (Textures::LoadTextures() == false)
 	{
 		return false;
@@ -195,11 +139,6 @@ bool Engine::InitEngine(int* argc, char** argv, int screenWidth, int screenHeigh
 	glutMainLoop();
 
 	return true;
-}
-
-Player* Engine::GetMainPlayer()
-{
-	return MainPlayer;
 }
 
 Map* Engine::GetMap()

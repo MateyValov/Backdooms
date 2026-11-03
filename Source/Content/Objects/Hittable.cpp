@@ -21,6 +21,13 @@ int Hittable::GetMaxHealth() const
 void Hittable::SetHealth(int value)
 {
 	health = clamp(value, 0, maxHealth);
+	healthUpdated.Invoke(health, maxHealth);
+
+	if (health == 0)
+	{
+		isKilled = true;
+		onKilled.Invoke();
+	}
 }
 
 void Hittable::SetMaxHealth(int value, bool heal)
@@ -30,9 +37,22 @@ void Hittable::SetMaxHealth(int value, bool heal)
 	{
 		health = maxHealth;
 	}
+	healthUpdated.Invoke(health, maxHealth);
 }
 
-void Hittable::AddHealth(int Amount)
+bool Hittable::RestoreHealth(unsigned int amount)
 {
-	health = clamp(health + Amount, 0, maxHealth);
+	int before = health;
+	SetHealth(health + amount);
+	return before != health;
+}
+
+void Hittable::TakeDamage(unsigned int amount)
+{
+	SetHealth(health - amount);
+}
+
+bool Hittable::IsKilled() const
+{
+	return isKilled;
 }

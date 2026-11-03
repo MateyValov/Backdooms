@@ -11,8 +11,8 @@ class PlayerHUD : public Widget
 private:
 	Player* source;
 
-	Subscription onHealthUpdated;
-	Subscription onAmmoUpdated;
+	Listener onHealthUpdated;
+	Listener onAmmoUpdated;
 
 	GUI_Image* healthBar;
 	GUI_Image* ammoBar;

@@ -30,17 +30,17 @@ using namespace std;
 
 // One listener's ticket. Move-only. Cancels the subscription when it is destroyed.
 // Safe even if the event was destroyed first.
-class Subscription
+class Listener
 {
 public:
-	Subscription() = default;
-	explicit Subscription(function<void()> cancel) : cancel(move(cancel)) {}   // made by Event::Subscribe
+	Listener() = default;
+	explicit Listener(function<void()> cancel) : cancel(move(cancel)) {}   // made by Event::Subscribe
 
-	Subscription(const Subscription&) = delete;
-	Subscription& operator=(const Subscription&) = delete;
+	Listener(const Listener&) = delete;
+	Listener& operator=(const Listener&) = delete;
 
-	Subscription(Subscription&& other) noexcept : cancel(move(other.cancel)) { other.cancel = nullptr; }
-	Subscription& operator=(Subscription&& other) noexcept
+	Listener(Listener&& other) noexcept : cancel(move(other.cancel)) { other.cancel = nullptr; }
+	Listener& operator=(Listener&& other) noexcept
 	{
 		if (this != &other)
 		{
@@ -50,7 +50,7 @@ public:
 		}
 		return *this;
 	}
-	~Subscription() { Unsubscribe(); }
+	~Listener() { Unsubscribe(); }
 
 	void Unsubscribe()
 	{
@@ -77,18 +77,18 @@ public:
 	Event& operator=(const Event&) = delete;
 
 	// Adds a listener. Listeners are called in the order they subscribed.
-	Subscription Subscribe(Callback callback)
+	Listener Subscribe(Callback callback)
 	{
 		unsigned id = state->nextId++;
 		state->entries.push_back(Entry{ id, make_shared<Callback>(move(callback)), true });
 
 		weak_ptr<State> weak = state;       // weak: the event may be gone by the time the ticket is cancelled
-		return Subscription([weak, id]() { if (shared_ptr<State> s = weak.lock()) { s->Remove(id); } });
+		return Listener([weak, id]() { if (shared_ptr<State> s = weak.lock()) { s->Remove(id); } });
 	}
 
 	// Same, for a member function:  event.Subscribe(this, &PlayerHUD::SetHealthBar)
 	template <typename T, typename Method>
-	Subscription Subscribe(T* object, Method method)
+	Listener Subscribe(T* object, Method method)
 	{
 		return Subscribe(Callback([object, method](Args... args) { (object->*method)(args...); }));
 	}

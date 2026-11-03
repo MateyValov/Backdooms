@@ -1,7 +1,7 @@
 #include "PlayerHUD.h"
 
 #include "../../Architecture/GUI/GUI_Image.h"
-#include "../../Architecture/Player.h"
+#include "../Objects/Player.h"
 
 PlayerHUD::PlayerHUD(Player* source)
 {
@@ -21,7 +21,7 @@ PlayerHUD::PlayerHUD(Player* source)
 	elements.push_back(ammoBar);
 	elements.push_back(new GUI_Image("GUI/BarOverlay.png", Vector2(5.f, 5.f)));
 	elements.push_back(new GUI_Image("GUI/BarOverlay.png", Vector2(148.f, 5.f)));
-	elements.push_back(new GUI_Image("GUI/Gun.png", Vector2(-93.f, -186.f), Vector2(1.f, 1.f), BOTTON_CENTER, Color()));
+	elements.push_back(new GUI_Image("GUI/Gun.png", Vector2(-93.f, -149.f), Vector2(1.f, 1.f), BOTTON_CENTER, Color()));
 	elements.push_back(new GUI_Image("GUI/Crosshair.png", Vector2(-2.f, -2.f), Vector2(1.f,1.f), MIDDLE_CENTER, Color()));
 }
 

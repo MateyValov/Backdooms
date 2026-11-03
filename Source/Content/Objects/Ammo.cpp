@@ -1,6 +1,6 @@
 #include "Ammo.h"
 
-#include "../../Architecture/Player.h"
+#include "Player.h"
 
 Ammo::Ammo() : Pickup()
 {

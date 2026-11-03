@@ -1,6 +1,6 @@
 #include "Soda.h"
 
-#include "../../Architecture/Player.h"
+#include "Player.h"
 
 Soda::Soda() : Pickup()
 {
@@ -18,7 +18,7 @@ void Soda::Obtain(Player* player)
 	{
 		return;
 	}
-	if(player->AddHealth(value))
+	if(player->RestoreHealth(value))
 	{
 		Destroy();
 	}
