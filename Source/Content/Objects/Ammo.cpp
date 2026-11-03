@@ -18,5 +18,8 @@ void Ammo::Obtain(Player* player)
 	{
 		return;
 	}
-	player->AddAmmo(value);
+	if (player->AddAmmo(value))
+	{
+		Destroy();
+	}
 }

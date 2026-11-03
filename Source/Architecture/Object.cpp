@@ -17,6 +17,17 @@ Object::Object(float radius)
 	hasCollision = true;
 }
 
+void Object::Destroy()
+{
+	markedForDestruction = true;
+	Engine::GetMap()->Destroy(this);
+}
+
+bool Object::MarkedForDestruction()
+{
+	return markedForDestruction;
+}
+
 Transform Object::GetTransform() const
 {
 	return transform;

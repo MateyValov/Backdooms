@@ -18,5 +18,8 @@ void Soda::Obtain(Player* player)
 	{
 		return;
 	}
-	player->AddHealth(value);
+	if(player->AddHealth(value))
+	{
+		Destroy();
+	}
 }

@@ -53,7 +53,7 @@ static void StartGame(bool isMultiplayer)
 	map->Spawn<Ammo>(map->GetSpawnpoint() + Vector2(64, -64), 0.f);
 	map->Spawn<Ammo>(map->GetSpawnpoint() + Vector2(-64, -64), 0.f);
 
-	map->Spawn<Monster>(Vector2(TILE_SIZE * 10 + TILE_SIZE / 2, TILE_SIZE * 2 + TILE_SIZE / 2), 0.f);
+	map->Spawn<Monster>(Vector2(TILE_SIZE * 10.5f, TILE_SIZE * 2.5f), 0.f);
 
 	if (isMultiplayer)
 	{
@@ -147,6 +147,7 @@ static void Update()
 	lastTime = now;
 	if (deltaTime > 0.05f) { deltaTime = 0.05f; }
 
+	map->UpdateObjects();
 	HandleInput();
 
 	glutPostRedisplay();

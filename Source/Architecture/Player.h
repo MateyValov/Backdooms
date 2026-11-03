@@ -2,6 +2,8 @@
 
 #include "MovableObject.h"
 
+#include "../Structs/Event.h"
+
 class Player : public MovableObject
 {
 private:
@@ -16,6 +18,9 @@ public:
 	Player(int health, int ammo);
 	Player(int health, int ammo, float radius, int movementSpeed, int turnSpeed);
 
+	Event<int, int> healthUpdated;
+	Event<int, int> ammoUpdated;
+
 	void OnCollisionEnter(Object* other) override;
 	void OnWallEnter(int tileX, int tileY, int wallValue) override;
 
@@ -24,8 +29,8 @@ public:
 	int GetAmmo() const;
 	int GetMaxAmmo() const;
 
-	void AddHealth(int Amount);
-	void AddAmmo(int Amount);
+	bool AddHealth(int Amount);
+	bool AddAmmo(int Amount);
 
 	void InteractPressed();
 };

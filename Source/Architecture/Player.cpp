@@ -4,6 +4,8 @@
 #include "../Structs/MathFuncs.h"
 #include "../Modules/Engine.h"
 
+#include "../Content/Objects/Pickup.h"
+
 
 Player::Player() : MovableObject()
 {
@@ -40,11 +42,19 @@ Player::Player(int health, int ammo, float radius, int movementSpeed, int turnSp
 
 void Player::OnCollisionEnter(Object* other)
 {
-	printf("COLLIDE");
+	Pickup* pickup = dynamic_cast<Pickup*>(other);
+	if (pickup != nullptr)
+	{
+		pickup->Obtain(this);
+	}
 }
 
 void Player::OnWallEnter(int tileX, int tileY, int wallValue)
 {
+	if (wallValue == 1)
+	{
+		printf("Wall\n");
+	}
 	if (wallValue == 2)
 	{
 		printf("Time to exit level\n");
@@ -71,14 +81,24 @@ int Player::GetMaxAmmo() const
 	return maxAmmo;
 }
 
-void Player::AddHealth(int Amount)
+bool Player::AddHealth(int Amount)
 {
+	int before = health;
 	health = clamp(health + Amount, 0, maxHealth);
+
+	healthUpdated.Invoke(health, maxHealth);
+
+	return before != health;
 }
 
-void Player::AddAmmo(int Amount)
+bool Player::AddAmmo(int Amount)
 {
+	int before = ammo;
 	ammo = clamp(ammo + Amount, 0, maxAmmo);
+
+	ammoUpdated.Invoke(ammo, maxAmmo);
+
+	return before != ammo;
 }
 
 void Player::InteractPressed()

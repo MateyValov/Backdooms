@@ -11,6 +11,7 @@ C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\Camera.cpp;
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GUI\MainMenu.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\MainMenu.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GUI\PlayerHUD.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\PlayerHUD.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\Objects\Ammo.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Ammo.obj
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\Objects\Hittable.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Hittable.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\Objects\Monster.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Monster.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\Objects\Pickup.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Pickup.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\Objects\Soda.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Soda.obj

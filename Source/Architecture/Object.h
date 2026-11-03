@@ -4,6 +4,9 @@
 
 class Object
 {
+private:
+	bool markedForDestruction = false;
+
 protected:
 	Transform transform;
 	float radius;
@@ -29,6 +32,9 @@ public:
 	virtual void OnWallEnter(int tileX, int tileY, int wallValue) {}
 	virtual void OnWallStay(int tileX, int tileY, int wallValue) {}
 	virtual void OnWallExit(int tileX, int tileY, int wallValue) {}
+
+	void Destroy();
+	bool MarkedForDestruction();
 
 	Transform GetTransform() const;
 	float GetRadius() const;

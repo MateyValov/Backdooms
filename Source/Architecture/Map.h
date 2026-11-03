@@ -88,7 +88,7 @@ public:
 	void UpdateObjects();
 
 	void Destroy(Object* object);
-	void DestroyAllObjects(bool includePlayer = false);
+	void DestroyAllObjects();
 	
 	int ObjectCount() const;      
 };

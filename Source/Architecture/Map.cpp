@@ -247,7 +247,7 @@ void Map::RunCollisions()
 			for (int tx = x0; tx <= x1; ++tx)
 			{
 				if (tx < 0 || ty < 0 || tx >= MAP_TILES_X || ty >= MAP_TILES_Y) { continue; }   // off the map: not reported
-				if (IsSolid(tx, ty)) { current.push_back(Tile{ ty, tx, wallValues[ty * MAP_TILES_X + tx] }); }
+				if (IsSolid(tx, ty)) { current.push_back(Tile{ tx, ty, wallValues[ty * MAP_TILES_X + tx] }); }
 			}
 		}
 
@@ -438,16 +438,11 @@ void Map::Destroy(Object* object)
 	}
 }
 
-void Map::DestroyAllObjects(bool includePlayer)
+void Map::DestroyAllObjects()
 {
 	for (ObjectEntry& entry : objects) 
 	{ 
-		if (static_cast<Player*>(entry.object.get()))
-		{
-			continue;
-		}
-			
-		entry.destroyed = true; 
+		entry.destroyed = true;	
 	}
 }
 
