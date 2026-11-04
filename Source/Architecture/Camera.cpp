@@ -15,10 +15,10 @@
 
 namespace
 {
-	const float SHADE_EAST_WEST_FACE = 0.9f;     // walls seen from the east or west
-	const float SHADE_NORTH_SOUTH_FACE = 0.7f;   // walls seen from the north or south
+	const float SHADE_EAST_WEST_FACE = 0.9f;     
+	const float SHADE_NORTH_SOUTH_FACE = 0.7f;
 
-	const unsigned char FLOOR_COLOUR[3] = { 40, 40, 40 };       // where the ground map says 0, or off the map
+	const unsigned char FLOOR_COLOUR[3] = { 40, 40, 40 };
 	const unsigned char CEILING_COLOUR[3] = { 60, 60, 75 };
 }
 
@@ -169,8 +169,6 @@ void Camera::DrawFloorAndRoof(const MapArray floor, const MapArray roof, const T
 	const int cell = Textures::Atlas::CellSize();
 	const float T = (float)TILE_SIZE;
 
-	// Where each map tile's texture starts inside the atlas image (-1 = no texture). Once per frame
-	// instead of once per pixel.
 	const int tiles = MAP_TILES_X * MAP_TILES_Y;
 	int groundX[tiles], groundY[tiles], ceilingX[tiles], ceilingY[tiles];
 	for (int i = 0; i < tiles; ++i)
@@ -181,7 +179,6 @@ void Camera::DrawFloorAndRoof(const MapArray floor, const MapArray roof, const T
 		ceilingX[i] = (roof[i] > 0 && hasAtlas) ? (int)r.x : -1;  ceilingY[i] = (int)r.y;
 	}
 
-	// This frame's ray direction for every pixel column.
 	const float angle = viewpoint.angle * PI / 180.0f;
 	const float ca = cosf(angle), sa = sinf(angle);
 	for (int x = 0; x < GetWidth(); ++x)
@@ -245,9 +242,8 @@ void Camera::DrawFloorAndRoof(const MapArray floor, const MapArray roof, const T
 void Camera::DrawObjects(const vector<Object*>& objects, const Transform viewpoint)
 {
 	const Image& atlas = Textures::Atlas::GetImage();
-	const float angle = viewpoint.angle * PI / 180.0f;
-	const float fx = cosf(angle), fy = -sinf(angle);     // the view direction on the map (its y axis points down)
-	const float rx = -fy, ry = fx;                       // the direction to the right of it
+	const float fx = viewpoint.GetForward().x, fy = viewpoint.GetForward().y;
+	const float rx = viewpoint.GetRight().x, ry = viewpoint.GetRight().y;     
 
 	struct Visible { Object* object; float depth; float lateral; int texture; };
 	vector<Visible> visible;
@@ -261,7 +257,7 @@ void Camera::DrawObjects(const vector<Object*>& objects, const Transform viewpoi
 
 		Vector2 p = object->GetTransform().position;
 		float dx = p.x - viewpoint.position.x, dy = p.y - viewpoint.position.y;
-		float depth = dx * fx + dy * fy;                              // how far ahead of the camera (negative = behind)
+		float depth = dx * fx + dy * fy;    
 		if (depth < nearClippingDistance) 
 		{ 
 			continue; 
@@ -269,41 +265,46 @@ void Camera::DrawObjects(const vector<Object*>& objects, const Transform viewpoi
 
 		visible.push_back(Visible{ object, depth, dx * rx + dy * ry, texture });
 	}
-	std::sort(visible.begin(), visible.end(), [](const Visible& a, const Visible& b) { return a.depth > b.depth; });   // far to near
+	sort(visible.begin(), visible.end(), [](const Visible& a, const Visible& b) { return a.depth > b.depth; }); 
 
 	for (const Visible& v : visible)
 	{
-		// Same scale as the walls: a wall one tile tall and one tile away is projDist * TILE_SIZE / distance pixels tall.
-		float scale = projDist / v.depth;                             // pixels per map unit at this distance
-		float size = 2.0f * v.object->GetRadius() * scale;            // the sprite is a square, as wide and tall as the object's diameter
-		float centreX = (fov / 2.0f + atan2f(v.lateral, v.depth) * 180.0f / PI) * GetWidth() / fov;   // same angle-to-pixel mapping as the walls
-		float left = centreX - size / 2, right = centreX + size / 2;
-		float bottom = GetHeight() / 2.0f + (TILE_SIZE / 2.0f) * scale;    // its feet stand on the floor
+		float radius = v.object->GetRadius();
+		float scale = projDist / v.depth;
+		float size = 2.0f * radius * scale;                           // its height on screen: its diameter
+		float pixelsPerDegree = (float)GetWidth() / fov;
+
+		// Each edge goes through the same angle-to-pixel mapping the walls use, so an object that is outside
+		// the view stays outside it, however close it is.
+		float left = (fov / 2.0f + atan2f(v.lateral - radius, v.depth) * 180.0f / PI) * pixelsPerDegree;
+		float right = (fov / 2.0f + atan2f(v.lateral + radius, v.depth) * 180.0f / PI) * pixelsPerDegree;
+		float bottom = GetHeight() / 2.0f + (TILE_SIZE / 2.0f) * scale;
 		float top = bottom - size;
 
-		float visibleTop = std::max(top, 0.0f), visibleBottom = min(bottom, (float)GetHeight());   // stay inside the viewport
-		if (size <= 0 || visibleBottom <= visibleTop || right <= 0 || left >= GetWidth()) 
+		float visibleTop = max(top, 0.0f), visibleBottom = min(bottom, (float)GetHeight()); 
+		if (radius <= 0 || visibleBottom <= visibleTop || right <= 0 || left >= GetWidth())
 		{ 
 			continue; 
 		}
-		float v0 = (visibleTop - top) / size, v1 = (visibleBottom - top) / size;                    // which part of the texture that is
+		float v0 = (visibleTop - top) / size, v1 = (visibleBottom - top) / size;   
 
 		Rect tex = Textures::Atlas::Cell(v.texture);
-		int firstColumn = std::max(0, (int)floorf(left / columnWidth));
-		int lastColumn = std::min(columnCount - 1, (int)floorf((right - 0.001f) / columnWidth));
+		int firstColumn = max(0, (int)floorf(left / columnWidth));
+		int lastColumn = min(columnCount - 1, (int)floorf((right - 0.001f) / columnWidth));
 		for (int c = firstColumn; c <= lastColumn; ++c)
 		{
 			if (v.depth >= wallDepth[c]) 
 			{ 
 				continue; 
-			}                // a wall is in front of the object in this column
+			}            
 
 			float x0 = max((float)(c * columnWidth), left), x1 = min((float)min(GetWidth(), (c + 1) * columnWidth), right);
 			if (x1 <= x0) 
 			{ 
 				continue; 
 			}
-			float u = min(max((0.5f * (x0 + x1) - left) / size, 0.0f), 0.9999f);          // where in the texture this strip is
+			float direction = (0.5f * (x0 + x1) / pixelsPerDegree - fov / 2.0f) * PI / 180.0f;
+			float u = min(max((v.depth * tanf(direction) - (v.lateral - radius)) / (2.0f * radius), 0.0f), 0.9999f);
 
 			Rendering::Draw(atlas,
 				Rect(screenspace.TopLeft.x + x0, screenspace.TopLeft.y + visibleTop, x1 - x0, visibleBottom - visibleTop),

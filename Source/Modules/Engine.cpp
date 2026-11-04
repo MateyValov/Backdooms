@@ -56,7 +56,7 @@ static void StartGame(bool isMultiplayer)
 	MainPlayer->AssignController(new PlayerController('W', 'A', 'S', 'D', 'Q'));
 
 	MainPlayerHUD = new PlayerHUD(MainPlayer);
-	MainViewport = new Camera(isMultiplayer ? TopScreen : Fullscreen, 60, 20, 2, 5.f);
+	MainViewport = new Camera(isMultiplayer ? TopScreen : Fullscreen, 60, 20, 2, 1.f);
 	
 	if (isMultiplayer)
 	{
@@ -77,9 +77,18 @@ static void HandleInput()
 {
 	Input::updateKeys();
 
-	if (Input::GetKeyState(VK_ESCAPE))
+	if (Input::GetKeyState(VK_ESCAPE) == pressed)
 	{
 		Quit();
+	}
+	if (Input::GetKeyState('I') == pressed)
+	{
+		printf("========OBJECTS IN MAP========\n");
+		for (Object* obj : map->GetObjects())
+		{
+			printf("Object: x - %.3f, y - %.3f, forward vector - %.3f, %.3f\n", 
+				obj->GetTransform().position.x, obj->GetTransform().position.y, obj->GetTransform().GetForward().x, obj->GetTransform().GetForward().y);
+		}
 	}
 }
 
@@ -129,6 +138,7 @@ bool Engine::InitEngine(int* argc, char** argv, int screenWidth, int screenHeigh
 	{
 		return false;
 	}
+
 
 	StartGame(true);
 	
