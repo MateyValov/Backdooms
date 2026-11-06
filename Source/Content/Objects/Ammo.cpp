@@ -1,15 +1,17 @@
 #include "Ammo.h"
 
+#include "../../Architecture/Components/Sprite.h"
+
 #include "Player.h"
 
 Ammo::Ammo() : Pickup()
 {
-	textureFront = 9;
+	AddComponent<Sprite>(9);
 }
 
-Ammo::Ammo(float radius, int value) : Pickup(radius, value)
+Ammo::Ammo(int value) : Pickup(value)
 {
-	textureFront = 9;
+	AddComponent<Sprite>(9);
 }
 
 void Ammo::Obtain(Player* player)

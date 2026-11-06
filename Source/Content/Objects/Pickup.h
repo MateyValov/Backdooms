@@ -10,8 +10,8 @@ protected:
 	int value = 1;
 
 public:
-	Pickup() : Object() {};
-	Pickup(float radius, int value);
+	Pickup() = default;
+	Pickup(int value);
 
 	void SetValue(int value);
 	int GetValue() const;

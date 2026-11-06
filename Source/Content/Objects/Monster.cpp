@@ -1,23 +1,40 @@
 #include "Monster.h"
 
+#include "../../Architecture/Components/Collider.h"
+#include "../../Architecture/Components/Sprite.h"
+
+#include "../Components/HittableComponent.h"
 #include "Player.h"
 
-Monster::Monster() : Hittable(4)
+Monster::Monster()
 {
-	SetTextureId(20);
-	radius = 30;
+	hittableComp = AddComponent<HittableComponent>(4);
+	AddComponent<Sprite>(20);
+	AddComponent<Collider>(20);
 }
 
-Monster::Monster(int health, float radius, int movementSpeed, int turnSpeed) : Hittable(health), MovableObject(radius, movementSpeed, turnSpeed)
+Monster::Monster(int health, float radius, int movementSpeed, int turnSpeed) : MovableObject(radius, movementSpeed, turnSpeed)
 {
-	SetTextureId(20);
+	hittableComp = AddComponent<HittableComponent>(health);
+	AddComponent<Sprite>(20);
+	AddComponent<Collider>(radius);
+}
+
+HittableComponent* Monster::GetHittableComponent()
+{
+	return hittableComp;
 }
 
 void Monster::OnCollisionEnter(Object* other)
 {
 	Player* player = dynamic_cast<Player*>(other);
-	if (player != nullptr)
+	if (player == nullptr)
 	{
-		player->TakeDamage(1);
+		return;
 	}
+	if (player->GetHittableComponent() == nullptr)
+	{
+		return;
+	}
+	player->GetHittableComponent()->TakeDamage(1);
 }

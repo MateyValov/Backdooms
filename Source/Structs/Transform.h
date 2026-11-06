@@ -56,4 +56,10 @@ struct Transform
 
 	bool operator==(const Transform& o) const { return position == o.position && angle == o.angle; }
 	bool operator!=(const Transform& o) const { return !(*this == o); }
+
+	Transform operator+(const Transform& o) const { return Transform(Vector2(position.x + o.position.x, position.y + o.position.y), angle + o.angle); }
+	Transform operator-(const Transform& o) const { return Transform(Vector2(position.x - o.position.x, position.y - o.position.y), angle - o.angle); }
+
+	Transform& operator+=(const Transform& o) { position.x += o.position.x; position.y += o.position.y; angle += o.angle; return *this; }
+	Transform& operator-=(const Transform& o) { position.x -= o.position.x; position.y -= o.position.y; angle -= o.angle; return *this; }
 };

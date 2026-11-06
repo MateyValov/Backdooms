@@ -1,21 +1,25 @@
 #pragma once
 
 #include "../../Architecture/MovableObject.h"
-#include "Hittable.h"
 
 #include "../../Structs/Event.h"
 
+class HittableComponent;
 class PlayerController;
 
-class Player : public MovableObject, public Hittable
+class Player : public MovableObject
 {
 private:
 	int ammo;
 	int maxAmmo;
 
 	PlayerController* controller = nullptr;
+	HittableComponent* hittableComp;
 
 	Listener onInteractPressed;
+
+protected:
+	void OnUpdate() override;
 
 public:
 	Player();
@@ -24,10 +28,10 @@ public:
 
 	Event<int, int> ammoUpdated;
 
-	void Update() override;
-
 	void OnCollisionEnter(Object* other) override;
 	void OnWallEnter(int tileX, int tileY, int wallValue) override;
+
+	HittableComponent* GetHittableComponent();
 
 	void AssignController(PlayerController* controller);
 

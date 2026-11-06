@@ -1,31 +1,66 @@
 #include "Object.h"
 
-#include "Map.h";
+#include "Level.h";
 #include "../Structs/MathFuncs.h"
 #include "../Modules/Engine.h"
 
 
-Object::Object()
+void Object::SweepRemoved()
 {
-	radius = 20.f;
-	hasCollision = true;
+	for (auto& c : components) 
+	{ 
+		if (c->removed) 
+		{
+			c->OnDestroy(); 
+		} 
+	}
+	components.erase(std::remove_if(components.begin(), components.end(), 
+		[](const std::unique_ptr<Component>& c) { return c->removed; }), components.end());
 }
 
-Object::Object(float radius)
+void Object::Start()
 {
-	this->radius = radius;
-	hasCollision = true;
+	size_t n = components.size();
+	for (size_t i = 0; i < n; ++i) 
+	{ 
+		components[i]->Start(); 
+	} 
+	OnStart();
+}
+
+void Object::Update()
+{
+	if (parent != nullptr)
+	{
+		transform = parent->GetTransform() + localTransform;
+	}
+
+	size_t count = components.size();           
+	for (size_t i = 0; i < count; ++i) 
+	{ 
+		if (!components[i]->removed) 
+		{ 
+			components[i]->Update(); 
+		} 
+	}
+	OnUpdate();                                    
+	SweepRemoved();
 }
 
 void Object::Destroy()
 {
-	markedForDestruction = true;
-	Engine::GetMap()->Destroy(this);
+	Engine::GetLevel()->Destroy(this);
 }
 
-bool Object::MarkedForDestruction()
+void Object::RemoveComponent(Component* component)
 {
-	return markedForDestruction;
+	for (auto& c : components) 
+	{ 
+		if (c.get() == component) 
+		{
+			c->removed = true; 
+		} 
+	}
 }
 
 Transform Object::GetTransform() const
@@ -33,14 +68,40 @@ Transform Object::GetTransform() const
 	return transform;
 }
 
-float Object::GetRadius() const
+Transform Object::GetLocalTransform() const
 {
-	return radius;
+	return parent != nullptr ? localTransform : transform;
 }
 
-bool Object::HasCollision() const
+void Object::SetParent(Object* parent, Transform offset)
 {
-	return hasCollision;
+	if (parent == nullptr)
+	{
+		return;
+	}
+	this->parent = parent;
+	localTransform = offset;
+}
+
+void Object::RemoveParent()
+{
+	parent = nullptr;
+	localTransform = Transform();
+}
+
+Object* Object::GetParent()
+{
+	return parent;
+}
+
+Object* Object::GetGrandParent()
+{
+	if (GetParent() == nullptr)
+	{
+		return this;
+	}
+	Object* result = parent->GetGrandParent();
+	return result != this ? result : nullptr;
 }
 
 void Object::SetTransform(Transform newTrasform)
@@ -55,7 +116,7 @@ void Object::SetPosition(Vector2 newPosition)
 	{
 		return;
 	}
-	transform.position = hasCollision ? Engine::GetMap()->EvaluatePosition(newPosition, radius) : newPosition;
+	transform.position = newPosition;  //    Engine::GetLevel()->EvaluatePosition(newPosition, radius);
 }
 
 void Object::SetAngle(float newAngle)
@@ -63,39 +124,3 @@ void Object::SetAngle(float newAngle)
 	transform.angle = clampAngle(newAngle);
 }
 
-void Object::SetTextureId(int front, int left, int back, int right)
-{
-	textureFront = front;
-	textureLeft  = left >  -1  ? left  : front;
-	textureBack = back > -1 ? back : front;
-	textureRight = right > -1  ? right : front;
-}
-
-int Object::GetTextureId() const
-{
-	return textureFront;
-}
-
-int Object::GetTextureIdForPosition(Vector2 viewerPosition) const
-{
-	float toViewer = atan2f(-(viewerPosition.y - transform.position.y), viewerPosition.x - transform.position.x) * 180.0f / PI;
-
-	float relative = clampAngle(fmodf(toViewer - transform.angle + 180.0f, 360.0f));
-	relative -= 180.0f;
-
-	int texture = textureFront;
-	if (relative >= 45.0f && relative < 135.0f) 
-	{ 
-		texture = textureLeft; 
-	}
-	else if (relative >= -135.0f && relative < -45.0f) 
-	{ 
-		texture = textureRight; 
-	}
-	else if (relative >= 135.0f || relative < -135.0f) 
-	{ 
-		texture = textureBack; 
-	}
-
-	return texture >= 0 ? texture : textureFront;
-}

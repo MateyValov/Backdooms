@@ -6,7 +6,7 @@ class Soda : public Pickup
 {
 public:
 	Soda();
-	Soda(float radius, int value);
+	Soda(int value);
 
 	void Obtain(Player* player) override;
 };

@@ -1,12 +1,14 @@
 #include "PlayerHUD.h"
 
 #include "../../Architecture/GUI/GUI_Image.h"
+
+#include "../Components/HittableComponent.h"
 #include "../Objects/Player.h"
 
 PlayerHUD::PlayerHUD(Player* source)
 {
 	this->source = source;
-	onHealthUpdated = source->healthUpdated.Subscribe(this, &PlayerHUD::UpdateHealth);
+	onHealthUpdated = source->GetHittableComponent()->healthUpdated.Subscribe(this, &PlayerHUD::UpdateHealth);
 	onAmmoUpdated = source->ammoUpdated.Subscribe(this, &PlayerHUD::UpdateAmmo);
 
 	healthBar = new GUI_Image(

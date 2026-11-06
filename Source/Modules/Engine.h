@@ -3,14 +3,14 @@
 #include "../Structs/Transform.h"
 #include "../Structs/Screenspace.h"
 
-class Map;
+class Level;
 class Player;
 
 namespace Engine
 {
 	bool InitEngine(int* argc, char** argv, int screenWidth, int screenHeight);
 
-	Map* GetMap();
+	Level* GetLevel();
 
 	float GetDeltaTime();
 

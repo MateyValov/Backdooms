@@ -1,8 +1,10 @@
 #pragma once
 
+#include "../../Architecture/Components/Component.h"
+
 #include "../../Structs/Event.h"
 
-class Hittable
+class HittableComponent : public Component
 {
 protected:
 	int health;
@@ -11,7 +13,7 @@ protected:
 	bool isKilled = false;
 
 public:
-	Hittable(int health);
+	HittableComponent(int health);
 
 	Event<int, int> healthUpdated;
 	Event<> onKilled;

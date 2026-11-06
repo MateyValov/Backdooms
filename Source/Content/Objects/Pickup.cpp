@@ -1,6 +1,6 @@
 #include "Pickup.h"
 
-Pickup::Pickup(float radius, int value) : Object(radius)
+Pickup::Pickup(int value)
 {
 	this->value = value;
 }

@@ -1,15 +1,18 @@
 #include "Soda.h"
 
+#include "../../Architecture/Components/Sprite.h"
+
+#include "../Components/HittableComponent.h"
 #include "Player.h"
 
-Soda::Soda() : Pickup()
+Soda::Soda()
 {
-	textureFront = 8;
+	AddComponent<Sprite>(8);
 }
 
-Soda::Soda(float radius, int value) : Pickup(radius, value)
+Soda::Soda(int value) : Pickup(value)
 {
-	textureFront = 8;
+	AddComponent<Sprite>(8);
 }
 
 void Soda::Obtain(Player* player)
@@ -18,7 +21,11 @@ void Soda::Obtain(Player* player)
 	{
 		return;
 	}
-	if(player->RestoreHealth(value))
+	if (player->GetHittableComponent() == nullptr)
+	{
+		return;
+	}
+	if(player->GetHittableComponent()->RestoreHealth(value))
 	{
 		Destroy();
 	}

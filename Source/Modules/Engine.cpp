@@ -3,10 +3,11 @@
 #include <GL/freeglut.h>
 
 #include "Textures.h"
+#include "Physics.h"
 #include "Input.h"
 
 #include "../Architecture/Camera.h"
-#include "../Architecture/Map.h"
+#include "../Architecture/Level.h"
 
 //======================================
 
@@ -29,13 +30,7 @@ static Screenspace Fullscreen;
 static Screenspace TopScreen;
 static Screenspace BottomScreen;
 
-static Map* map;
-
-static Camera* MainViewport;
-static Player* MainPlayer;
-
-static Camera* SecondViewport;
-static Player* SecondPlayer;
+static Level* activeLevel;
 
 static PlayerHUD* MainPlayerHUD;
 static PlayerHUD* SecondPlayerHUD;
@@ -43,27 +38,31 @@ static PlayerHUD* SecondPlayerHUD;
 
 static void StartGame(bool isMultiplayer)
 {
-	map = new Map();
+	activeLevel = new Level();
 
-	map->Spawn<Soda>(map->GetSpawnpoint() + Vector2(64, 64), 0.f);
-	map->Spawn<Soda>(map->GetSpawnpoint() + Vector2(-64, 64), 0.f);
-	map->Spawn<Ammo>(map->GetSpawnpoint() + Vector2(64, -64), 0.f);
-	map->Spawn<Ammo>(map->GetSpawnpoint() + Vector2(-64, -64), 0.f);
+	activeLevel->Spawn<Soda>(activeLevel->GetSpawnpoint() + Vector2(64, 64), 0.f);
+	activeLevel->Spawn<Soda>(activeLevel->GetSpawnpoint() + Vector2(-64, 64), 0.f);
+	activeLevel->Spawn<Ammo>(activeLevel->GetSpawnpoint() + Vector2(64, -64), 0.f);
+	activeLevel->Spawn<Ammo>(activeLevel->GetSpawnpoint() + Vector2(-64, -64), 0.f);
 
-	map->Spawn<Monster>(Vector2(TILE_SIZE * 10.5f, TILE_SIZE * 2.5f), 0.f);
+	activeLevel->Spawn<Monster>(Vector2(TILE_SIZE * 10.5f, TILE_SIZE * 2.5f), 0.f);
 
-	MainPlayer = map->Spawn<Player>(map->GetSpawnpoint(), 0.f);
+	Player* MainPlayer = activeLevel->Spawn<Player>(activeLevel->GetSpawnpoint(), 0.f);
 	MainPlayer->AssignController(new PlayerController('W', 'A', 'S', 'D', 'Q'));
 
+	Camera* MainCamera = activeLevel->Spawn<Camera>(activeLevel->GetSpawnpoint(), 0.f, isMultiplayer ? TopScreen : Fullscreen, 60, 20, 2, 1.f);
+	MainCamera->SetParent(MainPlayer);
+
 	MainPlayerHUD = new PlayerHUD(MainPlayer);
-	MainViewport = new Camera(isMultiplayer ? TopScreen : Fullscreen, 60, 20, 2, 1.f);
 	
 	if (isMultiplayer)
 	{
-		SecondPlayer = map->Spawn<Player>(map->GetSpawnpoint(), 0.f);
+		Player* SecondPlayer = activeLevel->Spawn<Player>(activeLevel->GetSpawnpoint(), 0.f);
 		SecondPlayer->AssignController(new PlayerController(VK_UP, VK_LEFT, VK_DOWN, VK_RIGHT, VK_SPACE));
 		
-		SecondViewport = new Camera(BottomScreen, 60, 20, 2, 1.f);
+		Camera* SecondCamera = activeLevel->Spawn<Camera>(Vector2(), 0.f, BottomScreen, 60, 20, 2, 1.f);
+		SecondCamera->SetParent(SecondPlayer);
+
 		SecondPlayerHUD = new PlayerHUD(SecondPlayer);
 	}
 }
@@ -84,7 +83,7 @@ static void HandleInput()
 	if (Input::GetKeyState('I') == pressed)
 	{
 		printf("========OBJECTS IN MAP========\n");
-		for (Object* obj : map->GetObjects())
+		for (Object* obj : activeLevel->GetObjects())
 		{
 			printf("Object: x - %.3f, y - %.3f, forward vector - %.3f, %.3f\n", 
 				obj->GetTransform().position.x, obj->GetTransform().position.y, obj->GetTransform().GetForward().x, obj->GetTransform().GetForward().y);
@@ -100,16 +99,16 @@ static void Update()
 	if (deltaTime > 0.05f) { deltaTime = 0.05f; }
 
 	HandleInput();
-	map->UpdateObjects();
-	
-	glutPostRedisplay();
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	MainViewport->DrawLevel(map, MainPlayer->GetTransform());
-	
-	if (SecondViewport != nullptr && SecondPlayer != nullptr)
+	activeLevel->UpdateObjects();
+	Physics::UpdatePhysics();
+
+	glutPostRedisplay();
+
+	if (SecondPlayerHUD != nullptr)
 	{
-		SecondViewport->DrawLevel(map, SecondPlayer->GetTransform());
 		SecondPlayerHUD->DrawWidget(BottomScreen);
 		MainPlayerHUD->DrawWidget(TopScreen);
 	}
@@ -117,7 +116,6 @@ static void Update()
 	{
 		MainPlayerHUD->DrawWidget(Fullscreen);
 	}
-	
 
 	glutSwapBuffers();
 }
@@ -139,8 +137,7 @@ bool Engine::InitEngine(int* argc, char** argv, int screenWidth, int screenHeigh
 		return false;
 	}
 
-
-	StartGame(true);
+	StartGame(false);
 	
 	glClearColor(0, 0, 0, 0);
 	gluOrtho2D(0, screenWidth, screenHeight, 0);
@@ -151,9 +148,9 @@ bool Engine::InitEngine(int* argc, char** argv, int screenWidth, int screenHeigh
 	return true;
 }
 
-Map* Engine::GetMap()
+Level* Engine::GetLevel()
 {
-	return map;
+	return activeLevel;
 }
 
 float Engine::GetDeltaTime()

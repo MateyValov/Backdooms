@@ -1,24 +1,24 @@
-#include "Hittable.h"
+#include "HittableComponent.h"
 
 #include "../../Structs/MathFuncs.h"
 
-Hittable::Hittable(int health)
+HittableComponent::HittableComponent(int health)
 {
 	this->maxHealth = health;
 	this->health = health;
 }
 
-int Hittable::GetHealth() const
+int HittableComponent::GetHealth() const
 {
 	return health;
 }
 
-int Hittable::GetMaxHealth() const
+int HittableComponent::GetMaxHealth() const
 {
 	return maxHealth;
 }
 
-void Hittable::SetHealth(int value)
+void HittableComponent::SetHealth(int value)
 {
 	health = clamp(value, 0, maxHealth);
 	healthUpdated.Invoke(health, maxHealth);
@@ -30,7 +30,7 @@ void Hittable::SetHealth(int value)
 	}
 }
 
-void Hittable::SetMaxHealth(int value, bool heal)
+void HittableComponent::SetMaxHealth(int value, bool heal)
 {
 	maxHealth = value;
 	if (heal)
@@ -40,19 +40,19 @@ void Hittable::SetMaxHealth(int value, bool heal)
 	healthUpdated.Invoke(health, maxHealth);
 }
 
-bool Hittable::RestoreHealth(unsigned int amount)
+bool HittableComponent::RestoreHealth(unsigned int amount)
 {
 	int before = health;
 	SetHealth(health + amount);
 	return before != health;
 }
 
-void Hittable::TakeDamage(unsigned int amount)
+void HittableComponent::TakeDamage(unsigned int amount)
 {
 	SetHealth(health - amount);
 }
 
-bool Hittable::IsKilled() const
+bool HittableComponent::IsKilled() const
 {
 	return isKilled;
 }

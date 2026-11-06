@@ -2,49 +2,119 @@
 
 #include "../Structs/Transform.h"
 
+#include "Components/Component.h"
+
+#include <algorithm>
+#include <cstdio>
+#include <memory>
+#include <string>
+#include <type_traits>
+#include <vector>
+
+
 class Object
 {
 private:
-	bool markedForDestruction = false;
+	Object* parent = nullptr;
+	Transform localTransform = Transform();
+
+	bool begun = false;
+
+	void SweepRemoved();
 
 protected:
 	Transform transform;
-	float radius;
-	bool hasCollision;
 
-	int textureFront = -1;
-	int textureLeft = -1;
-	int textureRight = -1;
-	int textureBack = -1;
+	std::vector<std::unique_ptr<Component>> components;
+
+	virtual void OnStart() {}
+	virtual void OnUpdate() {}
 
 public:
-	Object();
-	Object(float radius);
+	Object() = default;
+	Object(const Object&) = delete;
+	Object& operator=(const Object&) = delete;
 	virtual ~Object() = default;
 
-	virtual void Start() {}
-	virtual void Update() {}
-
-	virtual void OnCollisionEnter(Object* other) {}   
-	virtual void OnCollisionStay(Object* other) {}
-	virtual void OnCollisionExit(Object* other) {}  
-
-	virtual void OnWallEnter(int tileX, int tileY, int wallValue) {}
-	virtual void OnWallStay(int tileX, int tileY, int wallValue) {}
-	virtual void OnWallExit(int tileX, int tileY, int wallValue) {}
-
+	void Start();
+	void Update();
 	void Destroy();
-	bool MarkedForDestruction();
+
+	template <typename T, typename... Args>
+	T* AddComponent(Args&&... args);
+
+	template <typename T>
+	T* GetComponent();
+
+	template <typename T>
+	std::vector<T*> GetAllComponentOfClass();
+
+	void RemoveComponent(Component* component);
 
 	Transform GetTransform() const;
-	float GetRadius() const;
-	bool HasCollision() const;
+	Transform GetLocalTransform() const;
+
+	void SetParent(Object* parent, Transform offset = Transform());
+	void RemoveParent();
+	Object* GetParent();
+	Object* GetGrandParent();
 
 	void SetTransform(Transform newTrasform);
 	void SetPosition(Vector2 newPosition);
 	void SetAngle(float newAngle);
 
-	void SetTextureId(int front, int left = -1, int right = -1, int back = -1);
-	int GetTextureId() const;
-	int GetTextureIdForPosition(Vector2 viewerPosition) const; 
+	virtual void OnCollisionEnter(Object* other) {}
+	virtual void OnCollisionStay(Object* other) {}
+	virtual void OnCollisionExit(Object* other) {}
+
+	virtual void OnWallEnter(int tileX, int tileY, int wallValue) {}
+	virtual void OnWallStay(int tileX, int tileY, int wallValue) {}
+	virtual void OnWallExit(int tileX, int tileY, int wallValue) {}
 };
+
+template <typename T, typename... Args>
+T* Object::AddComponent(Args&&... args)
+{
+	static_assert(std::is_base_of<Component, T>::value, "T must inherit from Component");
+	std::unique_ptr<T> owned = std::make_unique<T>(std::forward<Args>(args)...);
+	T* component = owned.get();
+	components.push_back(std::move(owned));
+	component->owner = this;
+	if (begun) { component->Start(); }
+	return component;
+}
+
+template <typename T>
+T* Object::GetComponent()
+{
+	for (auto& c : components) 
+	{ 
+		if (c->removed) 
+		{ 
+			continue;
+		} 
+		if (T* t = dynamic_cast<T*>(c.get()))
+		{
+			return t;
+		}
+	}
+	return nullptr;
+}
+
+template <typename T>
+std::vector<T*> Object::GetAllComponentOfClass()
+{
+	std::vector<T*> output;
+	for (auto& c : components)
+	{
+		if (c->removed)
+		{
+			continue;
+		}
+		if (T* t = dynamic_cast<T*>(c.get()))
+		{
+			output.push_back(t);
+		}
+	}
+	return output;
+}

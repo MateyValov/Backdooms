@@ -1,6 +1,7 @@
-#include "Map.h"
+#include "Level.h"
 
 #include "Object.h"
+#include "Components/Collider.h"
 
 #include <cfloat>
 #include <cmath>
@@ -86,17 +87,17 @@ static MapArray ROOF_BASE =
 	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 };
 
-Map::Map()
+Level::Level()
 {
-	GenerateMap();
+	GenerateLevel();
 }
 
-void Map::GenerateMap()
+void Level::GenerateLevel()
 {
-	ResetMap();
+	ResetLevel();
 }
 
-void Map::ResetMap()
+void Level::ResetLevel()
 {
 	walls = WALLS_BASE;
 	floor = FLOOR_BASE;
@@ -104,32 +105,32 @@ void Map::ResetMap()
 	DestroyAllObjects();
 }
 
-MapArray Map::GetWalls() const
+MapArray Level::GetWalls() const
 {
 	return walls;
 }
 
-MapArray Map::GetFloor() const
+MapArray Level::GetFloor() const
 {
 	return floor;
 }
 
-MapArray Map::GetRoof() const
+MapArray Level::GetRoof() const
 {
 	return roof;
 }
 
-Vector2 Map::GetSpawnpoint() const
+Vector2 Level::GetSpawnpoint() const
 {
 	return Vector2(Vector2((MAP_TILES_X / 2.f) * TILE_SIZE, (MAP_TILES_Y / 2.f) * TILE_SIZE));
 }
 
-int Map::GetTile(int x, int y) const
+int Level::GetTile(int x, int y) const
 {
 	return walls[y * MAP_TILES_X + x];
 }
 
-vector<Object*> Map::GetObjects() const
+vector<Object*> Level::GetObjects() const
 {
 	vector<Object*> existing;
 	existing.reserve(objects.size());
@@ -144,7 +145,7 @@ vector<Object*> Map::GetObjects() const
 	return existing;
 }
 
-bool Map::IsSolid(int tileX, int tileY) const
+bool Level::IsSolid(int tileX, int tileY) const
 {
 	if (tileX < 0 || tileY < 0 || tileX >= MAP_TILES_X || tileY >= MAP_TILES_Y) 
 	{ 
@@ -153,7 +154,7 @@ bool Map::IsSolid(int tileX, int tileY) const
 	return walls[tileY * MAP_TILES_X + tileX] > 0;
 }
 
-bool Map::OverlapsWall(const Vector2& centre, float radius) const
+bool Level::OverlapsWall(const Vector2& centre, float radius) const
 {
 	int x0 = (int)floorf((centre.x - radius) / TILE_SIZE), x1 = (int)floorf((centre.x + radius) / TILE_SIZE);
 	int y0 = (int)floorf((centre.y - radius) / TILE_SIZE), y1 = (int)floorf((centre.y + radius) / TILE_SIZE);
@@ -171,7 +172,7 @@ bool Map::OverlapsWall(const Vector2& centre, float radius) const
 	return false;
 }
 
-bool Map::IsMarked(const Object* object) const
+bool Level::IsMarked(const Object* object) const
 {
 	for (const ObjectEntry& entry : objects)
 	{
@@ -183,17 +184,16 @@ bool Map::IsMarked(const Object* object) const
 	return true;
 }
 
-void Map::RunCollisions()
+void Level::RunCollisions()
 {
-	// Who takes part: objects with collision that are not marked for destruction. This is a snapshot
-	// of plain pointers, so callbacks may Spawn or Destroy freely; new objects join next frame.
-	vector<Object*> active;
+	struct Participant { Object* object; Collider* collider; };
+	vector<Participant> active;
 	for (const ObjectEntry& entry : objects)
 	{
-		if (entry.destroyed == false && entry.object->HasCollision()) 
-		{ 
-			active.push_back(entry.object.get()); 
-		}
+		if (entry.destroyed) { continue; }
+		Collider* collider = entry.object->GetComponent<Collider>();
+		if (collider == nullptr || !collider->IsActive()) { continue; }
+		active.push_back(Participant{ entry.object.get(), collider });
 	}
 
 	// ======================= object vs object (circles) =======================
@@ -204,10 +204,10 @@ void Map::RunCollisions()
 	{
 		for (size_t j = i + 1; j < active.size(); ++j)
 		{
-			Vector2 pa = active[i]->GetTransform().position, pb = active[j]->GetTransform().position;
+			Vector2 pa = active[i].object->GetTransform().position, pb = active[j].object->GetTransform().position;
 			float dx = pb.x - pa.x, dy = pb.y - pa.y;
-			float reach = active[i]->GetRadius() + active[j]->GetRadius();
-			if (dx * dx + dy * dy < reach * reach) { now.insert(makePair(active[i], active[j])); }
+			float reach = active[i].collider->GetRadius() + active[j].collider->GetRadius();
+			if (dx * dx + dy * dy < reach * reach) { now.insert(makePair(active[i].object, active[j].object)); }
 		}
 	}
 
@@ -217,26 +217,29 @@ void Map::RunCollisions()
 	set_difference(touchingPairs.begin(), touchingPairs.end(), now.begin(), now.end(), back_inserter(exited), PairLess());
 	touchingPairs = now;   // the new state is in place before any callback runs
 
-	// Each event goes to both objects, unless one of them was destroyed by an earlier callback.
+	// Each event goes to both objects (their components first, then the object itself),
+	// unless one of them was destroyed by an earlier callback.
 	auto deliver = [this](const ObjectPair& pair, void (Object::* event)(Object*))
 		{
 			if (!IsMarked(pair.first)) { (pair.first->*event)(pair.second); }
 			if (!IsMarked(pair.second)) { (pair.second->*event)(pair.first); }
 		};
-	for (const ObjectPair& pair : exited) { deliver(pair, &Object::OnCollisionExit); }
+
 	for (const ObjectPair& pair : entered) { deliver(pair, &Object::OnCollisionEnter); }
 	for (const ObjectPair& pair : stayed) { deliver(pair, &Object::OnCollisionStay); }
+	for (const ObjectPair& pair : exited) { deliver(pair, &Object::OnCollisionExit); }
 
 	// ======================= object vs wall tiles =======================
 	const MapArray& wallValues = GetWalls();
 	const float T = (float)TILE_SIZE;
 
-	for (Object* object : active)
+	for (const Participant& participant : active)
 	{
-		if (IsMarked(object)) { continue; }   // destroyed by a callback a moment ago
+		Object* object = participant.object;
+		if (IsMarked(object) || !participant.collider->IsActive()) { continue; }   // changed by a callback a moment ago
 
 		Vector2 p = object->GetTransform().position;
-		float reach = object->GetRadius() + WallTouchMargin;
+		float reach = participant.collider->GetRadius() + WallTouchMargin;
 		int x0 = (int)floorf((p.x - reach) / T), x1 = (int)floorf((p.x + reach) / T);
 		int y0 = (int)floorf((p.y - reach) / T), y1 = (int)floorf((p.y + reach) / T);
 
@@ -255,30 +258,30 @@ void Map::RunCollisions()
 		size_t i = 0, j = 0;
 		while (i < current.size() || j < previous.size())
 		{
-			if (j >= previous.size() || (i < current.size() && current[i].tileIndex() < previous[j].tileIndex())) 
-			{ 
-				wallsEntered.push_back(current[i++]); 
+			if (j >= previous.size() || (i < current.size() && current[i].tileIndex() < previous[j].tileIndex()))
+			{
+				wallsEntered.push_back(current[i++]);
 			}
-			else if (i >= current.size() || previous[j].tileIndex() < current[i].tileIndex()) 
-			{ 
+			else if (i >= current.size() || previous[j].tileIndex() < current[i].tileIndex())
+			{
 				wallsExited.push_back(previous[j++]);
 			}
-			else 
-			{ 
-				wallsStayed.push_back(current[i]); 
-				i++; 
-				j++; 
+			else
+			{
+				wallsStayed.push_back(current[i]);
+				i++;
+				j++;
 			}
 		}
 		previous = current;
 
-		for (const Tile& w : wallsExited) { if (!IsMarked(object)) { object->OnWallExit(w.x, w.y, w.value); } }
 		for (const Tile& w : wallsEntered) { if (!IsMarked(object)) { object->OnWallEnter(w.x, w.y, w.value); } }
 		for (const Tile& w : wallsStayed) { if (!IsMarked(object)) { object->OnWallStay(w.x, w.y, w.value); } }
+		for (const Tile& w : wallsExited) { if (!IsMarked(object)) { object->OnWallExit(w.x, w.y, w.value); } }
 	}
 
-	// Objects that stopped taking part (their collision was switched off) let go of their wall tiles.
-	unordered_set<Object*> activeSet(active.begin(), active.end());
+	unordered_set<Object*> activeSet;
+	for (const Participant& participant : active) { activeSet.insert(participant.object); }
 	vector<pair<Object*, std::vector<Tile>>> letGo;
 	for (auto it = touchingWalls.begin(); it != touchingWalls.end(); )
 	{
@@ -295,7 +298,7 @@ void Map::RunCollisions()
 	}
 }
 
-void Map::RemoveDestroyed()
+void Level::RemoveDestroyed()
 {
 	bool repeat = true;
 	while (repeat)
@@ -330,7 +333,7 @@ void Map::RemoveDestroyed()
 		[](const ObjectEntry& entry) { return entry.destroyed; }), objects.end());
 }
 
-Vector2 Map::EvaluatePosition(Vector2 position, float radius)
+Vector2 Level::EvaluatePosition(Vector2 position, float radius)
 {
 	const float GAP = 0.01f; 
 
@@ -407,7 +410,7 @@ Vector2 Map::EvaluatePosition(Vector2 position, float radius)
 	return best;
 }
 
-void Map::UpdateObjects()
+void Level::UpdateObjects()
 {
 	size_t count = objects.size();
 	for (size_t i = 0; i < count; ++i)
@@ -423,7 +426,7 @@ void Map::UpdateObjects()
 	RemoveDestroyed();
 }
 
-void Map::Destroy(Object* object)
+void Level::Destroy(Object* object)
 {
 	if (!object) { return; }
 
@@ -437,7 +440,7 @@ void Map::Destroy(Object* object)
 	}
 }
 
-void Map::DestroyAllObjects()
+void Level::DestroyAllObjects()
 {
 	for (ObjectEntry& entry : objects) 
 	{ 
@@ -445,7 +448,7 @@ void Map::DestroyAllObjects()
 	}
 }
 
-int Map::ObjectCount() const
+int Level::ObjectCount() const
 {
 	int n = 0;
 	for (const ObjectEntry& entry : objects) 

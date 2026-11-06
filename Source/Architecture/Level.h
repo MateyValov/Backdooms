@@ -14,6 +14,8 @@
 using namespace std;
 
 class Object;
+class Sprite;
+class Collider;
 
 using ObjectPair = std::pair<Object*, Object*>;
 
@@ -46,7 +48,7 @@ struct PairLess
 	}
 };
 
-class Map
+class Level
 {
 private:
 	MapArray walls;
@@ -66,10 +68,10 @@ private:
 	void RemoveDestroyed();
 
 public:
-	Map();
+	Level();
 
-	void GenerateMap();
-	void ResetMap();
+	void GenerateLevel();
+	void ResetLevel();
 
 	MapArray GetWalls() const;
 	MapArray GetFloor() const;
@@ -94,14 +96,16 @@ public:
 };
 
 template<typename T, typename ...Args>
-inline T* Map::Spawn(Vector2 position, float angle, Args && ...args)
+inline T* Level::Spawn(Vector2 position, float angle, Args && ...args)
 {
 	static_assert(is_base_of<Object, T>::value, "Map::Spawn<T>: T must inherit from Object");
 
 	unique_ptr<T> owned = make_unique<T>(std::forward<Args>(args)...);
 	T* object = owned.get();
-	object->SetTransform(Transform(position, angle));
 	objects.push_back(ObjectEntry{ move(owned), false });
+
+	object->SetTransform(Transform(position, angle));
 	object->Start();
+
 	return object;	
 }

@@ -2,13 +2,13 @@
 
 #include "../Modules/Engine.h"
 
-MovableObject::MovableObject() : Object()
+MovableObject::MovableObject()
 {
 	movementSpeed = 200;
 	turnSpeed = 150;
 }
 
-MovableObject::MovableObject(float radius, int movementSpeed, int turnSpeed) : Object(radius)
+MovableObject::MovableObject(float radius, int movementSpeed, int turnSpeed)
 {
 	this->movementSpeed = movementSpeed;
 	this->turnSpeed = turnSpeed;

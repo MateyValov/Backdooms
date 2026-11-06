@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Object.h"
+
 #include <vector>
 
 #include "../Structs/Image.h"
@@ -9,10 +11,7 @@
 
 using namespace std;
 
-class Map;
-class Object;
-
-class Camera
+class Camera : public Object
 {
 private:
 	Screenspace screenspace;
@@ -35,9 +34,13 @@ private:
 
 	void Setup();
 
-	void DrawWalls(const MapArray walls, const Transform viewpoint);
-	void DrawFloorAndRoof(const MapArray floor, const MapArray roof, const Transform viewpoint);
-	void DrawObjects(const vector<Object*>& objects, const Transform viewpoint);
+	void DrawWalls(const MapArray walls);
+	void DrawFloorAndRoof(const MapArray floor, const MapArray roof);
+	void DrawObjects(const vector<Object*>& objects);
+
+protected:
+	void OnStart() override;
+	void OnUpdate() override;
 
 public:
 	Camera();
@@ -48,7 +51,5 @@ public:
 	Screenspace GetScreenspace();
 
 	void InitFloorBuffer();
-
-	void DrawLevel(const Map* map, const Transform viewpoint);
 	
 };

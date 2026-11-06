@@ -4,7 +4,10 @@
 
 void Rendering::Draw(const Image& image, const Rect& dest, const Rect& source, const Color& tint)
 {
-	if (image.texture == 0 || image.width <= 0 || image.height <= 0) { return; }
+	if (image.texture == 0 || image.width <= 0 || image.height <= 0) 
+	{ 
+		return; 
+	}
 
 	float u0 = source.x / image.width, u1 = (source.x + source.w) / image.width;
 	float v0 = source.y / image.height, v1 = (source.y + source.h) / image.height;

@@ -3,8 +3,9 @@
 #include <algorithm>
 #include <cmath>
 
-#include "../Architecture/Map.h"  
-#include "../Architecture/Object.h"
+#include "Components/Sprite.h"
+#include "Level.h"  
+
 #include "../Modules/Rendering.h"
 #include "../Modules/Textures.h"
 #include "../Modules/Engine.h"
@@ -90,12 +91,12 @@ void Camera::InitFloorBuffer()
 	Textures::CreateImage(floorImage, GetWidth(), GetHeight(), floorBuf.data(), false, false);
 }
 
-void Camera::DrawWalls(const MapArray walls, const Transform viewpoint)
+void Camera::DrawWalls(const MapArray walls)
 {
 	const Image& atlas = Textures::Atlas::GetImage();
 	const float T = (float)TILE_SIZE;
-	const float px = viewpoint.position.x, py = viewpoint.position.y;
-	const float angle = viewpoint.angle * PI / 180.0f;
+	const float px = transform.position.x, py = transform.position.y;
+	const float angle = transform.angle * PI / 180.0f;
 	const float ca = cosf(angle), sa = sinf(angle);
 
 	fill(wallDepth.begin(), wallDepth.end(), FLT_MAX);
@@ -157,7 +158,7 @@ void Camera::DrawWalls(const MapArray walls, const Transform viewpoint)
 	}
 }
 
-void Camera::DrawFloorAndRoof(const MapArray floor, const MapArray roof, const Transform viewpoint)
+void Camera::DrawFloorAndRoof(const MapArray floor, const MapArray roof)
 {
 	if (!floorImage.texture) 
 	{ 
@@ -179,7 +180,7 @@ void Camera::DrawFloorAndRoof(const MapArray floor, const MapArray roof, const T
 		ceilingX[i] = (roof[i] > 0 && hasAtlas) ? (int)r.x : -1;  ceilingY[i] = (int)r.y;
 	}
 
-	const float angle = viewpoint.angle * PI / 180.0f;
+	const float angle = transform.angle * PI / 180.0f;
 	const float ca = cosf(angle), sa = sinf(angle);
 	for (int x = 0; x < GetWidth(); ++x)
 	{
@@ -209,8 +210,8 @@ void Camera::DrawFloorAndRoof(const MapArray floor, const MapArray roof, const T
 		for (int x = 0; x < GetWidth(); ++x)
 		{
 			float t = perp * pxInvCos[x];                    // distance along this column's ray
-			float wx = viewpoint.position.x + pxDirX[x] * t;
-			float wy = viewpoint.position.y + pxDirY[x] * t;
+			float wx = transform.position.x + pxDirX[x] * t;
+			float wy = transform.position.y + pxDirY[x] * t;
 			int tileX = (int)floorf(wx / T), tileY = (int)floorf(wy / T);
 
 			unsigned char* floorPixel = &floorBuf[((size_t)y * GetWidth() + x) * 4];
@@ -239,50 +240,58 @@ void Camera::DrawFloorAndRoof(const MapArray floor, const MapArray roof, const T
 		Rect(0, 0, (float)GetWidth(), (float)GetHeight()));
 }
 
-void Camera::DrawObjects(const vector<Object*>& objects, const Transform viewpoint)
+void Camera::DrawObjects(const vector<Object*>& objects)
 {
 	const Image& atlas = Textures::Atlas::GetImage();
-	const float fx = viewpoint.GetForward().x, fy = viewpoint.GetForward().y;
-	const float rx = viewpoint.GetRight().x, ry = viewpoint.GetRight().y;     
+	const float fx = transform.GetForward().x, fy = transform.GetForward().y;
+	const float rx = transform.GetRight().x, ry = transform.GetRight().y;
 
-	struct Visible { Object* object; float depth; float lateral; int texture; };
+	struct Visible { Sprite* sprite; float depth; float lateral; int texture; };
 	vector<Visible> visible;
 	for (Object* object : objects)
 	{
-		int texture = object->GetTextureIdForPosition(viewpoint.position);
-		if (texture < 0) 
-		{ 
-			continue; 
-		}                               
+		vector<Sprite*> sprites = object->GetAllComponentOfClass<Sprite>();
+		if (sprites.size() == 0)
+		{
+			continue;
+		}
+		for (Sprite* s : sprites)
+		{
+			int texture = s->GetTextureIdForPosition(transform.position);
+			if (texture < 0)
+			{
+				continue;
+			}
 
-		Vector2 p = object->GetTransform().position;
-		float dx = p.x - viewpoint.position.x, dy = p.y - viewpoint.position.y;
-		float depth = dx * fx + dy * fy;    
-		if (depth < nearClippingDistance) 
-		{ 
-			continue; 
-		}    
+			Vector2 p = object->GetTransform().position;
+			float dx = p.x - transform.position.x, dy = p.y - transform.position.y;
+			float depth = dx * fx + dy * fy;
+			if (depth < nearClippingDistance)
+			{
+				continue;
+			}
 
-		visible.push_back(Visible{ object, depth, dx * rx + dy * ry, texture });
+			visible.push_back(Visible{ s, depth, dx * rx + dy * ry, texture });
+		}
 	}
 	sort(visible.begin(), visible.end(), [](const Visible& a, const Visible& b) { return a.depth > b.depth; }); 
 
 	for (const Visible& v : visible)
 	{
-		float radius = v.object->GetRadius();
+		//float radius = v.object->GetRadius();
 		float scale = projDist / v.depth;
-		float size = 2.0f * radius * scale;                           // its height on screen: its diameter
+		float size = TILE_SIZE * scale;                           // its height on screen: its diameter
 		float pixelsPerDegree = (float)GetWidth() / fov;
 
 		// Each edge goes through the same angle-to-pixel mapping the walls use, so an object that is outside
 		// the view stays outside it, however close it is.
-		float left = (fov / 2.0f + atan2f(v.lateral - radius, v.depth) * 180.0f / PI) * pixelsPerDegree;
-		float right = (fov / 2.0f + atan2f(v.lateral + radius, v.depth) * 180.0f / PI) * pixelsPerDegree;
+		float left = (fov / 2.0f + atan2f(v.lateral - TILE_SIZE / 2, v.depth) * 180.0f / PI) * pixelsPerDegree;
+		float right = (fov / 2.0f + atan2f(v.lateral + TILE_SIZE / 2, v.depth) * 180.0f / PI) * pixelsPerDegree;
 		float bottom = GetHeight() / 2.0f + (TILE_SIZE / 2.0f) * scale;
 		float top = bottom - size;
 
 		float visibleTop = max(top, 0.0f), visibleBottom = min(bottom, (float)GetHeight()); 
-		if (radius <= 0 || visibleBottom <= visibleTop || right <= 0 || left >= GetWidth())
+		if (visibleBottom <= visibleTop || right <= 0 || left >= GetWidth())
 		{ 
 			continue; 
 		}
@@ -304,7 +313,7 @@ void Camera::DrawObjects(const vector<Object*>& objects, const Transform viewpoi
 				continue; 
 			}
 			float direction = (0.5f * (x0 + x1) / pixelsPerDegree - fov / 2.0f) * PI / 180.0f;
-			float u = min(max((v.depth * tanf(direction) - (v.lateral - radius)) / (2.0f * radius), 0.0f), 0.9999f);
+			float u = min(max((v.depth * tanf(direction) - (v.lateral - TILE_SIZE / 2)) / TILE_SIZE, 0.0f), 0.9999f);
 
 			Rendering::Draw(atlas,
 				Rect(screenspace.TopLeft.x + x0, screenspace.TopLeft.y + visibleTop, x1 - x0, visibleBottom - visibleTop),
@@ -314,11 +323,25 @@ void Camera::DrawObjects(const vector<Object*>& objects, const Transform viewpoi
 	}
 }
 
-void Camera::DrawLevel(const Map* map, const Transform viewpoint)
+void Camera::OnStart()
 {
-	DrawFloorAndRoof(map->GetFloor(), map->GetRoof(), viewpoint);
-	DrawWalls(map->GetWalls(), viewpoint);
-	DrawObjects(map->GetObjects(), viewpoint);
+	printf("========CAMERA STATS========\n");
+	printf("Viewport - %d/%d\n", GetWidth(), GetHeight());
+	printf("MaxRaySteps = %d\n", MaxRaySteps);
+	printf("fov = %d\n", fov);
+	printf("columnWidth = %d\n", columnWidth);
+	printf("nearClippingDistance = %.2f\n", nearClippingDistance);
+	printf("columnCount = %d\n", columnCount);
+	printf("projDist = %.2f\n", projDist);
+}
+
+void Camera::OnUpdate()
+{
+	Level* level = Engine::GetLevel();
+
+	DrawFloorAndRoof(level->GetFloor(), level->GetRoof());
+	DrawWalls(level->GetWalls());
+	DrawObjects(level->GetObjects());
 }
 
 
