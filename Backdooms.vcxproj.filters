@@ -237,4 +237,7 @@
       <Filter>Source Files\Source\Architecture</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
 </Project>
