@@ -14,6 +14,7 @@ struct Vector2
 	Vector2 operator-(const Vector2& o) const { return Vector2(x - o.x, y - o.y); }
 	Vector2 operator*(float s) const { return Vector2(x * s, y * s); }
 	Vector2 operator*(const Vector2& o) const { return Vector2(x * o.x, y * o.y); }
+	Vector2 operator/(float s) const { return Vector2(x / s, y / s); }
 	Vector2 operator-() const { return Vector2(-x, -y); }
 
 	Vector2& operator+=(const Vector2& o) { x += o.x; y += o.y; return *this; }

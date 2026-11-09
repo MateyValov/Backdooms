@@ -2,13 +2,13 @@
 
 #include "../../Modules/Input.h"
 
-PlayerController::PlayerController(unsigned char forwardKey, unsigned char leftKey, unsigned char backKey, unsigned char rightKey, unsigned char interactKey)
+PlayerController::PlayerController(ControlScheme controlScheme)
 {
-	this->forwardKey = forwardKey;
-	this->leftKey = leftKey;
-	this->backKey = backKey;
-	this->rightKey = rightKey;
-	this->interactKey = interactKey;
+	this->forwardKey = controlScheme.forwardKey;
+	this->leftKey = controlScheme.leftKey;
+	this->backKey = controlScheme.backKey;
+	this->rightKey = controlScheme.rightKey;
+	this->interactKey = controlScheme.interactKey;
 }
 
 void PlayerController::UpdateController()

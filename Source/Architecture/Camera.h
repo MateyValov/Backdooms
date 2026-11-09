@@ -4,10 +4,11 @@
 
 #include <vector>
 
+#include "../Modules/Window.h"
+
 #include "../Structs/Image.h"
 #include "../Structs/MapArray.h"
 #include "../Structs/Transform.h"
-#include "../Structs/Screenspace.h"
 
 using namespace std;
 

@@ -11,7 +11,7 @@
 #include "stb_image.h"
 
 #ifndef GL_CLAMP_TO_EDGE
-#define GL_CLAMP_TO_EDGE 0x812F   // Windows' gl.h is OpenGL 1.1 and lacks this
+#define GL_CLAMP_TO_EDGE 0x812F
 #endif
 
 static const char* ATLAS_PATH = "Atlas/Atlas.png";
@@ -90,9 +90,6 @@ static unsigned char* loadPixels(const char* path, int* w, int* h)
 	return nullptr;
 }
 
-// ============================================================================================
-// LOW LEVEL
-// ============================================================================================
 namespace Textures
 {
 	bool LoadRgba(const char* path, int& width, int& height, std::vector<unsigned char>& rgba)
@@ -134,9 +131,6 @@ namespace Textures
 	}
 }
 
-// ============================================================================================
-// ATLAS
-// ============================================================================================
 namespace Textures {
 	namespace Atlas
 	{
@@ -173,7 +167,7 @@ namespace Textures {
 
 			const int width = ATLAS_COLUMNS * AtlasCell;
 			const int gridHeight = ATLAS_ROWS * AtlasCell;
-			const int height = gridHeight + AtlasCell;          // + one hidden row holding the missing texture
+			const int height = gridHeight + AtlasCell;
 			std::vector<unsigned char> pixels((size_t)width * height * 4, 0);
 
 			if (ok)
@@ -185,8 +179,8 @@ namespace Textures {
 			{
 				for (int i = 0; i < ATLAS_COUNT; ++i) { fillChecker(pixels, width, (i % ATLAS_COLUMNS) * AtlasCell, (i / ATLAS_COLUMNS) * AtlasCell, AtlasCell); }
 			}
-			fillChecker(pixels, width, 0, gridHeight, AtlasCell);   // the missing texture, outside the numbered grid
-			CreateImage(AtlasImage, width, height, pixels.data(), true, false);   // crisp: neighbouring textures can't bleed
+			fillChecker(pixels, width, 0, gridHeight, AtlasCell);  
+			CreateImage(AtlasImage, width, height, pixels.data(), true, false);
 			return ok;
 		}
 
@@ -207,7 +201,7 @@ namespace Textures {
 			{
 				static std::unordered_set<int> warned;
 				if (warned.insert(index).second) { printf("Atlas: texture %d does not exist (valid: 0 to %d).\n", index, (int)ATLAS_COUNT - 1); }
-				return Rect(0, (float)(ATLAS_ROWS * AtlasCell), size, size);   // the hidden missing texture
+				return Rect(0, (float)(ATLAS_ROWS * AtlasCell), size, size);
 			}
 			return Rect((float)((index % ATLAS_COLUMNS) * AtlasCell), (float)((index / ATLAS_COLUMNS) * AtlasCell), size, size);
 		}
@@ -228,7 +222,7 @@ template <typename T>
 static void warnMissing(const char* kind, const std::string& path, const std::unordered_map<std::string, T>& map)
 {
 	static std::unordered_set<std::string> warned;
-	if (!warned.insert(std::string(kind) + path).second) { return; }   // already told you about this one
+	if (!warned.insert(std::string(kind) + path).second) { return; } 
 	printf("Textures: no GUI %s '%s'. Available:", kind, path.c_str());
 	for (const auto& entry : map) { printf(" %s", entry.first.c_str()); }
 	printf("\n");
@@ -267,7 +261,7 @@ namespace Textures {
 				if (!LoadImage(file.c_str(), image, false, false))
 				{
 					ok = false;
-					if (isNew) { guiImages.erase(key); }   // never erase an entry someone may hold a reference to
+					if (isNew) { guiImages.erase(key); }
 					continue;
 				}
 				++loaded;
@@ -286,7 +280,6 @@ namespace Textures {
 	}
 }
 
-// ============================================================================================
 bool Textures::LoadTextures()
 {
 	if (!MissingImage.texture) 

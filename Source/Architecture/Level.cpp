@@ -196,7 +196,6 @@ void Level::RunCollisions()
 		active.push_back(Participant{ entry.object.get(), collider });
 	}
 
-	// ======================= object vs object (circles) =======================
 	auto makePair = [](Object* a, Object* b) { return less<Object*>()(a, b) ? ObjectPair(a, b) : ObjectPair(b, a); };
 
 	set<ObjectPair, PairLess> now;
@@ -215,10 +214,8 @@ void Level::RunCollisions()
 	set_difference(now.begin(), now.end(), touchingPairs.begin(), touchingPairs.end(), back_inserter(entered), PairLess());
 	set_intersection(now.begin(), now.end(), touchingPairs.begin(), touchingPairs.end(), back_inserter(stayed), PairLess());
 	set_difference(touchingPairs.begin(), touchingPairs.end(), now.begin(), now.end(), back_inserter(exited), PairLess());
-	touchingPairs = now;   // the new state is in place before any callback runs
+	touchingPairs = now; 
 
-	// Each event goes to both objects (their components first, then the object itself),
-	// unless one of them was destroyed by an earlier callback.
 	auto deliver = [this](const ObjectPair& pair, void (Object::* event)(Object*))
 		{
 			if (!IsMarked(pair.first)) { (pair.first->*event)(pair.second); }
@@ -229,26 +226,25 @@ void Level::RunCollisions()
 	for (const ObjectPair& pair : stayed) { deliver(pair, &Object::OnCollisionStay); }
 	for (const ObjectPair& pair : exited) { deliver(pair, &Object::OnCollisionExit); }
 
-	// ======================= object vs wall tiles =======================
 	const MapArray& wallValues = GetWalls();
 	const float T = (float)TILE_SIZE;
 
 	for (const Participant& participant : active)
 	{
 		Object* object = participant.object;
-		if (IsMarked(object) || !participant.collider->IsActive()) { continue; }   // changed by a callback a moment ago
+		if (IsMarked(object) || !participant.collider->IsActive()) { continue; }  
 
 		Vector2 p = object->GetTransform().position;
 		float reach = participant.collider->GetRadius() + WallTouchMargin;
 		int x0 = (int)floorf((p.x - reach) / T), x1 = (int)floorf((p.x + reach) / T);
 		int y0 = (int)floorf((p.y - reach) / T), y1 = (int)floorf((p.y + reach) / T);
 
-		vector<Tile> current;       // sorted by tile index: the loops run in that order
+		vector<Tile> current;
 		for (int ty = y0; ty <= y1; ++ty)
 		{
 			for (int tx = x0; tx <= x1; ++tx)
 			{
-				if (tx < 0 || ty < 0 || tx >= MAP_TILES_X || ty >= MAP_TILES_Y) { continue; }   // off the map: not reported
+				if (tx < 0 || ty < 0 || tx >= MAP_TILES_X || ty >= MAP_TILES_Y) { continue; } 
 				if (IsSolid(tx, ty)) { current.push_back(Tile{ tx, ty, wallValues[ty * MAP_TILES_X + tx] }); }
 			}
 		}
@@ -304,7 +300,7 @@ void Level::RemoveDestroyed()
 	while (repeat)
 	{
 		repeat = false;
-		vector<ObjectPair> goodbyes;     // (survivor, leaving)
+		vector<ObjectPair> goodbyes;
 		for (auto it = touchingPairs.begin(); it != touchingPairs.end(); )
 		{
 			bool firstGone = IsMarked(it->first), secondGone = IsMarked(it->second);
@@ -333,24 +329,31 @@ void Level::RemoveDestroyed()
 		[](const ObjectEntry& entry) { return entry.destroyed; }), objects.end());
 }
 
-Vector2 Level::EvaluatePosition(Vector2 position, float radius)
+Vector2 Level::EvaluatePosition(Object* obj, Vector2 newPosition)
 {
-	const float GAP = 0.01f; 
-
-	position.x = min(max(position.x, radius), MAP_TILES_X * TILE_SIZE - radius);
-	position.y = min(max(position.y, radius), MAP_TILES_Y * TILE_SIZE - radius);
-
-	for (int iteration = 0; iteration < 32 && OverlapsWall(position, radius); ++iteration)
+	Collider* collider = obj->GetComponent<Collider>();
+	if (collider == nullptr)
 	{
-		int x0 = (int)floorf((position.x - radius) / TILE_SIZE), x1 = (int)floorf((position.x + radius) / TILE_SIZE);
-		int y0 = (int)floorf((position.y - radius) / TILE_SIZE), y1 = (int)floorf((position.y + radius) / TILE_SIZE);
+		return newPosition;
+	}
+
+	const float GAP = 0.01f;
+	const float radius = collider->GetRadius();
+
+	newPosition.x = min(max(newPosition.x, radius), MAP_TILES_X * TILE_SIZE - radius);
+	newPosition.y = min(max(newPosition.y, radius), MAP_TILES_Y * TILE_SIZE - radius);
+
+	for (int iteration = 0; iteration < 32 && OverlapsWall(newPosition, radius); ++iteration)
+	{
+		int x0 = (int)floorf((newPosition.x - radius) / TILE_SIZE), x1 = (int)floorf((newPosition.x + radius) / TILE_SIZE);
+		int y0 = (int)floorf((newPosition.y - radius) / TILE_SIZE), y1 = (int)floorf((newPosition.y + radius) / TILE_SIZE);
 
 		float bestAmount = FLT_MAX;
-		Vector2 bestPos = position;
+		Vector2 bestPos = newPosition;
 		bool any = false;
 		auto consider = [&](float newX, float newY)
 			{
-				float amount = fabsf(newX - position.x) + fabsf(newY - position.y);
+				float amount = fabsf(newX - newPosition.x) + fabsf(newY - newPosition.y);
 				if (amount < bestAmount) { bestAmount = amount; bestPos = Vector2(newX, newY); any = true; }
 			};
 
@@ -362,10 +365,10 @@ Vector2 Level::EvaluatePosition(Vector2 position, float radius)
 				float left = (float)(tx * TILE_SIZE), right = left + TILE_SIZE;
 				float top = (float)(ty * TILE_SIZE), bottom = top + TILE_SIZE;
 
-				if (!IsSolid(tx, ty - 1)) { consider(position.x, top - radius - GAP); }      
-				if (!IsSolid(tx, ty + 1)) { consider(position.x, bottom + radius + GAP); }   
-				if (!IsSolid(tx - 1, ty)) { consider(left - radius - GAP, position.y); }     
-				if (!IsSolid(tx + 1, ty)) { consider(right + radius + GAP, position.y); }   
+				if (!IsSolid(tx, ty - 1)) { consider(newPosition.x, top - radius - GAP); }
+				if (!IsSolid(tx, ty + 1)) { consider(newPosition.x, bottom + radius + GAP); }
+				if (!IsSolid(tx - 1, ty)) { consider(left - radius - GAP, newPosition.y); }
+				if (!IsSolid(tx + 1, ty)) { consider(right + radius + GAP, newPosition.y); }
 			}
 		}
 			
@@ -373,15 +376,15 @@ Vector2 Level::EvaluatePosition(Vector2 position, float radius)
 		{ 
 			break; 
 		}
-		position = bestPos;
+		newPosition = bestPos;
 	}
-	if (OverlapsWall(position, radius) == false) 
+	if (OverlapsWall(newPosition, radius) == false)
 	{ 
-		return position; 
+		return newPosition;
 	}
 
 	float bestDist = FLT_MAX;
-	Vector2 best = position;
+	Vector2 best = newPosition;
 
 	for (int ty = 0; ty < MAP_TILES_Y; ++ty)
 	{
@@ -397,8 +400,8 @@ Vector2 Level::EvaluatePosition(Vector2 position, float radius)
 			{
 				continue; 
 			}   
-			Vector2 c(std::min(std::max(position.x, minX), maxX), std::min(std::max(position.y, minY), maxY));
-			float d = (c.x - position.x) * (c.x - position.x) + (c.y - position.y) * (c.y - position.y);
+			Vector2 c(min(max(newPosition.x, minX), maxX), min(max(newPosition.y, minY), maxY));
+			float d = (c.x - newPosition.x) * (c.x - newPosition.x) + (c.y - newPosition.y) * (c.y - newPosition.y);
 			if (d < bestDist) 
 			{ 
 				bestDist = d; 

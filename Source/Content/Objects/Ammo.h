@@ -5,8 +5,8 @@
 class Ammo : public Pickup
 {
 public:
-	Ammo();
-	Ammo(int value);
+	Ammo(float radius);
+	Ammo(float radius, int value);
 
 	void Obtain(Player* player) override;
 };

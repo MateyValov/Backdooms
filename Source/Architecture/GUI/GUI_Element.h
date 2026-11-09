@@ -1,6 +1,7 @@
 #pragma once
 
-#include "../../Structs/Screenspace.h"
+#include "../../Modules/Window.h"
+
 #include "../../Structs/Transform.h"
 #include "../../Structs/Image.h"
 

@@ -5,10 +5,13 @@ C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\Components\
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\GUI\GUI_Element.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\GUI_Element.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\GUI\GUI_Image.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\GUI_Image.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\GUI\Widget.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Widget.obj
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\InputHandler.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\InputHandler.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\Level.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Level.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\MovableObject.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\MovableObject.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\Object.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Object.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\Camera.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Camera.obj
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\PlayerBase.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\PlayerBase.obj
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\Viewport.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Viewport.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\Components\HittableComponent.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\HittableComponent.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GUI\MainMenu.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\MainMenu.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GUI\PlayerHUD.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\PlayerHUD.obj
@@ -23,3 +26,4 @@ C:\Users\matey\Documents\University\CG\Backdooms\Source\Modules\Input.cpp;C:\Use
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Modules\Physics.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Physics.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Modules\Rendering.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Rendering.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Modules\Textures.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Textures.obj
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Modules\Window.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Window.obj

@@ -5,12 +5,12 @@
 #include "../Components/HittableComponent.h"
 #include "Player.h"
 
-Soda::Soda()
+Soda::Soda(float radius) : Pickup(radius)
 {
 	AddComponent<Sprite>(8);
 }
 
-Soda::Soda(int value) : Pickup(value)
+Soda::Soda(float radius, int value) : Pickup(radius, value)
 {
 	AddComponent<Sprite>(8);
 }

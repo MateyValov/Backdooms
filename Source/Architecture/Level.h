@@ -14,7 +14,6 @@
 using namespace std;
 
 class Object;
-class Sprite;
 class Collider;
 
 using ObjectPair = std::pair<Object*, Object*>;
@@ -82,7 +81,7 @@ public:
 	int GetTile(int x, int y) const;
 	vector<Object*> GetObjects() const;
 
-	Vector2 EvaluatePosition(Vector2 position, float radius);
+	Vector2 EvaluatePosition(Object* obj, Vector2 position);
 
 	template <typename T, typename... Args>
 	T* Spawn(Vector2 position, float angle, Args&&... args);

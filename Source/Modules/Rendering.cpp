@@ -43,5 +43,5 @@ void Rendering::DrawTile(int index, const Rect& dest, const Color& tint)
 
 void Rendering::DrawString(const std::string& text, const Vector2& position, float scale, const Color& tint)
 {
-	//skip for now
+	//to be added someday
 }

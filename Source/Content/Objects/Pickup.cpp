@@ -1,7 +1,15 @@
 #include "Pickup.h"
 
-Pickup::Pickup(int value)
+#include "../../Architecture/Components/Collider.h"
+
+Pickup::Pickup(float radius)
 {
+	AddComponent<Collider>(radius);
+}
+
+Pickup::Pickup(float radius, int value)
+{
+	AddComponent<Collider>(radius);
 	this->value = value;
 }
 

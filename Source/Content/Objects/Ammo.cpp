@@ -4,12 +4,12 @@
 
 #include "Player.h"
 
-Ammo::Ammo() : Pickup()
+Ammo::Ammo(float radius) : Pickup(radius)
 {
 	AddComponent<Sprite>(9);
 }
 
-Ammo::Ammo(int value) : Pickup(value)
+Ammo::Ammo(float radius, int value) : Pickup(radius, value)
 {
 	AddComponent<Sprite>(9);
 }

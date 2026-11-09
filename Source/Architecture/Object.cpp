@@ -116,7 +116,7 @@ void Object::SetPosition(Vector2 newPosition)
 	{
 		return;
 	}
-	transform.position = newPosition;  //    Engine::GetLevel()->EvaluatePosition(newPosition, radius);
+	transform.position = Engine::GetLevel()->EvaluatePosition(this, newPosition);
 }
 
 void Object::SetAngle(float newAngle)

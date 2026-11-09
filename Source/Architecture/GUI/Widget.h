@@ -3,7 +3,8 @@
 #include <vector>
 
 #include "../../Structs/Transform.h"
-#include "../../Structs/Screenspace.h"
+
+#include "../../Modules/Window.h"
 
 using namespace std;
 

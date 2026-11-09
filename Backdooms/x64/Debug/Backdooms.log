@@ -2,18 +2,37 @@
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\MathFuncs.h(9,14): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
   (compiling source file 'Source/Architecture/Camera.cpp')
   
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(49,40): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(50,40): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   (compiling source file 'Source/Architecture/Camera.cpp')
   
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(49,21): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(50,21): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   (compiling source file 'Source/Architecture/Camera.cpp')
   
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(54,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(55,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   (compiling source file 'Source/Architecture/Camera.cpp')
   
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(54,21): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(55,21): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   (compiling source file 'Source/Architecture/Camera.cpp')
   
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\Camera.cpp(76,22): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\Camera.cpp(81,22): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\Camera.cpp(75,22): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\Camera.cpp(80,22): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+  Level.cpp
+  Rendering.cpp
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\MathFuncs.h(9,14): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Source/Modules/Rendering.cpp')
+  
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(50,40): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Source/Modules/Rendering.cpp')
+  
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(50,21): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Source/Modules/Rendering.cpp')
+  
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(55,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Source/Modules/Rendering.cpp')
+  
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(55,21): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Source/Modules/Rendering.cpp')
+  
+  Textures.cpp
+  Generating Code...
   Backdooms.vcxproj -> C:\Users\matey\Documents\University\CG\Backdooms\x64\Debug\Backdooms.exe

@@ -4,6 +4,7 @@
 
 bool Input::keyDown(int vk)
 {
+	int i = VK_SPACE;
 	return (GetAsyncKeyState(vk) & 0x8000) != 0;
 }
 

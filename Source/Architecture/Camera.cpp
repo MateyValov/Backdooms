@@ -25,7 +25,7 @@ namespace
 
 Camera::Camera()
 {
-	screenspace = Engine::GetFullscreenBounds();
+	screenspace = Window::Fullscreen();
 	Setup();
 }
 
@@ -47,7 +47,6 @@ void Camera::Setup()
 	wallDepth.assign(columnCount, FLT_MAX);
 	floorBuf.assign((size_t)GetWidth() * GetHeight() * 4, 0);
 
-	// Angle away from the view direction at horizontal position xf (in pixels, 0 = left edge of the viewport).
 	auto angleAt = [&](float xf, float& c, float& s)
 		{
 			float theta = (fov / 2.0f - xf * ((float)fov / GetWidth())) * PI / 180.0f;
@@ -59,7 +58,7 @@ void Camera::Setup()
 	pxDirX.resize(GetWidth()); pxDirY.resize(GetWidth());
 	for (int x = 0; x < GetWidth(); ++x)
 	{
-		angleAt(x + 0.5f, pxCos[x], pxSin[x]);     // centre of pixel x
+		angleAt(x + 0.5f, pxCos[x], pxSin[x]); 
 		pxInvCos[x] = 1.0f / pxCos[x];
 	}
 
@@ -67,7 +66,7 @@ void Camera::Setup()
 	for (int c = 0; c < columnCount; ++c)
 	{
 		int x0 = c * columnWidth, x1 = min(GetWidth(), x0 + columnWidth);
-		angleAt(0.5f * (x0 + x1), colCos[c], colSin[c]);   // centre of the column
+		angleAt(0.5f * (x0 + x1), colCos[c], colSin[c]);
 	}
 }
 
@@ -103,54 +102,50 @@ void Camera::DrawWalls(const MapArray walls)
 
 	for (int c = 0; c < columnCount; ++c)
 	{
-		// Direction of this column's ray: the view direction turned by the column's angle.
 		float rdx = ca * colCos[c] - sa * colSin[c];
-		float rdy = -(sa * colCos[c] + ca * colSin[c]);      // minus: the map's y axis points down
+		float rdy = -(sa * colCos[c] + ca * colSin[c]);
 
-		// ---- walk the ray from tile to tile until it hits a wall ----
 		int mapX = (int)floorf(px / T), mapY = (int)floorf(py / T);
 		int stepX = rdx < 0 ? -1 : 1, stepY = rdy < 0 ? -1 : 1;
-		float deltaX = rdx != 0 ? fabsf(T / rdx) : 1e30f;    // distance along the ray to cross one whole tile
+		float deltaX = rdx != 0 ? fabsf(T / rdx) : 1e30f;   
 		float deltaY = rdy != 0 ? fabsf(T / rdy) : 1e30f;
-		float sideX = rdx == 0 ? 1e30f : (rdx < 0 ? (px - mapX * T) / -rdx : ((mapX + 1) * T - px) / rdx);   // distance to the next vertical line
-		float sideY = rdy == 0 ? 1e30f : (rdy < 0 ? (py - mapY * T) / -rdy : ((mapY + 1) * T - py) / rdy);  // ... horizontal line
+		float sideX = rdx == 0 ? 1e30f : (rdx < 0 ? (px - mapX * T) / -rdx : ((mapX + 1) * T - px) / rdx);   
+		float sideY = rdy == 0 ? 1e30f : (rdy < 0 ? (py - mapY * T) / -rdy : ((mapY + 1) * T - py) / rdy);  
 
 		int hitTile = 0;
 		bool hitEastWestFace = false;
-		float t = 0;                                         // distance along the ray to the wall
+		float t = 0;                                        
 		int stepsX = 0, stepsY = 0;
 		while (true)
 		{
 			if (sideX < sideY) { t = sideX; sideX += deltaX; mapX += stepX; ++stepsX; hitEastWestFace = true; }
 			else { t = sideY; sideY += deltaY; mapY += stepY; ++stepsY; hitEastWestFace = false; }
 
-			if (stepsX > MaxRaySteps || stepsY > MaxRaySteps) { break; }                              // too far away
-			if (mapX < 0 || mapY < 0 || mapX >= MAP_TILES_X || mapY >= MAP_TILES_Y) { break; }            // left the map
+			if (stepsX > MaxRaySteps || stepsY > MaxRaySteps) { break; }                              
+			if (mapX < 0 || mapY < 0 || mapX >= MAP_TILES_X || mapY >= MAP_TILES_Y) { break; }           
 			int value = walls[mapY * MAP_TILES_X + mapX];
 			if (value > 0) { hitTile = value; break; }
 		}
-		if (hitTile == 0) { continue; }                      // the ray found nothing: no wall in this column
+		if (hitTile == 0) { continue; }                      
 
-		// ---- where along the wall did it land? (0..1, left to right as the viewer sees it) ----
 		float hitX = px + rdx * t, hitY = py + rdy * t;
 		float u;
 		if (hitEastWestFace) { u = (hitY - floorf(hitY / T) * T) / T; if (rdx < 0) { u = 1 - u; } }
 		else { u = (hitX - floorf(hitX / T) * T) / T; if (rdy > 0) { u = 1 - u; } }
 
-		// ---- size on screen ----
-		float perp = std::max(t * colCos[c], 0.01f);         // straight-ahead distance: no fisheye
-		wallDepth[c] = perp;                                 // remembered so objects can hide behind this wall
+
+		float perp = std::max(t * colCos[c], 0.01f);         
+		wallDepth[c] = perp;                                
 		float lineH = (TILE_SIZE * projDist) / perp;
-		float cut = 0;                                       // fraction of the wall off-screen at the top and again at the bottom
+		float cut = 0;                                       
 		if (lineH > GetHeight()) { cut = (lineH - GetHeight()) / (2 * lineH); lineH = (float)GetHeight(); }
 		float top = (GetHeight() - lineH) / 2;
 
 		int x0 = c * columnWidth, x1 = min(GetWidth(), x0 + columnWidth);
 		float shade = hitEastWestFace ? SHADE_EAST_WEST_FACE : SHADE_NORTH_SOUTH_FACE;
 
-		// ---- draw one single-pixel-wide slice of the texture, stretched over the column ----
-		Rect tex = Textures::Atlas::Cell(hitTile - 1);       // map value 1 is atlas texture 0
-		float uu = std::min(std::max(u, 0.f), 0.9999f);      // stay inside this texture, never touch its neighbour
+		Rect tex = Textures::Atlas::Cell(hitTile - 1);
+		float uu = std::min(std::max(u, 0.f), 0.9999f);
 		Rendering::Draw(atlas,
 			Rect(screenspace.TopLeft.x + x0, screenspace.TopLeft.y + top, (float)(x1 - x0), lineH),
 			Rect(tex.x + uu * tex.w, tex.y + cut * tex.h, 0, tex.h * (1 - 2 * cut)),
@@ -202,14 +197,14 @@ void Camera::DrawFloorAndRoof(const MapArray floor, const MapArray roof)
 		};
 
 	const int half = GetHeight() / 2;
-	for (int y = half; y < GetHeight(); ++y)                      // the bottom half of the view is floor ...
+	for (int y = half; y < GetHeight(); ++y)                      
 	{
-		float perp = (T / 2.0f) * projDist / (y + 0.5f - half);   // distance straight ahead that this row sees
-		int yCeiling = GetHeight() - 1 - y;                       // ... and the mirrored row in the top half is ceiling
+		float perp = (T / 2.0f) * projDist / (y + 0.5f - half); 
+		int yCeiling = GetHeight() - 1 - y;                 
 
 		for (int x = 0; x < GetWidth(); ++x)
 		{
-			float t = perp * pxInvCos[x];                    // distance along this column's ray
+			float t = perp * pxInvCos[x];                   
 			float wx = transform.position.x + pxDirX[x] * t;
 			float wy = transform.position.y + pxDirY[x] * t;
 			int tileX = (int)floorf(wx / T), tileY = (int)floorf(wy / T);
@@ -278,13 +273,10 @@ void Camera::DrawObjects(const vector<Object*>& objects)
 
 	for (const Visible& v : visible)
 	{
-		//float radius = v.object->GetRadius();
 		float scale = projDist / v.depth;
-		float size = TILE_SIZE * scale;                           // its height on screen: its diameter
+		float size = TILE_SIZE * scale;
 		float pixelsPerDegree = (float)GetWidth() / fov;
 
-		// Each edge goes through the same angle-to-pixel mapping the walls use, so an object that is outside
-		// the view stays outside it, however close it is.
 		float left = (fov / 2.0f + atan2f(v.lateral - TILE_SIZE / 2, v.depth) * 180.0f / PI) * pixelsPerDegree;
 		float right = (fov / 2.0f + atan2f(v.lateral + TILE_SIZE / 2, v.depth) * 180.0f / PI) * pixelsPerDegree;
 		float bottom = GetHeight() / 2.0f + (TILE_SIZE / 2.0f) * scale;

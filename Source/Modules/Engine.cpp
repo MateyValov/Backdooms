@@ -2,6 +2,7 @@
 
 #include <GL/freeglut.h>
 
+#include "Window.h"
 #include "Textures.h"
 #include "Physics.h"
 #include "Input.h"
@@ -23,34 +24,28 @@
 static float lastTime;
 static float deltaTime;
 
-static int screenWidth;
-static int screenHeight;
-
-static Screenspace Fullscreen;
-static Screenspace TopScreen;
-static Screenspace BottomScreen;
-
 static Level* activeLevel;
 
 static PlayerHUD* MainPlayerHUD;
 static PlayerHUD* SecondPlayerHUD;
 
 
-static void StartGame(bool isMultiplayer)
+static void OpenLevel(Level* level, bool isMultiplayer)
 {
-	activeLevel = new Level();
+	activeLevel = level;
 
-	activeLevel->Spawn<Soda>(activeLevel->GetSpawnpoint() + Vector2(64, 64), 0.f);
-	activeLevel->Spawn<Soda>(activeLevel->GetSpawnpoint() + Vector2(-64, 64), 0.f);
-	activeLevel->Spawn<Ammo>(activeLevel->GetSpawnpoint() + Vector2(64, -64), 0.f);
-	activeLevel->Spawn<Ammo>(activeLevel->GetSpawnpoint() + Vector2(-64, -64), 0.f);
+	activeLevel->Spawn<Soda>(activeLevel->GetSpawnpoint() + Vector2(64, 64), 0.f, 10);
+	activeLevel->Spawn<Soda>(activeLevel->GetSpawnpoint() + Vector2(-64, 64), 0.f, 10);
+	activeLevel->Spawn<Ammo>(activeLevel->GetSpawnpoint() + Vector2(64, -64), 0.f, 10);
+	activeLevel->Spawn<Ammo>(activeLevel->GetSpawnpoint() + Vector2(-64, -64), 0.f, 10);
 
 	activeLevel->Spawn<Monster>(Vector2(TILE_SIZE * 10.5f, TILE_SIZE * 2.5f), 0.f);
 
 	Player* MainPlayer = activeLevel->Spawn<Player>(activeLevel->GetSpawnpoint(), 0.f);
-	MainPlayer->AssignController(new PlayerController('W', 'A', 'S', 'D', 'Q'));
+	MainPlayer->AssignController(new PlayerController(ControlScheme::PlayerOne()));
 
-	Camera* MainCamera = activeLevel->Spawn<Camera>(activeLevel->GetSpawnpoint(), 0.f, isMultiplayer ? TopScreen : Fullscreen, 60, 20, 2, 1.f);
+	Camera* MainCamera = activeLevel->Spawn<Camera>(activeLevel->GetSpawnpoint(), 0.f, 
+		isMultiplayer ? Window::TopHalf() : Window::Fullscreen(), 60, 20, 2, 1.f);
 	MainCamera->SetParent(MainPlayer);
 
 	MainPlayerHUD = new PlayerHUD(MainPlayer);
@@ -58,9 +53,9 @@ static void StartGame(bool isMultiplayer)
 	if (isMultiplayer)
 	{
 		Player* SecondPlayer = activeLevel->Spawn<Player>(activeLevel->GetSpawnpoint(), 0.f);
-		SecondPlayer->AssignController(new PlayerController(VK_UP, VK_LEFT, VK_DOWN, VK_RIGHT, VK_SPACE));
+		SecondPlayer->AssignController(new PlayerController(ControlScheme::PlayerTwo()));
 		
-		Camera* SecondCamera = activeLevel->Spawn<Camera>(Vector2(), 0.f, BottomScreen, 60, 20, 2, 1.f);
+		Camera* SecondCamera = activeLevel->Spawn<Camera>(Vector2(), 0.f, Window::BottomHalf(), 60, 20, 2, 1.f);
 		SecondCamera->SetParent(SecondPlayer);
 
 		SecondPlayerHUD = new PlayerHUD(SecondPlayer);
@@ -109,12 +104,12 @@ static void Update()
 
 	if (SecondPlayerHUD != nullptr)
 	{
-		SecondPlayerHUD->DrawWidget(BottomScreen);
-		MainPlayerHUD->DrawWidget(TopScreen);
+		SecondPlayerHUD->DrawWidget(Window::BottomHalf());
+		MainPlayerHUD->DrawWidget(Window::TopHalf());
 	}
 	else
 	{
-		MainPlayerHUD->DrawWidget(Fullscreen);
+		MainPlayerHUD->DrawWidget(Window::Fullscreen());
 	}
 
 	glutSwapBuffers();
@@ -127,17 +122,15 @@ bool Engine::InitEngine(int* argc, char** argv, int screenWidth, int screenHeigh
 	glutInitWindowSize(screenWidth, screenHeight);
 	glutCreateWindow("Backdooms");
 
-	Fullscreen = Screenspace(Vector2(), Vector2(screenWidth, screenHeight));
-	TopScreen = Screenspace(Vector2(), Vector2(screenWidth, screenHeight / 2));
-	BottomScreen = Screenspace(Vector2(0.f, screenHeight / 2), Vector2(screenWidth, screenHeight));
-
+	Window::InitWindow(screenWidth, screenHeight);
 	Input::InitKeyStates();
+
 	if (Textures::LoadTextures() == false)
 	{
 		return false;
 	}
 
-	StartGame(false);
+	OpenLevel(new Level(), true);
 	
 	glClearColor(0, 0, 0, 0);
 	gluOrtho2D(0, screenWidth, screenHeight, 0);
@@ -156,14 +149,4 @@ Level* Engine::GetLevel()
 float Engine::GetDeltaTime()
 {
 	return deltaTime;
-}
-
-Vector2 Engine::GetWindowSize()
-{
-	return Vector2(Fullscreen.x(), Fullscreen.y());
-}
-
-Screenspace Engine::GetFullscreenBounds()
-{
-	return Fullscreen;
 }
