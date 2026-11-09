@@ -129,11 +129,11 @@
     <ClCompile Include="Source\Architecture\PlayerBase.cpp">
       <Filter>Source Files\Source\Architecture</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Architecture\Viewport.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Architecture\InputHandler.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Source\Architecture</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Architecture\Viewport.cpp">
+      <Filter>Source Files\Source\Architecture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

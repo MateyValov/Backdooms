@@ -1,38 +1,39 @@
-﻿  Camera.cpp
+﻿  Engine.cpp
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\MathFuncs.h(9,14): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Source/Architecture/Camera.cpp')
+  (compiling source file 'Source/Modules/Engine.cpp')
   
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(50,40): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Source/Architecture/Camera.cpp')
+  (compiling source file 'Source/Modules/Engine.cpp')
   
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(50,21): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Source/Architecture/Camera.cpp')
+  (compiling source file 'Source/Modules/Engine.cpp')
   
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(55,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Source/Architecture/Camera.cpp')
+  (compiling source file 'Source/Modules/Engine.cpp')
   
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(55,21): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Source/Architecture/Camera.cpp')
+  (compiling source file 'Source/Modules/Engine.cpp')
   
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\Camera.cpp(75,22): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\Camera.cpp(80,22): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
-  Level.cpp
-  Rendering.cpp
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\MathFuncs.h(9,14): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Source/Modules/Rendering.cpp')
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Modules\Engine.cpp(91,12): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\memory(3465,56): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\memory(3465,56): warning C4244:         with
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\memory(3465,56): warning C4244:         [
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\memory(3465,56): warning C4244:             _Ty=int
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\memory(3465,56): warning C4244:         ]
+  (compiling source file 'Source/Modules/Engine.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\memory(3465,56):
+      the template instantiation context (the oldest one first) is
+          C:\Users\matey\Documents\University\CG\Backdooms\Source\Modules\Engine.cpp(37,13):
+          see reference to function template instantiation 'T *Level::Spawn<Soda,int>(Vector2,float,int &&)' being compiled
+          with
+          [
+              T=Soda
+          ]
+          C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\Level.h(102,24):
+          see reference to function template instantiation 'std::unique_ptr<Soda,std::default_delete<Soda>> std::make_unique<Soda,_Ty,0>(_Ty &&)' being compiled
+          with
+          [
+              _Ty=int
+          ]
   
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(50,40): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Source/Modules/Rendering.cpp')
-  
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(50,21): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Source/Modules/Rendering.cpp')
-  
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(55,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Source/Modules/Rendering.cpp')
-  
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(55,21): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Source/Modules/Rendering.cpp')
-  
-  Textures.cpp
-  Generating Code...
   Backdooms.vcxproj -> C:\Users\matey\Documents\University\CG\Backdooms\x64\Debug\Backdooms.exe

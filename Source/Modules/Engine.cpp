@@ -7,19 +7,19 @@
 #include "Physics.h"
 #include "Input.h"
 
-#include "../Architecture/Camera.h"
-#include "../Architecture/Level.h"
+#include "Architecture/Camera.h"
+#include "Architecture/Level.h"
 
 //======================================
 
-#include "../Content/Objects/Player.h"
-#include "../Content/Input/PlayerController.h"
+#include "Content/Objects/Player.h"
+#include "Content/Input/PlayerController.h"
 
-#include "../Content/Objects/Soda.h"
-#include "../Content/Objects/Ammo.h"
-#include "../Content/Objects/Monster.h"
+#include "Content/Objects/Soda.h"
+#include "Content/Objects/Ammo.h"
+#include "Content/Objects/Monster.h"
 
-#include "../Content/GUI/PlayerHUD.h"
+#include "Content/GUI/PlayerHUD.h"
 
 static float lastTime;
 static float deltaTime;
