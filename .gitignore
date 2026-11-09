@@ -40,5 +40,3 @@ packages/
 # vcpkg
 vcpkg_installed/
 
-# Exceptions
-!libs/**/*.lib
