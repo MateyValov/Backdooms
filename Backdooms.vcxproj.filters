@@ -1,0 +1,240 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Source">
+      <UniqueIdentifier>{8d84d792-72b1-4168-b1c7-6e44a58529a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Source\Structs">
+      <UniqueIdentifier>{5cb28aef-e57e-4ed9-a7cd-c76c6661f931}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Source\Modules">
+      <UniqueIdentifier>{7258f75a-b4c2-482e-a381-d217732b20cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Source\Architecture">
+      <UniqueIdentifier>{0a642b3e-8337-4c8e-a7ed-d19941052874}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Source\Architecture\GUI">
+      <UniqueIdentifier>{ce4824a3-7f3c-4eb8-a8a1-83a3e57a94e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Source\Content">
+      <UniqueIdentifier>{6b6ecc40-0025-42b5-9525-50c433de2dd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Source\Content\Objects">
+      <UniqueIdentifier>{f47f016b-2c7f-4563-a7e5-7900f8826ce9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Source\Content\GUI">
+      <UniqueIdentifier>{e2674ca9-17ec-4975-a8cd-09c827a9b942}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Source\Content\Input">
+      <UniqueIdentifier>{5620d7ca-d1a2-4e59-bc51-655bb37691dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Source\Architecture\Components">
+      <UniqueIdentifier>{66e27262-f739-4c1e-88ca-c69c1fd31b2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Source\Content\Components">
+      <UniqueIdentifier>{8fd058bc-f31c-4309-929f-10e9090cc42f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Backdooms.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Modules\Engine.cpp">
+      <Filter>Source Files\Source\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Modules\Rendering.cpp">
+      <Filter>Source Files\Source\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Modules\Textures.cpp">
+      <Filter>Source Files\Source\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Architecture\Level.cpp">
+      <Filter>Source Files\Source\Architecture</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Architecture\MovableObject.cpp">
+      <Filter>Source Files\Source\Architecture</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Architecture\Object.cpp">
+      <Filter>Source Files\Source\Architecture</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Architecture\Camera.cpp">
+      <Filter>Source Files\Source\Architecture</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Architecture\GUI\GUI_Element.cpp">
+      <Filter>Source Files\Source\Architecture\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Architecture\GUI\GUI_Image.cpp">
+      <Filter>Source Files\Source\Architecture\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Architecture\GUI\Widget.cpp">
+      <Filter>Source Files\Source\Architecture\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Content\Objects\Ammo.cpp">
+      <Filter>Source Files\Source\Content\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Content\Objects\Pickup.cpp">
+      <Filter>Source Files\Source\Content\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Content\Objects\Soda.cpp">
+      <Filter>Source Files\Source\Content\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Content\GUI\MainMenu.cpp">
+      <Filter>Source Files\Source\Content\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Content\GUI\PlayerHUD.cpp">
+      <Filter>Source Files\Source\Content\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Content\Objects\Monster.cpp">
+      <Filter>Source Files\Source\Content\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Content\Objects\Player.cpp">
+      <Filter>Source Files\Source\Content\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Modules\Input.cpp">
+      <Filter>Source Files\Source\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Content\Input\PlayerController.cpp">
+      <Filter>Source Files\Source\Content\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Architecture\Components\Component.cpp">
+      <Filter>Source Files\Source\Architecture\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Architecture\Components\Sprite.cpp">
+      <Filter>Source Files\Source\Architecture\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Architecture\Components\Collider.cpp">
+      <Filter>Source Files\Source\Architecture\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Modules\Physics.cpp">
+      <Filter>Source Files\Source\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Content\Components\HittableComponent.cpp">
+      <Filter>Source Files\Source\Content\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Modules\Window.cpp">
+      <Filter>Source Files\Source\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Architecture\PlayerBase.cpp">
+      <Filter>Source Files\Source\Architecture</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Architecture\Viewport.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Architecture\InputHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\Structs\Transform.h">
+      <Filter>Source Files\Source\Structs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Structs\Image.h">
+      <Filter>Source Files\Source\Structs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Structs\MathFuncs.h">
+      <Filter>Source Files\Source\Structs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Structs\MapArray.h">
+      <Filter>Source Files\Source\Structs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Modules\Engine.h">
+      <Filter>Source Files\Source\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Modules\Rendering.h">
+      <Filter>Source Files\Source\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Modules\Textures.h">
+      <Filter>Source Files\Source\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Architecture\Level.h">
+      <Filter>Source Files\Source\Architecture</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Architecture\MovableObject.h">
+      <Filter>Source Files\Source\Architecture</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Architecture\Object.h">
+      <Filter>Source Files\Source\Architecture</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Architecture\Camera.h">
+      <Filter>Source Files\Source\Architecture</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Architecture\GUI\GUI_Element.h">
+      <Filter>Source Files\Source\Architecture\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Architecture\GUI\GUI_Image.h">
+      <Filter>Source Files\Source\Architecture\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Architecture\GUI\Widget.h">
+      <Filter>Source Files\Source\Architecture\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\Objects\Ammo.h">
+      <Filter>Source Files\Source\Content\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\Objects\Pickup.h">
+      <Filter>Source Files\Source\Content\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\Objects\Soda.h">
+      <Filter>Source Files\Source\Content\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\GUI\MainMenu.h">
+      <Filter>Source Files\Source\Content\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\GUI\PlayerHUD.h">
+      <Filter>Source Files\Source\Content\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\Objects\Monster.h">
+      <Filter>Source Files\Source\Content\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Structs\Event.h">
+      <Filter>Source Files\Source\Structs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\Objects\Player.h">
+      <Filter>Source Files\Source\Content\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Modules\Input.h">
+      <Filter>Source Files\Source\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\Input\PlayerController.h">
+      <Filter>Source Files\Source\Content\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Architecture\Components\Component.h">
+      <Filter>Source Files\Source\Architecture\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Architecture\Components\Sprite.h">
+      <Filter>Source Files\Source\Architecture\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Architecture\Components\Collider.h">
+      <Filter>Source Files\Source\Architecture\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Modules\Physics.h">
+      <Filter>Source Files\Source\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\Components\HittableComponent.h">
+      <Filter>Source Files\Source\Content\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Modules\Window.h">
+      <Filter>Source Files\Source\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Architecture\PlayerBase.h">
+      <Filter>Source Files\Source\Architecture</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Architecture\InputHandler.h">
+      <Filter>Source Files\Source\Architecture</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Architecture\Viewport.h">
+      <Filter>Source Files\Source\Architecture</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

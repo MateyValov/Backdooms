@@ -1,34 +1,40 @@
-# Build
-bin/
-obj/
-
-# Linux
-Makefile
-libs/Makefile
-**/*.make
-
-# Windows
-**/*.sln
-**/*.vcxproj
-**/*.vcxproj.user
-**/*.vcxproj.filters
+# Visual Studio local settings and cache
 .vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.VC.db
+*.VC.VC.opendb
+*.ipch
+*.aps
 
-# Mac
-**/*.xcodeproj
-**/*.xcworkspace
-**/*.xcuserdatad
-.DS_Store
+# Build output folders
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Bb]in/
+[Oo]bj/
+Win32/
 
-# ImGui
-imgui.ini
+# Compiled files
+*.obj
+*.o
+*.pch
+*.pdb
+*.ilk
+*.exp
+*.idb
+*.tlog
+*.lastbuildstate
+*.log
 
-# Editors
-.vscode
-.cache
-compile_commands.json
+# Binaries (remove these lines if you want to commit them)
+*.exe
+*.dll
+*.lib
+*.a
 
-# CMake
-build/
-
-.vs/
+# vcpkg
+vcpkg_installed/
