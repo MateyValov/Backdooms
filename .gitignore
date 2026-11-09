@@ -30,7 +30,7 @@ Win32/
 *.lastbuildstate
 *.log
 
-# Binaries (remove these lines if you want to commit them)
+# Binaries
 *.exe
 *.dll
 *.lib
@@ -38,3 +38,6 @@ Win32/
 
 # vcpkg
 vcpkg_installed/
+
+# Exceptions
+!libs/**/*.lib
