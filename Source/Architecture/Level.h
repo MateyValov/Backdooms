@@ -47,6 +47,17 @@ struct PairLess
 	}
 };
 
+struct RaycastHit
+{
+	enum class Type { None, Wall, Object };
+
+	Type type = Type::None;
+	float distance = 0;                      
+	Vector2 point;                             
+	Object* object = nullptr;                
+	Tile tile;
+};
+
 class Level
 {
 private:
@@ -90,8 +101,12 @@ public:
 
 	void Destroy(Object* object);
 	void DestroyAllObjects();
+
+	RaycastHit Raycast(Vector2 from, Vector2 to, const Object* ignore = nullptr) const;
 	
-	int ObjectCount() const;      
+	int ObjectCount() const;    
+
+
 };
 
 template<typename T, typename ...Args>

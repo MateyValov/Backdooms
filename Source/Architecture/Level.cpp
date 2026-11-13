@@ -451,6 +451,74 @@ void Level::DestroyAllObjects()
 	}
 }
 
+RaycastHit Level::Raycast(Vector2 from, Vector2 to, const Object* ignore) const
+{
+	RaycastHit best;                                  
+	const float T = (float)TILE_SIZE;
+	float dx = to.x - from.x, dy = to.y - from.y;
+	float length = sqrtf(dx * dx + dy * dy);
+	Vector2 dir = length > 0 ? Vector2(dx / length, dy / length) : Vector2(0, 0);
+
+	auto hitWall = [&](int tx, int ty, float t)
+		{
+			best.type = RaycastHit::Type::Wall;
+			best.distance = t;
+			best.point = Vector2(from.x + dir.x * t, from.y + dir.y * t);
+			best.tile.x = tx; best.tile.y = ty;
+			best.tile.value = (tx >= 0 && ty >= 0 && tx < MAP_TILES_X && ty < MAP_TILES_Y) ? GetWalls()[ty * MAP_TILES_X + tx] : 0;
+		};
+
+	int tx = (int)floorf(from.x / T), ty = (int)floorf(from.y / T);
+	if (IsSolid(tx, ty))
+	{
+		hitWall(tx, ty, 0);                           
+	}
+	else if (length > 0)
+	{
+		int stepX = dir.x < 0 ? -1 : 1, stepY = dir.y < 0 ? -1 : 1;
+		float deltaX = dir.x != 0 ? fabsf(T / dir.x) : FLT_MAX, deltaY = dir.y != 0 ? fabsf(T / dir.y) : FLT_MAX;
+		float sideX = dir.x == 0 ? FLT_MAX : (dir.x < 0 ? (from.x - tx * T) / -dir.x : ((tx + 1) * T - from.x) / dir.x);
+		float sideY = dir.y == 0 ? FLT_MAX : (dir.y < 0 ? (from.y - ty * T) / -dir.y : ((ty + 1) * T - from.y) / dir.y);
+		while (true)
+		{
+			float t;
+			if (sideX < sideY) { t = sideX; sideX += deltaX; tx += stepX; }
+			else { t = sideY; sideY += deltaY; ty += stepY; }
+			if (t > length) { break; }
+			if (IsSolid(tx, ty)) { hitWall(tx, ty, t); break; }
+		}
+	}
+
+	for (const ObjectEntry& entry : objects)
+	{
+		if (entry.destroyed || entry.object.get() == ignore) { continue; }
+		Collider* collider = entry.object->GetComponent<Collider>();
+		if (collider == nullptr || !collider->IsActive()) { continue; }
+
+		Vector2 c = entry.object->GetTransform().position;
+		float fx = from.x - c.x, fy = from.y - c.y, r = collider->GetRadius();
+		float cc = fx * fx + fy * fy - r * r;
+		float t;
+		if (cc <= 0) { t = 0; }
+		else
+		{
+			float b = fx * dir.x + fy * dir.y;
+			float disc = b * b - cc;
+			if (disc < 0) { continue; }
+			t = -b - sqrtf(disc);
+			if (t < 0 || t > length) { continue; }
+		}
+		if (best.type == RaycastHit::Type::None || t < best.distance)
+		{
+			best.type = RaycastHit::Type::Object;
+			best.distance = t;
+			best.point = Vector2(from.x + dir.x * t, from.y + dir.y * t);
+			best.object = entry.object.get();
+		}
+	}
+	return best;
+}
+
 int Level::ObjectCount() const
 {
 	int n = 0;

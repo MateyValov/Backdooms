@@ -8,6 +8,7 @@ struct Vector2
 	float y = 0.f;
 
 	Vector2() = default;
+	Vector2(float xy) : x(xy), y(xy) {}
 	Vector2(float x, float y) : x(x), y(y) {}
 
 	Vector2 operator+(const Vector2& o) const { return Vector2(x + o.x, y + o.y); }

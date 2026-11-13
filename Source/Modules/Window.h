@@ -12,6 +12,9 @@ struct Screenspace
 	Screenspace(float width, float height) : TopLeft(Vector2()), BottomRight(Vector2(width, height)) {}
 	Screenspace(Vector2 TopLeft, float width, float height) : TopLeft(TopLeft), BottomRight(Vector2(TopLeft.x + width, TopLeft.y + height)) {}
 
+	bool operator==(const Screenspace& o) const { return TopLeft == o.TopLeft && BottomRight == o.BottomRight; }
+	bool operator!=(const Screenspace& o) const { return !(*this == o); }
+
 	float x() const
 	{
 		return BottomRight.x - TopLeft.x;

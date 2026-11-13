@@ -7,25 +7,22 @@
 GUI_Image::GUI_Image(string path) : GUI_Element()
 {
 	this->path = path;
-	this->scale = Vector2(1.f, 1.f);
 	image = Textures::GUI::Get(path);
 }
 
-GUI_Image::GUI_Image(string path, Vector2 position) : GUI_Element(position)
+GUI_Image::GUI_Image(string path, Vector2 position, float width, float height) : GUI_Element(position, width, height)
 {
 	this->path = path;
-	this->scale = Vector2(1.f, 1.f);
 	image = Textures::GUI::Get(path);
 }
 
-GUI_Image::GUI_Image(string path, Vector2 position, Vector2 scale, Vector2 alignment, Color color) : GUI_Element(position, alignment, color)
+GUI_Image::GUI_Image(string path, GUITransform transform, Color color) : GUI_Element(transform, color)
 {
 	this->path = path;
-	this->scale = scale;
 	image = Textures::GUI::Get(path);
 }
 
 void GUI_Image::Draw(Screenspace screenspace)
 {
-	Rendering::DrawImage(image, GetTruePosition(screenspace.TopLeft, screenspace.BottomRight), scale, color);
+	Rendering::DrawImage(image, transform, screenspace, color);
 }

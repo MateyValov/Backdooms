@@ -7,5 +7,5 @@ void InputHandler::UpdateActions()
 
 void InputHandler::RegisterAction(InputAction action)
 {
-	inputActions.push_back(action);
+	inputActions.push_back(std::move(action));
 }

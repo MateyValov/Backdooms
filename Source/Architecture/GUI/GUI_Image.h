@@ -13,11 +13,9 @@ protected:
 	Image image;
 
 public:
-	Vector2 scale;
-
 	GUI_Image(string path);
-	GUI_Image(string path, Vector2 position);
-	GUI_Image(string path, Vector2 position, Vector2 scale, Vector2 alignment, Color color);
+	GUI_Image(string path, Vector2 position, float width, float height);
+	GUI_Image(string path, GUITransform transform, Color color);
 
 	void Draw(Screenspace screenspace) override;
 };

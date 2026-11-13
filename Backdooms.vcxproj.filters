@@ -135,6 +135,9 @@
     <ClCompile Include="Source\Architecture\Viewport.cpp">
       <Filter>Source Files\Source\Architecture</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Architecture\GUI\GUI_Text.cpp">
+      <Filter>Source Files\Source\Architecture\GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Structs\Transform.h">
@@ -235,6 +238,12 @@
     </ClInclude>
     <ClInclude Include="Source\Architecture\Viewport.h">
       <Filter>Source Files\Source\Architecture</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Architecture\GUI\GUI_Text.h">
+      <Filter>Source Files\Source\Architecture\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Structs\GUITransform.h">
+      <Filter>Source Files\Source\Structs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -310,7 +310,7 @@ void Camera::DrawObjects(const vector<Object*>& objects)
 			Rendering::Draw(atlas,
 				Rect(screenspace.TopLeft.x + x0, screenspace.TopLeft.y + visibleTop, x1 - x0, visibleBottom - visibleTop),
 				Rect(tex.x + u * tex.w, tex.y + v0 * tex.h, 0, (v1 - v0) * tex.h),
-				Color());
+				v.sprite->GetColor());
 		}
 	}
 }

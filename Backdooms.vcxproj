@@ -135,6 +135,7 @@
     <ClCompile Include="Source\Architecture\Components\Sprite.cpp" />
     <ClCompile Include="Source\Architecture\GUI\GUI_Element.cpp" />
     <ClCompile Include="Source\Architecture\GUI\GUI_Image.cpp" />
+    <ClCompile Include="Source\Architecture\GUI\GUI_Text.cpp" />
     <ClCompile Include="Source\Architecture\GUI\Widget.cpp" />
     <ClCompile Include="Source\Architecture\InputHandler.cpp" />
     <ClCompile Include="Source\Architecture\Level.cpp" />
@@ -163,6 +164,7 @@
     <ClInclude Include="Source\Architecture\Components\Collider.h" />
     <ClInclude Include="Source\Architecture\Components\Component.h" />
     <ClInclude Include="Source\Architecture\Components\Sprite.h" />
+    <ClInclude Include="Source\Architecture\GUI\GUI_Text.h" />
     <ClInclude Include="Source\Architecture\InputHandler.h" />
     <ClInclude Include="Source\Architecture\GUI\GUI_Element.h" />
     <ClInclude Include="Source\Architecture\GUI\GUI_Image.h" />
@@ -189,6 +191,7 @@
     <ClInclude Include="Source\Modules\Textures.h" />
     <ClInclude Include="Source\Modules\Window.h" />
     <ClInclude Include="Source\Structs\Event.h" />
+    <ClInclude Include="Source\Structs\GUITransform.h" />
     <ClInclude Include="Source\Structs\Image.h" />
     <ClInclude Include="Source\Structs\MapArray.h" />
     <ClInclude Include="Source\Structs\MathFuncs.h" />

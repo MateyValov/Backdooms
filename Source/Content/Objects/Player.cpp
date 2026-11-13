@@ -123,5 +123,23 @@ bool Player::AddAmmo(unsigned int amount)
 
 void Player::InteractPressed()
 {	
+	if (ammo <= 0)
+	{
+		return;
+	}
 	SetAmmo(ammo - 1);
+
+	RaycastHit hit = Engine::GetLevel()->Raycast(transform.position, transform.position + transform.GetForward() * 640, this);
+	if (hit.object == nullptr)
+	{
+		printf("nothing was hit/wall was hit\n");
+		return;
+	}
+	HittableComponent* otherHittableComp = hit.object->GetComponent<HittableComponent>();
+	if (otherHittableComp == nullptr)
+	{
+		printf("object isn't hittable\n");
+		return;
+	}
+	otherHittableComp->TakeDamage(1);
 }

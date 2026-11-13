@@ -11,12 +11,22 @@ Sprite::Sprite(int texture)
 	this->textureRight = texture;
 }
 
+Sprite::Sprite(int texture, Color color) : Sprite(texture)
+{
+	this->color = color;
+}
+
 Sprite::Sprite(int textureFront, int textureLeft, int textureBack, int textureRight)
 {
 	this->textureFront = textureFront;
 	this->textureLeft = textureLeft;
 	this->textureBack = textureBack;
 	this->textureRight = textureRight;
+}
+
+Sprite::Sprite(int textureFront, int textureLeft, int textureBack, int textureRight, Color color) : Sprite(textureFront, textureLeft, textureBack, textureRight)
+{
+	this->color = color;
 }
 
 void Sprite::SetTextureId(int front, int left, int back, int right)
@@ -58,4 +68,14 @@ int Sprite::GetTextureIdForPosition(Vector2 viewerPosition) const
 	}
 
 	return texture >= 0 ? texture : textureFront;
+}
+
+void Sprite::SetColor(Color color)
+{
+	this->color = color;
+}
+
+Color Sprite::GetColor() const
+{
+	return color;
 }

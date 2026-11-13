@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "../Structs/Event.h"
+#include "Structs/Event.h"
 
 struct InputAction
 {
