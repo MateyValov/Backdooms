@@ -46,6 +46,12 @@
     <Filter Include="Source Files\Source\Content\Components">
       <UniqueIdentifier>{8fd058bc-f31c-4309-929f-10e9090cc42f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Source\Content\Levels">
+      <UniqueIdentifier>{0d91c57e-d316-4451-a27f-4dbba7e3778f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Source\Content\GameState">
+      <UniqueIdentifier>{222e9e87-538a-4219-83fa-54e840ebfd8f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Backdooms.cpp">
@@ -137,6 +143,12 @@
     </ClCompile>
     <ClCompile Include="Source\Architecture\GUI\GUI_Text.cpp">
       <Filter>Source Files\Source\Architecture\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Content\Levels\BackdoomsLevel.cpp">
+      <Filter>Source Files\Source\Content\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Content\GameState\BackdoomsGameState.cpp">
+      <Filter>Source Files\Source\Content\GameState</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -244,6 +256,15 @@
     </ClInclude>
     <ClInclude Include="Source\Structs\GUITransform.h">
       <Filter>Source Files\Source\Structs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\Levels\BackdoomsLevel.h">
+      <Filter>Source Files\Source\Content\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Architecture\GameState.h">
+      <Filter>Source Files\Source\Architecture</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\GameState\BackdoomsGameState.h">
+      <Filter>Source Files\Source\Content\GameState</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

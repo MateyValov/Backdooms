@@ -61,12 +61,6 @@ struct RaycastHit
 class Level
 {
 private:
-	MapArray walls;
-	MapArray floor;
-	MapArray roof;
-
-	vector<ObjectEntry> objects;
-
 	bool IsSolid(int tileX, int tileY) const;
 	bool OverlapsWall(const Vector2& centre, float radius) const;
 
@@ -77,11 +71,19 @@ private:
 	void RunCollisions();
 	void RemoveDestroyed();
 
-public:
-	Level();
+protected:
+	MapArray walls;
+	MapArray floor;
+	MapArray roof;
 
-	void GenerateLevel();
-	void ResetLevel();
+	vector<ObjectEntry> objects;
+
+public:
+	Level() = default;
+	virtual ~Level() = default;
+
+	virtual void GenerateLevel() {}
+	virtual void GenerateInitialObjects() {}
 
 	MapArray GetWalls() const;
 	MapArray GetFloor() const;
@@ -91,6 +93,13 @@ public:
 
 	int GetTile(int x, int y) const;
 	vector<Object*> GetObjects() const;
+
+	void SetWallTile(int x, int y, int value);
+	void SetFloorTile(int x, int y, int value);
+	void SetRoofTile(int x, int y, int value);
+
+	template <typename T>
+	vector<T*> GetObjectsOfClass();
 
 	Vector2 EvaluatePosition(Object* obj, Vector2 position);
 
@@ -105,19 +114,41 @@ public:
 	RaycastHit Raycast(Vector2 from, Vector2 to, const Object* ignore = nullptr) const;
 	
 	int ObjectCount() const;    
-
-
 };
+
+template<typename T>
+inline vector<T*> Level::GetObjectsOfClass()
+{
+	static_assert(is_base_of<Object, T>::value, "Level::Spawn<T>: T must inherit from Object");
+
+	vector<T*> existing;
+	existing.reserve(objects.size());
+	for (const ObjectEntry& entry : objects)
+	{
+		if (entry.destroyed)
+		{
+			continue;
+		}
+		T* obj = dynamic_cast<T*>(entry.object.get());
+		if (obj == nullptr)
+		{
+			continue;
+		}
+		existing.push_back(obj);
+	}
+	return existing;
+}
 
 template<typename T, typename ...Args>
 inline T* Level::Spawn(Vector2 position, float angle, Args && ...args)
 {
-	static_assert(is_base_of<Object, T>::value, "Map::Spawn<T>: T must inherit from Object");
+	static_assert(is_base_of<Object, T>::value, "Level::Spawn<T>: T must inherit from Object");
 
 	unique_ptr<T> owned = make_unique<T>(std::forward<Args>(args)...);
 	T* object = owned.get();
 	objects.push_back(ObjectEntry{ move(owned), false });
 
+	object->level = this;
 	object->SetTransform(Transform(position, angle));
 	object->Start();
 

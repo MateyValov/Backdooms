@@ -8,9 +8,10 @@
 #include "Input.h"
 
 #include "Architecture/Camera.h"
-#include "Architecture/Level.h"
 
 //======================================
+
+#include "Content/Levels/BackdoomsLevel.h"
 
 #include "Content/Objects/Player.h"
 #include "Content/Input/PlayerController.h"
@@ -23,6 +24,7 @@
 
 static float lastTime;
 static float deltaTime;
+static float timeScale = 1.f;
 
 static Level* activeLevel;
 
@@ -32,16 +34,11 @@ static PlayerHUD* SecondPlayerHUD;
 
 static void OpenLevel(Level* level, bool isMultiplayer)
 {
+	level->GenerateLevel();
+	level->GenerateInitialObjects();
 	activeLevel = level;
 
-	activeLevel->Spawn<Soda>(activeLevel->GetSpawnpoint() + Vector2(64, 64), 0.f, 10);
-	activeLevel->Spawn<Soda>(activeLevel->GetSpawnpoint() + Vector2(-64, 64), 0.f, 10);
-	activeLevel->Spawn<Ammo>(activeLevel->GetSpawnpoint() + Vector2(64, -64), 0.f, 10);
-	activeLevel->Spawn<Ammo>(activeLevel->GetSpawnpoint() + Vector2(-64, -64), 0.f, 10);
-
-	activeLevel->Spawn<Monster>(Vector2(TILE_SIZE * 10.5f, TILE_SIZE * 2.5f), 0.f);
-
-	Player* MainPlayer = activeLevel->Spawn<Player>(activeLevel->GetSpawnpoint(), 0.f);
+	Player* MainPlayer = activeLevel->Spawn<Player>(activeLevel->GetSpawnpoint(), 90.f);
 	MainPlayer->AssignController(new PlayerController(ControlScheme::PlayerOne()));
 
 	Camera* MainCamera = activeLevel->Spawn<Camera>(activeLevel->GetSpawnpoint(), 0.f, 
@@ -52,7 +49,7 @@ static void OpenLevel(Level* level, bool isMultiplayer)
 	
 	if (isMultiplayer)
 	{
-		Player* SecondPlayer = activeLevel->Spawn<Player>(activeLevel->GetSpawnpoint(), 0.f);
+		Player* SecondPlayer = activeLevel->Spawn<Player>(activeLevel->GetSpawnpoint(), 90.f);
 		SecondPlayer->AssignController(new PlayerController(ControlScheme::PlayerTwo()));
 		
 		Camera* SecondCamera = activeLevel->Spawn<Camera>(Vector2(), 0.f, Window::BottomHalf(), 60, 20, 2, 1.f);
@@ -60,21 +57,14 @@ static void OpenLevel(Level* level, bool isMultiplayer)
 
 		SecondPlayerHUD = new PlayerHUD(SecondPlayer);
 	}
-}
 
-static void Quit()
-{
-	glutLeaveMainLoop();
+	activeLevel->Spawn<Monster>(Vector2(TILE_SIZE * 10.5f, TILE_SIZE * 2.5f), 0.f, 4, 20, 200, 150);
 }
 
 static void HandleInput()
 {
 	Input::updateKeys();
 
-	if (Input::GetKeyState(VK_ESCAPE) == pressed)
-	{
-		Quit();
-	}
 	if (Input::GetKeyState('I') == pressed)
 	{
 		printf("========OBJECTS IN MAP========\n");
@@ -83,6 +73,10 @@ static void HandleInput()
 			printf("Object: x - %.3f, y - %.3f, forward vector - %.3f, %.3f\n", 
 				obj->GetTransform().position.x, obj->GetTransform().position.y, obj->GetTransform().GetForward().x, obj->GetTransform().GetForward().y);
 		}
+	}
+	if (Input::GetKeyState('P') == pressed)
+	{
+		Engine::SetTimeScale(!Engine::GetTimeScale());
 	}
 }
 
@@ -130,7 +124,7 @@ bool Engine::InitEngine(int* argc, char** argv, int screenWidth, int screenHeigh
 		return false;
 	}
 
-	OpenLevel(new Level(), true);
+	OpenLevel(new BackdoomsLevel(), true);
 	
 	glClearColor(0, 0, 0, 0);
 	gluOrtho2D(0, screenWidth, screenHeight, 0);
@@ -141,12 +135,22 @@ bool Engine::InitEngine(int* argc, char** argv, int screenWidth, int screenHeigh
 	return true;
 }
 
-Level* Engine::GetLevel()
+void Engine::Quit()
 {
-	return activeLevel;
+	glutLeaveMainLoop();
 }
 
 float Engine::GetDeltaTime()
 {
-	return deltaTime;
+	return deltaTime * timeScale;
+}
+
+float Engine::GetTimeScale()
+{
+	return timeScale;
+}
+
+void Engine::SetTimeScale(float value)
+{
+	timeScale = value;
 }

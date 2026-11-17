@@ -31,7 +31,7 @@ Player::Player(int health, int ammo) : MovableObject()
 	AddComponent<Collider>(20);
 }
 
-Player::Player(int health, int ammo, float radius, int movementSpeed, int turnSpeed) : MovableObject(radius, movementSpeed, turnSpeed)
+Player::Player(int health, int ammo, float radius, int movementSpeed, int turnSpeed) : MovableObject(movementSpeed, turnSpeed)
 {
 	this->maxAmmo = ammo;
 	this->ammo = maxAmmo;
@@ -123,13 +123,13 @@ bool Player::AddAmmo(unsigned int amount)
 
 void Player::InteractPressed()
 {	
-	if (ammo <= 0)
+	if (GetLevel() == nullptr || ammo <= 0)
 	{
 		return;
 	}
 	SetAmmo(ammo - 1);
 
-	RaycastHit hit = Engine::GetLevel()->Raycast(transform.position, transform.position + transform.GetForward() * 640, this);
+	RaycastHit hit = GetLevel()->Raycast(transform.position, transform.position + transform.GetForward() * 640, this);
 	if (hit.object == nullptr)
 	{
 		printf("nothing was hit/wall was hit\n");

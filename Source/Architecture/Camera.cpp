@@ -6,9 +6,10 @@
 #include "Components/Sprite.h"
 #include "Level.h"  
 
-#include "../Modules/Rendering.h"
-#include "../Modules/Textures.h"
-#include "../Modules/Engine.h"
+#include "Modules/Rendering.h"
+#include "Modules/Textures.h"
+#include "Modules/Engine.h"
+
 
 #ifndef GL_CLAMP_TO_EDGE
 #define GL_CLAMP_TO_EDGE 0x812F
@@ -317,19 +318,19 @@ void Camera::DrawObjects(const vector<Object*>& objects)
 
 void Camera::OnStart()
 {
-	printf("========CAMERA STATS========\n");
-	printf("Viewport - %d/%d\n", GetWidth(), GetHeight());
-	printf("MaxRaySteps = %d\n", MaxRaySteps);
-	printf("fov = %d\n", fov);
-	printf("columnWidth = %d\n", columnWidth);
-	printf("nearClippingDistance = %.2f\n", nearClippingDistance);
-	printf("columnCount = %d\n", columnCount);
-	printf("projDist = %.2f\n", projDist);
+	//printf("========CAMERA STATS========\n");
+	//printf("Viewport - %d/%d\n", GetWidth(), GetHeight());
+	//printf("MaxRaySteps = %d\n", MaxRaySteps);
+	//printf("fov = %d\n", fov);
+	//printf("columnWidth = %d\n", columnWidth);
+	//printf("nearClippingDistance = %.2f\n", nearClippingDistance);
+	//printf("columnCount = %d\n", columnCount);
+	//printf("projDist = %.2f\n", projDist);
 }
 
 void Camera::OnUpdate()
 {
-	Level* level = Engine::GetLevel();
+	Level* level = GetLevel();
 
 	DrawFloorAndRoof(level->GetFloor(), level->GetRoof());
 	DrawWalls(level->GetWalls());

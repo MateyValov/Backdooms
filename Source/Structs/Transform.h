@@ -24,6 +24,11 @@ struct Vector2
 
 	bool operator==(const Vector2& o) const { return x == o.x && y == o.y; }
 	bool operator!=(const Vector2& o) const { return !(*this == o); }
+
+	static float distance(const Vector2& a, const Vector2& b)
+	{
+		return sqrt((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y));
+	}
 };
 
 inline Vector2 operator*(float s, const Vector2& v) { return v * s; }

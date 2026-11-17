@@ -145,9 +145,11 @@
     <ClCompile Include="Source\Architecture\PlayerBase.cpp" />
     <ClCompile Include="Source\Architecture\Viewport.cpp" />
     <ClCompile Include="Source\Content\Components\HittableComponent.cpp" />
+    <ClCompile Include="Source\Content\GameState\BackdoomsGameState.cpp" />
     <ClCompile Include="Source\Content\GUI\MainMenu.cpp" />
     <ClCompile Include="Source\Content\GUI\PlayerHUD.cpp" />
     <ClCompile Include="Source\Content\Input\PlayerController.cpp" />
+    <ClCompile Include="Source\Content\Levels\BackdoomsLevel.cpp" />
     <ClCompile Include="Source\Content\Objects\Ammo.cpp" />
     <ClCompile Include="Source\Content\Objects\Monster.cpp" />
     <ClCompile Include="Source\Content\Objects\Pickup.cpp" />
@@ -164,6 +166,7 @@
     <ClInclude Include="Source\Architecture\Components\Collider.h" />
     <ClInclude Include="Source\Architecture\Components\Component.h" />
     <ClInclude Include="Source\Architecture\Components\Sprite.h" />
+    <ClInclude Include="Source\Architecture\GameState.h" />
     <ClInclude Include="Source\Architecture\GUI\GUI_Text.h" />
     <ClInclude Include="Source\Architecture\InputHandler.h" />
     <ClInclude Include="Source\Architecture\GUI\GUI_Element.h" />
@@ -176,9 +179,11 @@
     <ClInclude Include="Source\Architecture\PlayerBase.h" />
     <ClInclude Include="Source\Architecture\Viewport.h" />
     <ClInclude Include="Source\Content\Components\HittableComponent.h" />
+    <ClInclude Include="Source\Content\GameState\BackdoomsGameState.h" />
     <ClInclude Include="Source\Content\GUI\MainMenu.h" />
     <ClInclude Include="Source\Content\GUI\PlayerHUD.h" />
     <ClInclude Include="Source\Content\Input\PlayerController.h" />
+    <ClInclude Include="Source\Content\Levels\BackdoomsLevel.h" />
     <ClInclude Include="Source\Content\Objects\Ammo.h" />
     <ClInclude Include="Source\Content\Objects\Monster.h" />
     <ClInclude Include="Source\Content\Objects\Pickup.h" />

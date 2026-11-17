@@ -11,16 +11,20 @@
 #include <type_traits>
 #include <vector>
 
+class Level;
 
 class Object
 {
 private:
+	Level* level = nullptr;
 	Object* parent = nullptr;
 	Transform localTransform = Transform();
 
 	bool begun = false;
 
 	void SweepRemoved();
+
+	friend class Level;
 
 protected:
 	Transform transform;
@@ -58,6 +62,8 @@ public:
 	void RemoveParent();
 	Object* GetParent();
 	Object* GetGrandParent();
+
+	Level* GetLevel();
 
 	void SetTransform(Transform newTrasform);
 	void SetPosition(Vector2 newPosition);

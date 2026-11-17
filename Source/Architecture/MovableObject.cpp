@@ -8,7 +8,7 @@ MovableObject::MovableObject()
 	turnSpeed = 150;
 }
 
-MovableObject::MovableObject(float radius, int movementSpeed, int turnSpeed)
+MovableObject::MovableObject(int movementSpeed, int turnSpeed)
 {
 	this->movementSpeed = movementSpeed;
 	this->turnSpeed = turnSpeed;

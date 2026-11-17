@@ -1,13 +1,26 @@
 #pragma once
 
-#include "../../Architecture/MovableObject.h"
+#include "Architecture/MovableObject.h"
 
 class HittableComponent;
+class Player;
 
 class Monster : public MovableObject
 {
 private:
 	HittableComponent* hittableComp;
+	std::vector<Player*> players;
+	Player* currentTarget;
+
+protected:
+	float sightRange = 350.f;
+	float loseRange = 500.f;
+
+	virtual void OnStart() override;
+	virtual void OnUpdate() override;
+
+	void Idle();
+	void Persue();
 
 public:
 	Monster();

@@ -12,7 +12,7 @@ private:
 
 public:
 	MovableObject();
-	MovableObject(float radius, int movementSpeed, int turnSpeed);
+	MovableObject(int movementSpeed, int turnSpeed);
 
 	void Turn(bool isRight);
 	void Move(Vector2 direction);

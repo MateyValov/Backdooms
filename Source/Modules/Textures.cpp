@@ -14,6 +14,7 @@
 #define GL_CLAMP_TO_EDGE 0x812F
 #endif
 
+static const char* ROOT = "Assets/Textures";
 static const char* ATLAS_PATH = "Atlas/Atlas.png";
 static const char* GUI_PATH = "GUI";
 
@@ -45,9 +46,10 @@ static bool isImageFile(const filesystem::path& p)
 
 static bool findTexturesRoot(filesystem::path& out)
 {
-	for (const char* candidate : { "Textures", "../Textures", "../../Textures" })
-	{
-		if (filesystem::is_directory(candidate)) { out = candidate; return true; }
+	if (filesystem::is_directory(ROOT)) 
+	{ 
+		out = ROOT; 
+		return true; 
 	}
 	return false;
 }

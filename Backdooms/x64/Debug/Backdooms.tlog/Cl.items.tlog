@@ -14,9 +14,11 @@ C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\Camera.cpp;
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\PlayerBase.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\PlayerBase.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\Viewport.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Viewport.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\Components\HittableComponent.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\HittableComponent.obj
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GameState\BackdoomsGameState.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\BackdoomsGameState.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GUI\MainMenu.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\MainMenu.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GUI\PlayerHUD.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\PlayerHUD.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\Input\PlayerController.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\PlayerController.obj
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\Levels\BackdoomsLevel.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\BackdoomsLevel.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\Objects\Ammo.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Ammo.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\Objects\Monster.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Monster.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\Objects\Pickup.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Pickup.obj

@@ -49,7 +49,7 @@ void Object::Update()
 
 void Object::Destroy()
 {
-	Engine::GetLevel()->Destroy(this);
+	level->Destroy(this);
 }
 
 void Object::RemoveComponent(Component* component)
@@ -104,6 +104,11 @@ Object* Object::GetGrandParent()
 	return result != this ? result : nullptr;
 }
 
+Level* Object::GetLevel()
+{
+	return level;
+}
+
 void Object::SetTransform(Transform newTrasform)
 {
 	SetPosition(newTrasform.position);
@@ -116,7 +121,7 @@ void Object::SetPosition(Vector2 newPosition)
 	{
 		return;
 	}
-	transform.position = Engine::GetLevel()->EvaluatePosition(this, newPosition);
+	transform.position = level->EvaluatePosition(this, newPosition);
 }
 
 void Object::SetAngle(float newAngle)

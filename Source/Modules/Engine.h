@@ -6,8 +6,10 @@ class Level;
 namespace Engine
 {
 	bool InitEngine(int* argc, char** argv, int screenWidth, int screenHeight);
-
-	Level* GetLevel();
+	void Quit();
 
 	float GetDeltaTime();
+
+	float GetTimeScale();
+	void SetTimeScale(float value);
 };
