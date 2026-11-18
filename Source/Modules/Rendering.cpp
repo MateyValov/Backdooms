@@ -1,6 +1,7 @@
 #include "Rendering.h"
 
 #include "Textures.h"
+#include "Fonts.h"
 
 static Vector2 GetLocalScreenspaceScale(Screenspace localScreenspace)
 {
@@ -74,5 +75,50 @@ void Rendering::DrawImage(const Image& image, const GUITransform& transform, con
 
 void Rendering::DrawString(const string& text, const GUITransform& transform, const Screenspace localScreenspace, const Color& tint)
 {
-	//to be added someday
+	const Fonts::Font& font = Fonts::GetBase();   // reference, not a copy
+	if (!font.IsLoaded() || text.empty()) return;
+
+	const Vector2 size = font.Measure(text, 1.0f);
+	if (size.x <= 0.f || size.y <= 0.f) return;
+
+	GUITransform box = transform;
+	box.width = size.x;
+	box.height = size.y;
+	const GUITransform t = GetTrueGUITransform(box, localScreenspace);
+
+	// Effective scale = transform.scale * viewport scale, already baked into t.width/t.height
+	const float sx = t.width / size.x;
+	const float sy = t.height / size.y;
+
+	// Describe the font atlas as an Image so Draw() can use it
+	Image atlas;
+	atlas.texture = font.texture;
+	atlas.width = Fonts::Font::AtlasSize;
+	atlas.height = Fonts::Font::AtlasSize;
+
+	float penX = 0.0f, lineTop = 0.0f;
+
+	for (unsigned char c : text)
+	{
+		if (c == '\n')
+		{
+			penX = 0.0f;
+			lineTop += font.lineHeight;
+			continue;
+		}
+
+		stbtt_aligned_quad q;
+		if (!font.GetGlyphQuad(c, penX, lineTop + font.ascent, q)) continue;
+
+		const stbtt_bakedchar& g = font.glyphs[c - Fonts::Font::FirstChar];
+		if (g.x1 <= g.x0) continue;
+
+		Rect source((float)g.x0, (float)g.y0, (float)(g.x1 - g.x0), (float)(g.y1 - g.y0));
+		Rect dest(t.position.x + q.x0 * sx,
+			t.position.y + q.y0 * sy,
+			(q.x1 - q.x0) * sx,
+			(q.y1 - q.y0) * sy);
+
+		Draw(atlas, dest, source, tint);
+	}
 }

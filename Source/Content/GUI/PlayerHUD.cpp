@@ -1,6 +1,7 @@
 #include "PlayerHUD.h"
 
-#include "../../Architecture/GUI/GUI_Image.h"
+#include "Architecture/GUI/GUI_Image.h"
+#include "Architecture/GUI/GUI_Text.h"
 
 #include "../Components/HittableComponent.h"
 #include "../Objects/Player.h"
@@ -26,6 +27,7 @@ PlayerHUD::PlayerHUD(Player* source)
 	elements.push_back(new GUI_Image("GUI/BarOverlay.png", Vector2(148.f, 5.f), 138.f, 40.f));
 	elements.push_back(new GUI_Image("GUI/Gun.png", GUITransform(Vector2(), 186.f, 149.f, Vector2(1.f), BOTTOM_CENTER, BOTTOM_CENTER), Color()));
 	elements.push_back(new GUI_Image("GUI/Crosshair.png", GUITransform(Vector2(), 8.f, 8.f, Vector2(1.f), MIDDLE_CENTER, MIDDLE_CENTER), Color()));
+	elements.push_back(new GUI_Text("A Sample text", GUITransform(Vector2(10.f,-10.f), 1.f, 1.f, Vector2(1.f), BOTTOM_LEFT, BOTTOM_LEFT), Color()));
 }
 
 void PlayerHUD::UpdateHealth(float newValue, float maxValue)

@@ -4,6 +4,7 @@
 
 #include "Window.h"
 #include "Textures.h"
+#include "Fonts.h"
 #include "Physics.h"
 #include "Input.h"
 
@@ -119,7 +120,7 @@ bool Engine::InitEngine(int* argc, char** argv, int screenWidth, int screenHeigh
 	Window::InitWindow(screenWidth, screenHeight);
 	Input::InitKeyStates();
 
-	if (Textures::LoadTextures() == false)
+	if (Textures::LoadTextures() == false || Fonts::InitFont("UFO50Tall.ttf") == false)
 	{
 		return false;
 	}
@@ -137,6 +138,7 @@ bool Engine::InitEngine(int* argc, char** argv, int screenWidth, int screenHeigh
 
 void Engine::Quit()
 {
+	Fonts::ShutdownFont();
 	glutLeaveMainLoop();
 }
 

@@ -132,7 +132,7 @@
     <ClCompile Include="Source\Modules\Window.cpp">
       <Filter>Source Files\Source\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Architecture\PlayerBase.cpp">
+    <ClCompile Include="Source\Architecture\PlayerHandle.cpp">
       <Filter>Source Files\Source\Architecture</Filter>
     </ClCompile>
     <ClCompile Include="Source\Architecture\InputHandler.cpp">
@@ -149,6 +149,9 @@
     </ClCompile>
     <ClCompile Include="Source\Content\GameState\BackdoomsGameState.cpp">
       <Filter>Source Files\Source\Content\GameState</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Modules\Fonts.cpp">
+      <Filter>Source Files\Source\Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -242,7 +245,7 @@
     <ClInclude Include="Source\Modules\Window.h">
       <Filter>Source Files\Source\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Architecture\PlayerBase.h">
+    <ClInclude Include="Source\Architecture\PlayerHandle.h">
       <Filter>Source Files\Source\Architecture</Filter>
     </ClInclude>
     <ClInclude Include="Source\Architecture\InputHandler.h">
@@ -265,6 +268,9 @@
     </ClInclude>
     <ClInclude Include="Source\Content\GameState\BackdoomsGameState.h">
       <Filter>Source Files\Source\Content\GameState</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Modules\Fonts.h">
+      <Filter>Source Files\Source\Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -142,7 +142,7 @@
     <ClCompile Include="Source\Architecture\MovableObject.cpp" />
     <ClCompile Include="Source\Architecture\Object.cpp" />
     <ClCompile Include="Source\Architecture\Camera.cpp" />
-    <ClCompile Include="Source\Architecture\PlayerBase.cpp" />
+    <ClCompile Include="Source\Architecture\PlayerHandle.cpp" />
     <ClCompile Include="Source\Architecture\Viewport.cpp" />
     <ClCompile Include="Source\Content\Components\HittableComponent.cpp" />
     <ClCompile Include="Source\Content\GameState\BackdoomsGameState.cpp" />
@@ -156,6 +156,7 @@
     <ClCompile Include="Source\Content\Objects\Player.cpp" />
     <ClCompile Include="Source\Content\Objects\Soda.cpp" />
     <ClCompile Include="Source\Modules\Engine.cpp" />
+    <ClCompile Include="Source\Modules\Fonts.cpp" />
     <ClCompile Include="Source\Modules\Input.cpp" />
     <ClCompile Include="Source\Modules\Physics.cpp" />
     <ClCompile Include="Source\Modules\Rendering.cpp" />
@@ -176,7 +177,7 @@
     <ClInclude Include="Source\Architecture\MovableObject.h" />
     <ClInclude Include="Source\Architecture\Object.h" />
     <ClInclude Include="Source\Architecture\Camera.h" />
-    <ClInclude Include="Source\Architecture\PlayerBase.h" />
+    <ClInclude Include="Source\Architecture\PlayerHandle.h" />
     <ClInclude Include="Source\Architecture\Viewport.h" />
     <ClInclude Include="Source\Content\Components\HittableComponent.h" />
     <ClInclude Include="Source\Content\GameState\BackdoomsGameState.h" />
@@ -190,6 +191,7 @@
     <ClInclude Include="Source\Content\Objects\Player.h" />
     <ClInclude Include="Source\Content\Objects\Soda.h" />
     <ClInclude Include="Source\Modules\Engine.h" />
+    <ClInclude Include="Source\Modules\Fonts.h" />
     <ClInclude Include="Source\Modules\Input.h" />
     <ClInclude Include="Source\Modules\Physics.h" />
     <ClInclude Include="Source\Modules\Rendering.h" />
