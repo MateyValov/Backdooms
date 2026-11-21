@@ -4,11 +4,11 @@
 
 #include <vector>
 
-#include "../Modules/Window.h"
+#include "Modules/Window.h"
 
-#include "../Structs/Image.h"
-#include "../Structs/MapArray.h"
-#include "../Structs/Transform.h"
+#include "Structs/Image.h"
+#include "Structs/Tile.h"
+#include "Structs/Transform.h"
 
 using namespace std;
 

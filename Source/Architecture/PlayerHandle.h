@@ -14,9 +14,13 @@ protected:
 	virtual void OnUpdate() override;
 
 public:
-	PlayerHandle();
+	PlayerHandle() = default;
+	virtual ~PlayerHandle() = default;
 
 	void AssignObject(Object* playerObject);
 	void AssignViewport(Viewport* viewport);
+
+	Object* GetPlayerObject();
+	Viewport* GetPlayerViewport();
 
 };

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../Architecture/GUI/Widget.h"
-#include "../../Structs/Event.h"
+#include "Architecture/GUI/Widget.h"
+#include "Structs/Event.h"
 
 class Player;
 class GUI_Image;

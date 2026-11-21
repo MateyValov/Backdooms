@@ -69,13 +69,3 @@ int Sprite::GetTextureIdForPosition(Vector2 viewerPosition) const
 
 	return texture >= 0 ? texture : textureFront;
 }
-
-void Sprite::SetColor(Color color)
-{
-	this->color = color;
-}
-
-Color Sprite::GetColor() const
-{
-	return color;
-}

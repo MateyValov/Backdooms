@@ -1,15 +1,22 @@
 #pragma once
 
-#include "../Modules/Window.h"
+#include <vector>
+
+#include "Modules/Window.h"
+
+class GUI_Element;
 
 class Viewport
 {
-private:
+protected:
 	Screenspace screenspace;
-
-	void UpdatViewport();
+	std::vector<GUI_Element*> elements;
 
 public:
 	Viewport(Screenspace screenspace);
+	virtual ~Viewport() = default;
+
+	void UpdateViewport();
+
 	Screenspace GetScreenspace() const;
 };

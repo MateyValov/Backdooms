@@ -2,19 +2,17 @@
 
 #include <vector>
 
-#include "../../Structs/Transform.h"
+#include "GUI_Element.h"
 
 #include "../../Modules/Window.h"
 
 using namespace std;
 
-class GUI_Element;
-
-class Widget
+class Widget : public GUI_Element
 {
 protected:
 	vector<GUI_Element*> elements;
 
 public:
-	void DrawWidget(Screenspace screenspace);
+	virtual void Draw(Screenspace screenspace) override;
 };

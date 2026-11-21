@@ -52,6 +52,9 @@
     <Filter Include="Source Files\Source\Content\GameState">
       <UniqueIdentifier>{222e9e87-538a-4219-83fa-54e840ebfd8f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Source\Content\Player">
+      <UniqueIdentifier>{8829beb1-6420-4679-8071-5c5e604f322b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Backdooms.cpp">
@@ -153,6 +156,15 @@
     <ClCompile Include="Source\Modules\Fonts.cpp">
       <Filter>Source Files\Source\Modules</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Content\GUI\PlayerViewport.cpp">
+      <Filter>Source Files\Source\Content\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Content\GUI\GameOverWidget.cpp">
+      <Filter>Source Files\Source\Content\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Architecture\Components\Renderer.cpp">
+      <Filter>Source Files\Source\Architecture\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Structs\Transform.h">
@@ -162,9 +174,6 @@
       <Filter>Source Files\Source\Structs</Filter>
     </ClInclude>
     <ClInclude Include="Source\Structs\MathFuncs.h">
-      <Filter>Source Files\Source\Structs</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Structs\MapArray.h">
       <Filter>Source Files\Source\Structs</Filter>
     </ClInclude>
     <ClInclude Include="Source\Modules\Engine.h">
@@ -271,6 +280,21 @@
     </ClInclude>
     <ClInclude Include="Source\Modules\Fonts.h">
       <Filter>Source Files\Source\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Structs\Tile.h">
+      <Filter>Source Files\Source\Structs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\GUI\PlayerViewport.h">
+      <Filter>Source Files\Source\Content\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\GUI\GameOverWidget.h">
+      <Filter>Source Files\Source\Content\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Architecture\Components\Renderer.h">
+      <Filter>Source Files\Source\Architecture\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\Player\BackdoomsPlayerHandle.h">
+      <Filter>Source Files\Source\Content\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

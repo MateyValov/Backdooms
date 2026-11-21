@@ -6,71 +6,24 @@
 #include <vector>
 #include <functional>
 #include <set>
-#include <unordered_map>
 
-#include "../Structs/Transform.h"
-#include "../Structs/MapArray.h"
+#include "Structs/Transform.h"
+#include "Structs/Tile.h"
 
 using namespace std;
 
 class Object;
 class Collider;
-
-using ObjectPair = std::pair<Object*, Object*>;
+class Viewport;
 
 struct ObjectEntry
 {
 	unique_ptr<Object> object;
 	bool destroyed = false;
-};
-
-struct Tile 
-{ 
-	int x;
-	int y;
-	int value; 
-
-	int tileIndex() const 
-	{
-		return y * MAP_TILES_X + x;
-	}
 };     
-               
-struct PairLess
-{
-	bool operator()(const ObjectPair& l, const ObjectPair& r) const
-	{
-		less<Object*> lt;
-		if (lt(l.first, r.first)) { return true; }
-		if (lt(r.first, l.first)) { return false; }
-		return lt(l.second, r.second);
-	}
-};
-
-struct RaycastHit
-{
-	enum class Type { None, Wall, Object };
-
-	Type type = Type::None;
-	float distance = 0;                      
-	Vector2 point;                             
-	Object* object = nullptr;                
-	Tile tile;
-};
 
 class Level
 {
-private:
-	bool IsSolid(int tileX, int tileY) const;
-	bool OverlapsWall(const Vector2& centre, float radius) const;
-
-	set<ObjectPair, PairLess> touchingPairs;
-	unordered_map<Object*, vector<Tile>> touchingWalls;
-
-	bool IsMarked(const Object* object) const;
-	void RunCollisions();
-	void RemoveDestroyed();
-
 protected:
 	MapArray walls;
 	MapArray floor;
@@ -98,6 +51,9 @@ public:
 	void SetFloorTile(int x, int y, int value);
 	void SetRoofTile(int x, int y, int value);
 
+	bool IsSolid(int tileX, int tileY) const;
+	bool OverlapsWall(const Vector2& centre, float radius) const;
+
 	template <typename T>
 	vector<T*> GetObjectsOfClass();
 
@@ -107,11 +63,11 @@ public:
 	T* Spawn(Vector2 position, float angle, Args&&... args);
 	
 	void UpdateObjects();
+	bool IsMarked(const Object* object) const;
+	void RemoveDestroyed();
 
 	void Destroy(Object* object);
 	void DestroyAllObjects();
-
-	RaycastHit Raycast(Vector2 from, Vector2 to, const Object* ignore = nullptr) const;
 	
 	int ObjectCount() const;    
 };

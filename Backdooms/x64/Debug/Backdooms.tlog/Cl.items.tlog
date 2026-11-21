@@ -1,6 +1,7 @@
 C:\Users\matey\Documents\University\CG\Backdooms\Backdooms.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Backdooms.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\Components\Collider.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Collider.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\Components\Component.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Component.obj
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\Components\Renderer.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Renderer.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\Components\Sprite.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Sprite.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\GUI\GUI_Element.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\GUI_Element.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\GUI\GUI_Image.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\GUI_Image.obj
@@ -15,8 +16,10 @@ C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\PlayerHandl
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\Viewport.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Viewport.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\Components\HittableComponent.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\HittableComponent.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GameState\BackdoomsGameState.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\BackdoomsGameState.obj
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GUI\GameOverWidget.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\GameOverWidget.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GUI\MainMenu.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\MainMenu.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GUI\PlayerHUD.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\PlayerHUD.obj
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GUI\PlayerViewport.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\PlayerViewport.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\Input\PlayerController.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\PlayerController.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\Levels\BackdoomsLevel.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\BackdoomsLevel.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\Objects\Ammo.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Ammo.obj

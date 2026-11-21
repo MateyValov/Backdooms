@@ -32,18 +32,8 @@ struct Color
 	Color(float r, float g, float b) : r(r), g(g), b(b) {}
 	Color(float r, float g, float b, float a) : r(r), g(g), b(b), a(a) {}
 
-	static Color Red()
-	{
-		return Color(1.f, 0.f, 0.f, 1.f);
-	}
-
-	static Color Green()
-	{
-		return Color(0.f, 1.f, 0.f, 1.f);
-	}
-
-	static Color Blue()
-	{
-		return Color(0.f, 0.f, 1.f, 1.f);
-	}
+	static Color Red()    { return Color(1.f, 0.f, 0.f, 1.f); }
+	static Color Green()  { return Color(0.f, 1.f, 0.f, 1.f); }
+	static Color Blue()   { return Color(0.f, 0.f, 1.f, 1.f); }
+	static Color Black()  { return Color(0.f, 0.f, 0.f, 1.f); }
 };

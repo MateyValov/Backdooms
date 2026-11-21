@@ -5,10 +5,11 @@
 #include "Structs/GUITransform.h"
 #include "Structs/Image.h"
 
-
-
 class GUI_Element
 {
+private:
+	bool isActive = false;
+
 public:
 	GUITransform transform;
 	Color color;
@@ -17,6 +18,9 @@ public:
 	GUI_Element(Vector2 position);
 	GUI_Element(Vector2 position, float width, float height);
 	GUI_Element(GUITransform transform, Color color);
+
+	bool IsActive() const;
+	void SetActive(bool value);
 
 	virtual void Draw(Screenspace screenspace) = 0;
 };

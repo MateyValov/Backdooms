@@ -1,10 +1,11 @@
 #include "Player.h"
 
-#include "../../Architecture/Components/Collider.h"
-#include "../../Architecture/Components/Sprite.h"
-#include "../../Architecture/Level.h"
-#include "../../Structs/MathFuncs.h"
-#include "../../Modules/Engine.h"
+#include "Architecture/Components/Collider.h"
+#include "Architecture/Components/Sprite.h"
+#include "Architecture/Level.h"
+#include "Structs/MathFuncs.h"
+#include "Modules/Engine.h"
+#include "Modules/Physics.h"
 
 #include "../Components/HittableComponent.h"
 #include "../Input/PlayerController.h"
@@ -129,7 +130,7 @@ void Player::InteractPressed()
 	}
 	SetAmmo(ammo - 1);
 
-	RaycastHit hit = GetLevel()->Raycast(transform.position, transform.position + transform.GetForward() * 640, this);
+	RaycastHit hit = Physics::Raycast(GetLevel(), transform.position, transform.position + transform.GetForward() * 640, this);
 	if (hit.object == nullptr)
 	{
 		printf("nothing was hit/wall was hit\n");

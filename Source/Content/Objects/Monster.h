@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Architecture/MovableObject.h"
+#include "Structs/Event.h"
 
 class HittableComponent;
 class Player;
@@ -10,7 +11,9 @@ class Monster : public MovableObject
 private:
 	HittableComponent* hittableComp;
 	std::vector<Player*> players;
-	Player* currentTarget;
+	Player* currentTarget = nullptr;
+
+	Listener onHealthDepleted;
 
 protected:
 	float sightRange = 350.f;
@@ -21,6 +24,8 @@ protected:
 
 	void Idle();
 	void Persue();
+
+	void Die();
 
 public:
 	Monster();

@@ -14,6 +14,8 @@ Monster::Monster()
 	hittableComp = AddComponent<HittableComponent>(4);
 	AddComponent<Sprite>(20);
 	AddComponent<Collider>(20);
+
+	onHealthDepleted = hittableComp->onKilled.Subscribe(this, &Monster::Die);
 }
 
 Monster::Monster(int health, float radius, int movementSpeed, int turnSpeed) : MovableObject(movementSpeed, turnSpeed)
@@ -21,6 +23,8 @@ Monster::Monster(int health, float radius, int movementSpeed, int turnSpeed) : M
 	hittableComp = AddComponent<HittableComponent>(health);
 	AddComponent<Sprite>(20);
 	AddComponent<Collider>(radius);
+
+	onHealthDepleted = hittableComp->onKilled.Subscribe(this, &Monster::Die);
 }
 
 void Monster::OnStart()
@@ -70,6 +74,11 @@ void Monster::Persue()
 	{
 		currentTarget = nullptr;
 	}
+}
+
+void Monster::Die()
+{
+	Destroy();
 }
 
 HittableComponent* Monster::GetHittableComponent()

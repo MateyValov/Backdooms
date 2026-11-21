@@ -23,3 +23,13 @@ GUI_Element::GUI_Element(GUITransform transform, Color color)
 	this->transform = transform;
 	this->color = color;
 }
+
+bool GUI_Element::IsActive() const
+{
+	return isActive;
+}
+
+void GUI_Element::SetActive(bool value)
+{
+	isActive = value;
+}

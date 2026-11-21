@@ -132,6 +132,7 @@
     <ClCompile Include="Backdooms.cpp" />
     <ClCompile Include="Source\Architecture\Components\Collider.cpp" />
     <ClCompile Include="Source\Architecture\Components\Component.cpp" />
+    <ClCompile Include="Source\Architecture\Components\Renderer.cpp" />
     <ClCompile Include="Source\Architecture\Components\Sprite.cpp" />
     <ClCompile Include="Source\Architecture\GUI\GUI_Element.cpp" />
     <ClCompile Include="Source\Architecture\GUI\GUI_Image.cpp" />
@@ -146,8 +147,10 @@
     <ClCompile Include="Source\Architecture\Viewport.cpp" />
     <ClCompile Include="Source\Content\Components\HittableComponent.cpp" />
     <ClCompile Include="Source\Content\GameState\BackdoomsGameState.cpp" />
+    <ClCompile Include="Source\Content\GUI\GameOverWidget.cpp" />
     <ClCompile Include="Source\Content\GUI\MainMenu.cpp" />
     <ClCompile Include="Source\Content\GUI\PlayerHUD.cpp" />
+    <ClCompile Include="Source\Content\GUI\PlayerViewport.cpp" />
     <ClCompile Include="Source\Content\Input\PlayerController.cpp" />
     <ClCompile Include="Source\Content\Levels\BackdoomsLevel.cpp" />
     <ClCompile Include="Source\Content\Objects\Ammo.cpp" />
@@ -166,6 +169,7 @@
   <ItemGroup>
     <ClInclude Include="Source\Architecture\Components\Collider.h" />
     <ClInclude Include="Source\Architecture\Components\Component.h" />
+    <ClInclude Include="Source\Architecture\Components\Renderer.h" />
     <ClInclude Include="Source\Architecture\Components\Sprite.h" />
     <ClInclude Include="Source\Architecture\GameState.h" />
     <ClInclude Include="Source\Architecture\GUI\GUI_Text.h" />
@@ -181,8 +185,10 @@
     <ClInclude Include="Source\Architecture\Viewport.h" />
     <ClInclude Include="Source\Content\Components\HittableComponent.h" />
     <ClInclude Include="Source\Content\GameState\BackdoomsGameState.h" />
+    <ClInclude Include="Source\Content\GUI\GameOverWidget.h" />
     <ClInclude Include="Source\Content\GUI\MainMenu.h" />
     <ClInclude Include="Source\Content\GUI\PlayerHUD.h" />
+    <ClInclude Include="Source\Content\GUI\PlayerViewport.h" />
     <ClInclude Include="Source\Content\Input\PlayerController.h" />
     <ClInclude Include="Source\Content\Levels\BackdoomsLevel.h" />
     <ClInclude Include="Source\Content\Objects\Ammo.h" />
@@ -190,6 +196,7 @@
     <ClInclude Include="Source\Content\Objects\Pickup.h" />
     <ClInclude Include="Source\Content\Objects\Player.h" />
     <ClInclude Include="Source\Content\Objects\Soda.h" />
+    <ClInclude Include="Source\Content\Player\BackdoomsPlayerHandle.h" />
     <ClInclude Include="Source\Modules\Engine.h" />
     <ClInclude Include="Source\Modules\Fonts.h" />
     <ClInclude Include="Source\Modules\Input.h" />
@@ -200,8 +207,8 @@
     <ClInclude Include="Source\Structs\Event.h" />
     <ClInclude Include="Source\Structs\GUITransform.h" />
     <ClInclude Include="Source\Structs\Image.h" />
-    <ClInclude Include="Source\Structs\MapArray.h" />
     <ClInclude Include="Source\Structs\MathFuncs.h" />
+    <ClInclude Include="Source\Structs\Tile.h" />
     <ClInclude Include="Source\Structs\Transform.h" />
   </ItemGroup>
   <ItemGroup>

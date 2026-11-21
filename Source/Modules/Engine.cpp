@@ -22,6 +22,7 @@
 #include "Content/Objects/Monster.h"
 
 #include "Content/GUI/PlayerHUD.h"
+#include "Content/GUI/MainMenu.h"
 
 static float lastTime;
 static float deltaTime;
@@ -31,6 +32,7 @@ static Level* activeLevel;
 
 static PlayerHUD* MainPlayerHUD;
 static PlayerHUD* SecondPlayerHUD;
+static MainMenu* m;
 
 
 static void OpenLevel(Level* level, bool isMultiplayer)
@@ -47,6 +49,7 @@ static void OpenLevel(Level* level, bool isMultiplayer)
 	MainCamera->SetParent(MainPlayer);
 
 	MainPlayerHUD = new PlayerHUD(MainPlayer);
+	m = new MainMenu();
 	
 	if (isMultiplayer)
 	{
@@ -93,19 +96,21 @@ static void Update()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	activeLevel->UpdateObjects();
-	Physics::UpdatePhysics();
+	Physics::UpdatePhysics(activeLevel);
+	activeLevel->RemoveDestroyed();
 
 	glutPostRedisplay();
 
 	if (SecondPlayerHUD != nullptr)
 	{
-		SecondPlayerHUD->DrawWidget(Window::BottomHalf());
-		MainPlayerHUD->DrawWidget(Window::TopHalf());
+		SecondPlayerHUD->Draw(Window::BottomHalf());
+		MainPlayerHUD->Draw(Window::TopHalf());
 	}
 	else
 	{
-		MainPlayerHUD->DrawWidget(Window::Fullscreen());
+		MainPlayerHUD->Draw(Window::Fullscreen());
 	}
+	//m->Draw(Window::Fullscreen());
 
 	glutSwapBuffers();
 }

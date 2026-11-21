@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../../Architecture/MovableObject.h"
+#include "Architecture/MovableObject.h"
 
-#include "../../Structs/Event.h"
+#include "Structs/Event.h"
 
 class HittableComponent;
 class PlayerController;
