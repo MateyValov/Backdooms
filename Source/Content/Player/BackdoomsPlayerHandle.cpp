@@ -7,6 +7,8 @@
 
 #include "Content/Objects/Player.h"
 #include "Content/GUI/PlayerViewport.h"
+#include "Content/Components/HittableComponent.h"
+
 
 BackdoomsPlayerHandle::BackdoomsPlayerHandle(Screenspace screenspace, ControlScheme controlScheme) : PlayerHandle(screenspace)
 {
@@ -17,16 +19,36 @@ BackdoomsPlayerHandle::BackdoomsPlayerHandle(Screenspace screenspace, ControlSch
 	this->interactKey = controlScheme.interactKey;
 }
 
+void BackdoomsPlayerHandle::OnPlayerDied()
+{
+	PlayerViewport* pv = dynamic_cast<PlayerViewport*>(viewport);
+	if (pv == nullptr)
+	{
+		return;
+	}
+
+	pv->ShowPlayerHUD(false);
+	pv->ShowGameOverWidget(true);
+
+	playerObject->Destroy();
+}
+
 void BackdoomsPlayerHandle::OnStart()
 {
 	Player* player = GetLevel()->Spawn<Player>(Vector2(), 90.f);
 	playerObject = player;
 	playerRef = player;
 
-	viewport = new PlayerViewport(player, screenspace);
+	if (player->GetHittableComponent() != nullptr)
+	{
+		onPlayerDied.Unsubscribe();
+		onPlayerDied += player->GetHittableComponent()->onKilled.Subscribe(this, &BackdoomsPlayerHandle::OnPlayerDied);
+	}
 
 	camera = GetLevel()->Spawn<Camera>(Vector2(), 90.f, screenspace, 60, 20, 2, 1.f);
 	camera->SetParent(player);
+
+	viewport = new PlayerViewport(player, screenspace);
 }
 
 void BackdoomsPlayerHandle::OnUpdate()

@@ -2,6 +2,8 @@
 
 #include "Architecture/GameState.h"
 
+#include "Structs/Event.h"
+
 class Pickup;
 class Monster;
 class BackdoomsPlayerHandle;
@@ -10,8 +12,15 @@ class BackdoomsGameState : public GameState
 {
 private:
 	int playerCount;
+	int alivePlayers;
+	int playersReachedEnd = 0;
+
+	int score = 0;
+	int highscore = 0;
+
 	bool isPaused = false;
 	bool isStarted = false;
+	bool isOver = false;
 
 	std::vector<Pickup*> pickups;
 	std::vector<Monster*> monsters;
@@ -19,13 +28,20 @@ private:
 
 	std::vector<int> occupiedRooms;
 
+	Listener onPlayerReachedEnd;
+	Listener onPlayerDied;
+
 	void StartGame(int playerCount);
+	void SetPlayerBindings(BackdoomsPlayerHandle* playerHandle);
 
 	void PositionPlayers();
 	void GenerateExit();
 	void GenerateWalls();
 	void GeneratePickups();
 	void GenerateMonsters();
+
+	void OnDied();
+	void OnEndReached();
 
 	void EscPressed();
 	void EnterPressed();

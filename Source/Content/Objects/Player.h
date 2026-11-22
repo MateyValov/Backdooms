@@ -15,15 +15,13 @@ private:
 
 	HittableComponent* hittableComp;
 
-	Listener onInteractPressed;
-
-
 public:
 	Player();
 	Player(int health, int ammo);
 	Player(int health, int ammo, float radius, int movementSpeed, int turnSpeed);
 
 	Event<int, int> ammoUpdated;
+	Event<> exitTouched;
 
 	void OnCollisionEnter(Object* other) override;
 	void OnWallEnter(int tileX, int tileY, int wallValue) override;

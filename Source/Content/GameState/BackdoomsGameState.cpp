@@ -1,6 +1,5 @@
 #include "BackdoomsGameState.h"
 
-#include <windows.h>
 #include <stdlib.h>
 #include <time.h>
 
@@ -14,6 +13,7 @@
 #include "Content/Objects/Monster.h"
 #include "Content/Levels/BackdoomsLevel.h"
 #include "Content/Player/BackdoomsPlayerHandle.h"
+#include "Content/Components/HittableComponent.h"
 
 
 void BackdoomsGameState::OnStart()
@@ -31,11 +31,11 @@ void BackdoomsGameState::OnUpdate()
 	{
 		StartGame(2);
 	}
-	if (Input::GetKeyState(VK_ESCAPE) == pressed)
+	if (Input::GetKeyState(0x1B) == pressed) //escape
 	{
 		EscPressed();
 	}
-	if (Input::GetKeyState(VK_RETURN) == pressed)
+	if (Input::GetKeyState(0x0D) == pressed) //return
 	{
 		EnterPressed();
 	}
@@ -47,23 +47,53 @@ void BackdoomsGameState::StartGame(int playerCount)
 	{
 		return;
 	}
-
+	for (PlayerHandle* ph : playerHandles)
+	{
+		ph->Destroy();
+	}
 	playerHandles.clear();
+
+	onPlayerReachedEnd.Unsubscribe();
+	onPlayerDied.Unsubscribe();
 
 	isStarted = true;
 	this->playerCount = playerCount;
+	alivePlayers = playerCount;
 
 	if (playerCount == 2)
 	{
-		playerHandles.push_back(GetLevel()->Spawn<BackdoomsPlayerHandle>(Vector2(), 0.f, Window::TopHalf(), ControlScheme::PlayerOne()));
-		playerHandles.push_back(GetLevel()->Spawn<BackdoomsPlayerHandle>(Vector2(), 0.f, Window::BottomHalf(), ControlScheme::PlayerTwo()));
+		BackdoomsPlayerHandle* playerOne = GetLevel()->Spawn<BackdoomsPlayerHandle>(Vector2(), 0.f, Window::TopHalf(), ControlScheme::PlayerOne());
+		SetPlayerBindings(playerOne);
+		playerHandles.push_back(playerOne);
+
+		BackdoomsPlayerHandle* playerTwo = GetLevel()->Spawn<BackdoomsPlayerHandle>(Vector2(), 0.f, Window::BottomHalf(), ControlScheme::PlayerTwo());
+		SetPlayerBindings(playerTwo);
+		playerHandles.push_back(playerTwo);
 	}
 	else
 	{
-		playerHandles.push_back(GetLevel()->Spawn<BackdoomsPlayerHandle>(Vector2(), 0.f, Window::Fullscreen(), ControlScheme::PlayerOne()));
+		BackdoomsPlayerHandle* player = GetLevel()->Spawn<BackdoomsPlayerHandle>(Vector2(), 0.f, Window::Fullscreen(), ControlScheme::PlayerOne());
+		SetPlayerBindings(player);
+		playerHandles.push_back(player);
 	}
 
 	SetupLevel();
+}
+
+void BackdoomsGameState::SetPlayerBindings(BackdoomsPlayerHandle* playerHandle)
+{
+	Player* p = dynamic_cast<Player*>(playerHandle->GetPlayerObject());
+	if (p == nullptr)
+	{
+		return;
+	}
+	if (p->GetHittableComponent() == nullptr)
+	{
+		return;
+	}
+	
+	onPlayerReachedEnd += p->exitTouched.Subscribe(this, &BackdoomsGameState::OnEndReached);
+	onPlayerDied += p->GetHittableComponent()->onKilled.Subscribe(this, &BackdoomsGameState::OnDied);
 }
 
 void BackdoomsGameState::SetupLevel()
@@ -74,9 +104,9 @@ void BackdoomsGameState::SetupLevel()
 	{
 		return;
 	}
+	GetLevel()->GenerateLevel();
 
-	pickups.clear();
-	monsters.clear();
+	playersReachedEnd = 0;
 
 	PositionPlayers();
 	GenerateExit();
@@ -99,7 +129,8 @@ void BackdoomsGameState::PositionPlayers()
 			continue;
 		}
 		Vector2 spawnpoint = TileCoordinatesToRealCoordinates(GetRoomCoordinates(rand() % 25));
-		ph->GetPlayerObject()->SetPosition(spawnpoint);
+		int rotation = 90 * (rand() % 4);
+		ph->GetPlayerObject()->SetTransform(Transform(spawnpoint, rotation));
 	}
 }
 
@@ -140,11 +171,11 @@ void BackdoomsGameState::GeneratePickups()
 	{
 		p->Destroy();
 	}
+	pickups.clear();
 
 	Vector2 SpawnCoordinates;
-	vector<Vector2> used;
+	std::vector<Vector2> used;
 
-	srand(time(0));
 	for (int i = 0; i < playerCount * 2; i++)
 	{
 		do
@@ -177,17 +208,44 @@ void BackdoomsGameState::GenerateMonsters()
 	{
 		m->Destroy();
 	}
+	monsters.clear();
 
 	Vector2 RoomCoordinates;
-	vector<Vector2> used;
+	std::vector<Vector2> used;
 
-	srand(time(0));
 	for (int i = 0; i < playerCount; i++)
 	{
 		RoomCoordinates = GetRoomCoordinates(rand() % 25);
 		Monster* monster = GetLevel()->Spawn<Monster>(TileCoordinatesToRealCoordinates(RoomCoordinates), 0.f);
 		monsters.push_back(monster);
 	}
+}
+
+void BackdoomsGameState::OnDied()
+{
+	alivePlayers--;
+	if (alivePlayers <= 0)
+	{
+		isOver = true;
+		printf("Game over!\n");
+	}
+}
+
+void BackdoomsGameState::OnEndReached()
+{
+	playersReachedEnd++;
+	printf("A player reached the end!\n");
+
+	if (playersReachedEnd < alivePlayers)
+	{
+		printf("Waiting for all players (%d/%d)\n", playersReachedEnd, alivePlayers);
+		return;
+	}
+
+	score++;
+	if (score > highscore) highscore = score;
+	printf("Level cleared! Score: %d, High Score: %d\n", score, highscore);
+	SetupLevel();
 }
 
 void BackdoomsGameState::EscPressed()

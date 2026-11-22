@@ -2,6 +2,8 @@
 
 #include "Architecture/PlayerHandle.h"
 
+#include "Structs/Event.h"
+
 class Player;
 
 struct ControlScheme
@@ -44,6 +46,10 @@ private:
 	Vector2 movementInput;
 
 	Player* playerRef = nullptr;
+
+	Listener onPlayerDied;
+
+	void OnPlayerDied();
 
 protected:
 	virtual void OnStart() override;

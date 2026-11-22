@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Structs/Transform.h"
+#include "Structs/Transform.h"
 
 struct Screenspace
 {

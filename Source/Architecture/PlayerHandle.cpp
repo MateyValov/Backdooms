@@ -24,6 +24,7 @@ void PlayerHandle::AssignObject(Object* playerObject)
 
 void PlayerHandle::AssignCamera(Camera* camera)
 {
+	this->camera = camera;
 }
 
 void PlayerHandle::AssignViewport(Viewport* viewport)
@@ -38,7 +39,7 @@ Object* PlayerHandle::GetPlayerObject()
 
 Camera* PlayerHandle::GetCamera()
 {
-	return nullptr;
+	return camera;
 }
 
 Viewport* PlayerHandle::GetPlayerViewport()

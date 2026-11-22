@@ -54,7 +54,7 @@ void Player::OnWallEnter(int tileX, int tileY, int wallValue)
 {
 	if (wallValue == 2)
 	{
-		printf("Time to exit level\n");
+		exitTouched.Invoke();
 	}
 }
 
@@ -107,13 +107,11 @@ void Player::InteractPressed()
 	RaycastHit hit = Physics::Raycast(GetLevel(), transform.position, transform.position + transform.GetForward() * 640, this);
 	if (hit.object == nullptr)
 	{
-		printf("nothing was hit/wall was hit\n");
 		return;
 	}
 	HittableComponent* otherHittableComp = hit.object->GetComponent<HittableComponent>();
 	if (otherHittableComp == nullptr)
 	{
-		printf("object isn't hittable\n");
 		return;
 	}
 	otherHittableComp->TakeDamage(1);

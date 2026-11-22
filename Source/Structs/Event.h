@@ -12,36 +12,56 @@ class Listener
 {
 public:
 	Listener() = default;
-	explicit Listener(function<void()> cancel) : cancel(move(cancel)) {} 
+	explicit Listener(function<void()> cancel) { Add(move(cancel)); }
 
 	Listener(const Listener&) = delete;
 	Listener& operator=(const Listener&) = delete;
 
-	Listener(Listener&& other) noexcept : cancel(move(other.cancel)) { other.cancel = nullptr; }
+	Listener(Listener&& other) noexcept : cancels(move(other.cancels)) { other.cancels.clear(); }
 	Listener& operator=(Listener&& other) noexcept
 	{
 		if (this != &other)
 		{
-			Unsubscribe();                      
-			cancel = std::move(other.cancel);
-			other.cancel = nullptr;
+			Unsubscribe();
+			cancels = move(other.cancels);
+			other.cancels.clear();
 		}
 		return *this;
 	}
 	~Listener() { Unsubscribe(); }
 
-	void Unsubscribe()
+	Listener& operator+=(Listener&& other)
 	{
-		if (!cancel) { return; }
-		function<void()> cancelNow = move(cancel);
-		cancel = nullptr;
-		cancelNow();
+		if (this != &other)
+		{
+			cancels.reserve(cancels.size() + other.cancels.size());
+			for (function<void()>& c : other.cancels) { cancels.push_back(move(c)); }
+			other.cancels.clear();
+		}
+		return *this;
 	}
 
-	bool IsSubscribed() const { return cancel != nullptr; }
+	void Unsubscribe()
+	{
+		if (cancels.empty()) { return; }
+		vector<function<void()>> toCancel = move(cancels);
+		cancels.clear();
+		for (auto it = toCancel.rbegin(); it != toCancel.rend(); ++it)
+		{
+			if (*it) { (*it)(); }
+		}
+	}
+
+	bool IsSubscribed() const { return !cancels.empty(); }
+	size_t Count() const { return cancels.size(); }
 
 private:
-	function<void()> cancel;
+	void Add(function<void()> cancel)
+	{
+		if (cancel) { cancels.push_back(move(cancel)); }
+	}
+
+	vector<function<void()>> cancels;
 };
 
 template <typename... Args>
