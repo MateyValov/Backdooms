@@ -2,25 +2,33 @@
 
 #include "Object.h"
 
+#include "Modules/Window.h"
+
+class Camera;
 class Viewport;
+
 
 class PlayerHandle : public Object
 {
 protected:
-	Viewport* viewport = nullptr;
 	Object* playerObject = nullptr;
+	Camera* camera = nullptr;
+	Viewport* viewport = nullptr;
+	
+	Screenspace screenspace;
 
-protected:
 	virtual void OnUpdate() override;
 
 public:
-	PlayerHandle() = default;
+	PlayerHandle(Screenspace screenspace);
 	virtual ~PlayerHandle() = default;
 
 	void AssignObject(Object* playerObject);
+	void AssignCamera(Camera* camera);
 	void AssignViewport(Viewport* viewport);
 
 	Object* GetPlayerObject();
+	Camera* GetCamera();
 	Viewport* GetPlayerViewport();
 
 };

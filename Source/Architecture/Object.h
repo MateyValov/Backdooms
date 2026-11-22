@@ -20,6 +20,7 @@ private:
 	Object* parent = nullptr;
 	Transform localTransform = Transform();
 
+	bool isActive = true;
 	bool begun = false;
 
 	void SweepRemoved();
@@ -43,6 +44,9 @@ public:
 	void Start();
 	void Update();
 	void Destroy();
+
+	bool IsActive();
+	void SetActive(bool value);
 
 	template <typename T, typename... Args>
 	T* AddComponent(Args&&... args);

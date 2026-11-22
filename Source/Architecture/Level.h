@@ -25,9 +25,9 @@ struct ObjectEntry
 class Level
 {
 protected:
-	MapArray walls;
-	MapArray floor;
-	MapArray roof;
+	MapArray walls = MapArray();
+	MapArray floor = MapArray();
+	MapArray roof = MapArray();
 
 	vector<ObjectEntry> objects;
 
@@ -63,6 +63,7 @@ public:
 	T* Spawn(Vector2 position, float angle, Args&&... args);
 	
 	void UpdateObjects();
+
 	bool IsMarked(const Object* object) const;
 	void RemoveDestroyed();
 

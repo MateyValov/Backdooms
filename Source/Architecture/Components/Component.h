@@ -7,6 +7,7 @@ class Component
 private:
 	friend class Object;
 	bool removed = false;
+	bool isActive = true;
 
 protected:
 	Object* owner = nullptr;
@@ -19,4 +20,7 @@ public:
 	virtual ~Component() = default;
 
 	Object* GetOwner();
+
+	bool IsActive();
+	void SetActive(bool value);
 };

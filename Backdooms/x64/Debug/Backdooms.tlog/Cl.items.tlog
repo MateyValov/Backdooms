@@ -20,13 +20,13 @@ C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GUI\GameOverWidg
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GUI\MainMenu.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\MainMenu.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GUI\PlayerHUD.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\PlayerHUD.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GUI\PlayerViewport.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\PlayerViewport.obj
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\Input\PlayerController.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\PlayerController.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\Levels\BackdoomsLevel.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\BackdoomsLevel.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\Objects\Ammo.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Ammo.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\Objects\Monster.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Monster.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\Objects\Pickup.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Pickup.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\Objects\Player.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Player.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\Objects\Soda.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Soda.obj
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\Player\BackdoomsPlayerHandle.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\BackdoomsPlayerHandle.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Modules\Engine.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Engine.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Modules\Fonts.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Fonts.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Modules\Input.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Input.obj

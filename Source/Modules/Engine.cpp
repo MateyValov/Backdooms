@@ -15,11 +15,6 @@
 #include "Content/Levels/BackdoomsLevel.h"
 
 #include "Content/Objects/Player.h"
-#include "Content/Input/PlayerController.h"
-
-#include "Content/Objects/Soda.h"
-#include "Content/Objects/Ammo.h"
-#include "Content/Objects/Monster.h"
 
 #include "Content/GUI/PlayerHUD.h"
 #include "Content/GUI/MainMenu.h"
@@ -30,9 +25,9 @@ static float timeScale = 1.f;
 
 static Level* activeLevel;
 
-static PlayerHUD* MainPlayerHUD;
-static PlayerHUD* SecondPlayerHUD;
-static MainMenu* m;
+//static PlayerHUD* MainPlayerHUD;
+//static PlayerHUD* SecondPlayerHUD;
+//static MainMenu* m;
 
 
 static void OpenLevel(Level* level, bool isMultiplayer)
@@ -41,7 +36,7 @@ static void OpenLevel(Level* level, bool isMultiplayer)
 	level->GenerateInitialObjects();
 	activeLevel = level;
 
-	Player* MainPlayer = activeLevel->Spawn<Player>(activeLevel->GetSpawnpoint(), 90.f);
+	/*Player* MainPlayer = activeLevel->Spawn<Player>(activeLevel->GetSpawnpoint(), 90.f);
 	MainPlayer->AssignController(new PlayerController(ControlScheme::PlayerOne()));
 
 	Camera* MainCamera = activeLevel->Spawn<Camera>(activeLevel->GetSpawnpoint(), 0.f, 
@@ -60,28 +55,7 @@ static void OpenLevel(Level* level, bool isMultiplayer)
 		SecondCamera->SetParent(SecondPlayer);
 
 		SecondPlayerHUD = new PlayerHUD(SecondPlayer);
-	}
-
-	activeLevel->Spawn<Monster>(Vector2(TILE_SIZE * 10.5f, TILE_SIZE * 2.5f), 0.f, 4, 20, 200, 150);
-}
-
-static void HandleInput()
-{
-	Input::updateKeys();
-
-	if (Input::GetKeyState('I') == pressed)
-	{
-		printf("========OBJECTS IN MAP========\n");
-		for (Object* obj : activeLevel->GetObjects())
-		{
-			printf("Object: x - %.3f, y - %.3f, forward vector - %.3f, %.3f\n", 
-				obj->GetTransform().position.x, obj->GetTransform().position.y, obj->GetTransform().GetForward().x, obj->GetTransform().GetForward().y);
-		}
-	}
-	if (Input::GetKeyState('P') == pressed)
-	{
-		Engine::SetTimeScale(!Engine::GetTimeScale());
-	}
+	}*/
 }
 
 static void Update()
@@ -91,7 +65,16 @@ static void Update()
 	lastTime = now;
 	if (deltaTime > 0.05f) { deltaTime = 0.05f; }
 
-	HandleInput();
+	Input::updateKeys();
+	if (Input::GetKeyState('I') == pressed)
+	{
+		printf("========OBJECTS IN MAP========\n");
+		for (Object* obj : activeLevel->GetObjects())
+		{
+			printf("Object: x - %.3f, y - %.3f, forward vector - %.3f, %.3f\n",
+				obj->GetTransform().position.x, obj->GetTransform().position.y, obj->GetTransform().GetForward().x, obj->GetTransform().GetForward().y);
+		}
+	}
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -100,17 +83,6 @@ static void Update()
 	activeLevel->RemoveDestroyed();
 
 	glutPostRedisplay();
-
-	if (SecondPlayerHUD != nullptr)
-	{
-		SecondPlayerHUD->Draw(Window::BottomHalf());
-		MainPlayerHUD->Draw(Window::TopHalf());
-	}
-	else
-	{
-		MainPlayerHUD->Draw(Window::Fullscreen());
-	}
-	//m->Draw(Window::Fullscreen());
 
 	glutSwapBuffers();
 }

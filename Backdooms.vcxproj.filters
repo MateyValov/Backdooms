@@ -37,9 +37,6 @@
     <Filter Include="Source Files\Source\Content\GUI">
       <UniqueIdentifier>{e2674ca9-17ec-4975-a8cd-09c827a9b942}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Source\Content\Input">
-      <UniqueIdentifier>{5620d7ca-d1a2-4e59-bc51-655bb37691dc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Source\Architecture\Components">
       <UniqueIdentifier>{66e27262-f739-4c1e-88ca-c69c1fd31b2a}</UniqueIdentifier>
     </Filter>
@@ -114,9 +111,6 @@
     <ClCompile Include="Source\Modules\Input.cpp">
       <Filter>Source Files\Source\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Content\Input\PlayerController.cpp">
-      <Filter>Source Files\Source\Content\Input</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Architecture\Components\Component.cpp">
       <Filter>Source Files\Source\Architecture\Components</Filter>
     </ClCompile>
@@ -164,6 +158,9 @@
     </ClCompile>
     <ClCompile Include="Source\Architecture\Components\Renderer.cpp">
       <Filter>Source Files\Source\Architecture\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Content\Player\BackdoomsPlayerHandle.cpp">
+      <Filter>Source Files\Source\Content\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -232,9 +229,6 @@
     </ClInclude>
     <ClInclude Include="Source\Modules\Input.h">
       <Filter>Source Files\Source\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Content\Input\PlayerController.h">
-      <Filter>Source Files\Source\Content\Input</Filter>
     </ClInclude>
     <ClInclude Include="Source\Architecture\Components\Component.h">
       <Filter>Source Files\Source\Architecture\Components</Filter>

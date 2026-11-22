@@ -1,7 +1,13 @@
 #include "PlayerHandle.h"
 
 #include "Viewport.h"
+#include "Camera.h"
 
+
+PlayerHandle::PlayerHandle(Screenspace screenspace)
+{
+	this->screenspace = screenspace;
+}
 
 void PlayerHandle::OnUpdate()
 {
@@ -16,6 +22,10 @@ void PlayerHandle::AssignObject(Object* playerObject)
 	this->playerObject = playerObject;
 }
 
+void PlayerHandle::AssignCamera(Camera* camera)
+{
+}
+
 void PlayerHandle::AssignViewport(Viewport* viewport)
 {
 	this->viewport = viewport;
@@ -24,6 +34,11 @@ void PlayerHandle::AssignViewport(Viewport* viewport)
 Object* PlayerHandle::GetPlayerObject()
 {
 	return playerObject;
+}
+
+Camera* PlayerHandle::GetCamera()
+{
+	return nullptr;
 }
 
 Viewport* PlayerHandle::GetPlayerViewport()

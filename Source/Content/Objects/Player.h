@@ -13,13 +13,10 @@ private:
 	int ammo;
 	int maxAmmo;
 
-	PlayerController* controller = nullptr;
 	HittableComponent* hittableComp;
 
 	Listener onInteractPressed;
 
-protected:
-	void OnUpdate() override;
 
 public:
 	Player();
@@ -32,8 +29,6 @@ public:
 	void OnWallEnter(int tileX, int tileY, int wallValue) override;
 
 	HittableComponent* GetHittableComponent();
-
-	void AssignController(PlayerController* controller);
 
 	int GetAmmo() const;
 	int GetMaxAmmo() const;

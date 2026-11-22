@@ -11,7 +11,7 @@ void Viewport::UpdateViewport()
 {
 	for (GUI_Element* e : elements)
 	{
-		if (e->IsActive())
+		if (e->IsActive() == false)
 		{
 			continue;
 		}

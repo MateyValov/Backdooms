@@ -8,6 +8,9 @@ PlayerViewport::PlayerViewport(Player* player, Screenspace screenspace) : Viewpo
 	playerHUD = new PlayerHUD(player);
 	gameOverWidget = new GameOverWidget();
 
+	elements.push_back(playerHUD);
+	elements.push_back(gameOverWidget);
+
 	ShowPlayerHUD(true);
 }
 

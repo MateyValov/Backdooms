@@ -4,20 +4,27 @@
 
 class Pickup;
 class Monster;
+class BackdoomsPlayerHandle;
 
 class BackdoomsGameState : public GameState
 {
 private:
-	int playerCount = 1;
+	int playerCount;
 	bool isPaused = false;
-	bool isStarted = true;
+	bool isStarted = false;
 
 	std::vector<Pickup*> pickups;
 	std::vector<Monster*> monsters;
+	std::vector<BackdoomsPlayerHandle*> playerHandles;
 
+	std::vector<int> occupiedRooms;
+
+	void StartGame(int playerCount);
+
+	void PositionPlayers();
 	void GenerateExit();
 	void GenerateWalls();
-	void GeneratePickups(int perTypeAmount);
+	void GeneratePickups();
 	void GenerateMonsters();
 
 	void EscPressed();
@@ -28,11 +35,13 @@ protected:
 	virtual void OnUpdate() override;
 
 public:
-	BackdoomsGameState();
+	BackdoomsGameState() = default;
 
 	void SetupLevel();
 
 	bool IsValidRoomId(int id);
 	Vector2 TileCoordinatesToRealCoordinates(Vector2 in);
+
 	Vector2 GetRoomCoordinates(int roomId);
+	Vector2 GetRoomCornerCoordinates(int roomId);
 };

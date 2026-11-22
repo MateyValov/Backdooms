@@ -151,13 +151,13 @@
     <ClCompile Include="Source\Content\GUI\MainMenu.cpp" />
     <ClCompile Include="Source\Content\GUI\PlayerHUD.cpp" />
     <ClCompile Include="Source\Content\GUI\PlayerViewport.cpp" />
-    <ClCompile Include="Source\Content\Input\PlayerController.cpp" />
     <ClCompile Include="Source\Content\Levels\BackdoomsLevel.cpp" />
     <ClCompile Include="Source\Content\Objects\Ammo.cpp" />
     <ClCompile Include="Source\Content\Objects\Monster.cpp" />
     <ClCompile Include="Source\Content\Objects\Pickup.cpp" />
     <ClCompile Include="Source\Content\Objects\Player.cpp" />
     <ClCompile Include="Source\Content\Objects\Soda.cpp" />
+    <ClCompile Include="Source\Content\Player\BackdoomsPlayerHandle.cpp" />
     <ClCompile Include="Source\Modules\Engine.cpp" />
     <ClCompile Include="Source\Modules\Fonts.cpp" />
     <ClCompile Include="Source\Modules\Input.cpp" />
@@ -189,7 +189,6 @@
     <ClInclude Include="Source\Content\GUI\MainMenu.h" />
     <ClInclude Include="Source\Content\GUI\PlayerHUD.h" />
     <ClInclude Include="Source\Content\GUI\PlayerViewport.h" />
-    <ClInclude Include="Source\Content\Input\PlayerController.h" />
     <ClInclude Include="Source\Content\Levels\BackdoomsLevel.h" />
     <ClInclude Include="Source\Content\Objects\Ammo.h" />
     <ClInclude Include="Source\Content\Objects\Monster.h" />

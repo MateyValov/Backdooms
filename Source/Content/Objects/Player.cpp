@@ -7,8 +7,7 @@
 #include "Modules/Engine.h"
 #include "Modules/Physics.h"
 
-#include "../Components/HittableComponent.h"
-#include "../Input/PlayerController.h"
+#include "Content/Components/HittableComponent.h"
 #include "Pickup.h"
 
 
@@ -42,23 +41,6 @@ Player::Player(int health, int ammo, float radius, int movementSpeed, int turnSp
 	AddComponent<Collider>(radius);
 }
 
-void Player::OnUpdate()
-{
-	if (controller == nullptr)
-	{
-		return;
-	}
-
-	controller->UpdateController();
-
-	if (controller->GetMovementInput().x != 0.f)
-	{
-		Turn(controller->GetMovementInput().x > 0);
-	}
-	
-	Move(transform.GetForward() * controller->GetMovementInput().y);
-}
-
 void Player::OnCollisionEnter(Object* other)
 {
 	Pickup* pickup = dynamic_cast<Pickup*>(other);
@@ -79,14 +61,6 @@ void Player::OnWallEnter(int tileX, int tileY, int wallValue)
 HittableComponent* Player::GetHittableComponent()
 {
 	return hittableComp;
-}
-
-void Player::AssignController(PlayerController* controller)
-{
-	this->controller = controller;
-
-	onInteractPressed.Unsubscribe();
-	onInteractPressed = controller->interactPressed.Subscribe(this, &Player::InteractPressed);
 }
 
 int Player::GetAmmo() const

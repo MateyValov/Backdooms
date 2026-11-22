@@ -43,13 +43,24 @@ void Object::Update()
 			components[i]->Update(); 
 		} 
 	}
-	OnUpdate();                                    
+
+	if(isActive) OnUpdate();                   
 	SweepRemoved();
 }
 
 void Object::Destroy()
 {
 	level->Destroy(this);
+}
+
+bool Object::IsActive()
+{
+	return isActive;
+}
+
+void Object::SetActive(bool value)
+{
+	isActive = value;
 }
 
 void Object::RemoveComponent(Component* component)
