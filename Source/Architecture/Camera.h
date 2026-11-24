@@ -33,7 +33,11 @@ private:
 	vector<float> colCos, colSin;
 	vector<float> pxDirX, pxDirY;
 
+	friend class Window;
+
 	void Setup();
+
+	void DrawLevel();
 
 	void DrawWalls(const MapArray walls);
 	void DrawFloorAndRoof(const MapArray floor, const MapArray roof);
@@ -41,7 +45,6 @@ private:
 
 protected:
 	void OnStart() override;
-	void OnUpdate() override;
 
 public:
 	Camera();
@@ -50,7 +53,5 @@ public:
 	int GetWidth();
 	int GetHeight();
 	Screenspace GetScreenspace();
-
-	void InitFloorBuffer();
 	
 };

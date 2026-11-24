@@ -1,6 +1,8 @@
 #include "BackdoomsLevel.h"
 
+#include "Content/GUI/MenuViewport.h"
 #include "Content/GameState/BackdoomsGameState.h"
+
 
 void BackdoomsLevel::GenerateLevel()
 {
@@ -82,5 +84,6 @@ void BackdoomsLevel::GenerateLevel()
 
 void BackdoomsLevel::GenerateInitialObjects()
 {
-	Spawn<BackdoomsGameState>(Vector2(), 0.f);
+	globalViewport = Spawn<MenuViewport>(Vector2(), 0.f, Window::Fullscreen());
+	gameState = Spawn<BackdoomsGameState>(Vector2(), 0.f);
 }

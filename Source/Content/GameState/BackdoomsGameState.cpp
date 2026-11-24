@@ -14,11 +14,12 @@
 #include "Content/Levels/BackdoomsLevel.h"
 #include "Content/Player/BackdoomsPlayerHandle.h"
 #include "Content/Components/HittableComponent.h"
+#include "Content/GUI/MenuViewport.h"
 
 
 void BackdoomsGameState::OnStart()
 {
-	
+	globalViewport = dynamic_cast<MenuViewport*>(GetLevel()->GetGlobalViewport());
 }
 
 void BackdoomsGameState::OnUpdate()
@@ -78,6 +79,13 @@ void BackdoomsGameState::StartGame(int playerCount)
 	}
 
 	SetupLevel();
+
+	if (globalViewport == nullptr)
+	{
+		globalViewport = dynamic_cast<MenuViewport*>(GetLevel()->GetGlobalViewport());
+	}
+	globalViewport->ShowMainMenu(false);
+	globalViewport->ShowScoreWidget(true);
 }
 
 void BackdoomsGameState::SetPlayerBindings(BackdoomsPlayerHandle* playerHandle)

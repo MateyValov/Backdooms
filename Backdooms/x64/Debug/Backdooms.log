@@ -1,51 +1,20 @@
-﻿  BackdoomsGameState.cpp
+﻿  ScoreWidget.cpp
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\MathFuncs.h(9,14): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Source/Content/GameState/BackdoomsGameState.cpp')
+  (compiling source file 'Source/Content/GUI/ScoreWidget.cpp')
   
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(30,14): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Source/Content/GameState/BackdoomsGameState.cpp')
+  (compiling source file 'Source/Content/GUI/ScoreWidget.cpp')
   
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(56,40): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Source/Content/GameState/BackdoomsGameState.cpp')
+  (compiling source file 'Source/Content/GUI/ScoreWidget.cpp')
   
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(56,21): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Source/Content/GameState/BackdoomsGameState.cpp')
+  (compiling source file 'Source/Content/GUI/ScoreWidget.cpp')
   
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(61,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Source/Content/GameState/BackdoomsGameState.cpp')
+  (compiling source file 'Source/Content/GUI/ScoreWidget.cpp')
   
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(61,21): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Source/Content/GameState/BackdoomsGameState.cpp')
+  (compiling source file 'Source/Content/GUI/ScoreWidget.cpp')
   
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GameState\BackdoomsGameState.cpp(101,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GameState\BackdoomsGameState.cpp(133,61): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GameState\BackdoomsGameState.cpp(283,56): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GameState\BackdoomsGameState.cpp(283,30): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GameState\BackdoomsGameState.cpp(297,30): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GameState\BackdoomsGameState.cpp(297,19): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GameState\BackdoomsGameState.cpp(303,102): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GameState\BackdoomsGameState.cpp(303,62): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\memory(3465,56): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\memory(3465,56): warning C4244:         with
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\memory(3465,56): warning C4244:         [
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\memory(3465,56): warning C4244:             _Ty=int
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\memory(3465,56): warning C4244:         ]
-  (compiling source file 'Source/Content/GameState/BackdoomsGameState.cpp')
-      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\memory(3465,56):
-      the template instantiation context (the oldest one first) is
-          C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GameState\BackdoomsGameState.cpp(187,26):
-          see reference to function template instantiation 'T *Level::Spawn<Soda,int>(Vector2,float,int &&)' being compiled
-          with
-          [
-              T=Soda
-          ]
-          C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\Level.h(104,24):
-          see reference to function template instantiation 'std::unique_ptr<Soda,std::default_delete<Soda>> std::make_unique<Soda,_Ty,0>(_Ty &&)' being compiled
-          with
-          [
-              _Ty=int
-          ]
-  
-  BackdoomsLevel.cpp
-  Generating Code...
   Backdooms.vcxproj -> C:\Users\matey\Documents\University\CG\Backdooms\x64\Debug\Backdooms.exe

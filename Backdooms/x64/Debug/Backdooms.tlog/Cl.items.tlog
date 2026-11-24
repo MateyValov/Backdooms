@@ -18,8 +18,10 @@ C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\Components\Hitta
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GameState\BackdoomsGameState.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\BackdoomsGameState.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GUI\GameOverWidget.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\GameOverWidget.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GUI\MainMenu.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\MainMenu.obj
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GUI\MenuViewport.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\MenuViewport.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GUI\PlayerHUD.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\PlayerHUD.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GUI\PlayerViewport.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\PlayerViewport.obj
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GUI\ScoreWidget.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\ScoreWidget.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\Levels\BackdoomsLevel.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\BackdoomsLevel.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\Objects\Ammo.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Ammo.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\Objects\Monster.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Monster.obj

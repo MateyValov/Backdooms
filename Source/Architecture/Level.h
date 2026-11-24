@@ -10,26 +10,40 @@
 #include "Structs/Transform.h"
 #include "Structs/Tile.h"
 
+#include "Architecture/Camera.h"
+#include "Architecture/Viewport.h"
+
 using namespace std;
 
 class Object;
 class Collider;
-class Viewport;
+class GameState;
 
 struct ObjectEntry
 {
 	unique_ptr<Object> object;
 	bool destroyed = false;
-};     
+};
 
 class Level
 {
 protected:
+	Viewport* globalViewport = nullptr;
+	GameState* gameState = nullptr;
+
 	MapArray walls = MapArray();
 	MapArray floor = MapArray();
 	MapArray roof = MapArray();
 
 	vector<ObjectEntry> objects;
+	vector<Camera*> cameras;
+	vector<Viewport*> viewports;
+
+	void Register(Object*) {}
+	void Register(Camera* camera) { cameras.push_back(camera); }
+	void Register(Viewport* viewport) { viewports.push_back(viewport); }
+
+	void Unregister(Object* object);
 
 public:
 	Level() = default;
@@ -38,11 +52,12 @@ public:
 	virtual void GenerateLevel() {}
 	virtual void GenerateInitialObjects() {}
 
+	Viewport* GetGlobalViewport();
+	GameState* GetGameState();
+
 	MapArray GetWalls() const;
 	MapArray GetFloor() const;
 	MapArray GetRoof() const;
-
-	Vector2 GetSpawnpoint() const;
 
 	int GetTile(int x, int y) const;
 	vector<Object*> GetObjects() const;
@@ -68,9 +83,10 @@ public:
 	void RemoveDestroyed();
 
 	void Destroy(Object* object);
-	void DestroyAllObjects();
 	
-	int ObjectCount() const;    
+	int ObjectCount() const;  
+	vector<Camera*> GetCameras() const;
+	vector<Viewport*> GetViewports() const;
 };
 
 template<typename T>
@@ -107,6 +123,7 @@ inline T* Level::Spawn(Vector2 position, float angle, Args && ...args)
 
 	object->level = this;
 	object->SetTransform(Transform(position, angle));
+	Register(object);
 	object->Start();
 
 	return object;	

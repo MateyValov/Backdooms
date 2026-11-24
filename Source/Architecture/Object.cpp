@@ -1,8 +1,8 @@
 #include "Object.h"
 
-#include "Level.h";
-#include "../Structs/MathFuncs.h"
-#include "../Modules/Engine.h"
+#include "Level.h"
+#include "Structs/MathFuncs.h"
+#include "Modules/Engine.h"
 
 
 void Object::SweepRemoved()
@@ -16,6 +16,16 @@ void Object::SweepRemoved()
 	}
 	components.erase(std::remove_if(components.begin(), components.end(), 
 		[](const std::unique_ptr<Component>& c) { return c->removed; }), components.end());
+}
+
+void Object::DetachFromHierarchy()
+{
+	vector<Object*> kids = children;
+	for (Object* child : kids)
+	{
+		child->RemoveParent();
+	}
+	RemoveParent();
 }
 
 void Object::Start()
@@ -90,12 +100,21 @@ void Object::SetParent(Object* parent, Transform offset)
 	{
 		return;
 	}
+	if (this->parent != nullptr)
+	{
+		parent->RemoveChild(this);
+	}
 	this->parent = parent;
+	this->parent->AddChild(this);
 	localTransform = offset;
 }
 
 void Object::RemoveParent()
 {
+	if (parent != nullptr)
+	{
+		parent->RemoveChild(this);
+	}
 	parent = nullptr;
 	localTransform = Transform();
 }
@@ -113,6 +132,35 @@ Object* Object::GetGrandParent()
 	}
 	Object* result = parent->GetGrandParent();
 	return result != this ? result : nullptr;
+}
+
+void Object::AddChild(Object* child)
+{
+	children.push_back(child);
+}
+
+void Object::RemoveChild(Object* child)
+{
+	children.erase(std::remove(children.begin(), children.end(), child), children.end());
+}
+
+std::vector<Object*> Object::GetChildren() const
+{
+	return children;
+}
+
+int Object::GetChildCount() const
+{
+	return (int)children.size();
+}
+
+Object* Object::GetChild(int index) const
+{
+	if (index < 0 || index >= (int)children.size())
+	{
+		return nullptr;
+	}
+	return children[index];
 }
 
 Level* Object::GetLevel()

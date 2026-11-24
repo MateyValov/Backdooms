@@ -2,6 +2,9 @@
 
 #include "Structs/Transform.h"
 
+class Level;
+class Viewport;
+
 struct Screenspace
 {
 	Vector2 TopLeft;
@@ -38,6 +41,9 @@ private:
 
 public:
 	static void InitWindow(int width, int height);
+
+	static void RenderScene(Level* level);
+	static void RenderViewports(Level* level);
 
 	static Screenspace Fullscreen();
 

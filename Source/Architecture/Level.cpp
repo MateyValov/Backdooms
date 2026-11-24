@@ -1,14 +1,32 @@
 #include "Level.h"
 
 #include "Modules/Physics.h"
-#include "Object.h"
+#include "Architecture/Object.h"
+#include "Architecture/GameState.h"
 #include "Components/Collider.h"
 
-#include <cfloat>
 #include <cmath>
-#include <algorithm>
+#include <cfloat>
 #include <iterator>
+#include <algorithm>
 
+void Level::Unregister(Object* object)
+{
+	cameras.erase(std::remove_if(cameras.begin(), cameras.end(),
+		[object](Camera* c) { return static_cast<Object*>(c) == object; }), cameras.end());
+	viewports.erase(std::remove_if(viewports.begin(), viewports.end(),
+		[object](Viewport* v) { return static_cast<Object*>(v) == object; }), viewports.end());
+}
+
+Viewport* Level::GetGlobalViewport()
+{
+	return globalViewport;
+}
+
+GameState* Level::GetGameState()
+{
+	return gameState;
+}
 
 MapArray Level::GetWalls() const
 {
@@ -23,11 +41,6 @@ MapArray Level::GetFloor() const
 MapArray Level::GetRoof() const
 {
 	return roof;
-}
-
-Vector2 Level::GetSpawnpoint() const
-{
-	return Vector2(Vector2((MAP_TILES_X / 2.f) * TILE_SIZE, (MAP_TILES_Y / 2.f) * TILE_SIZE));
 }
 
 int Level::GetTile(int x, int y) const
@@ -217,16 +230,10 @@ void Level::Destroy(Object* object)
 		if (entry.object.get() == object) 
 		{ 
 			entry.destroyed = true; 
+			Unregister(object);
+			object->DetachFromHierarchy();
 			return; 
 		}
-	}
-}
-
-void Level::DestroyAllObjects()
-{
-	for (ObjectEntry& entry : objects) 
-	{ 
-		entry.destroyed = true;	
 	}
 }
 
@@ -238,5 +245,15 @@ int Level::ObjectCount() const
 		if (!entry.destroyed) { n++; } 
 	}
 	return n;
+}
+
+vector<Camera*> Level::GetCameras() const
+{
+	return cameras;
+}
+
+vector<Viewport*> Level::GetViewports() const
+{
+	return viewports;
 }
 

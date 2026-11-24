@@ -47,6 +47,8 @@ static void Update()
 	activeLevel->UpdateObjects();
 	Physics::UpdatePhysics(activeLevel);
 	activeLevel->RemoveDestroyed();
+	Window::RenderScene(activeLevel);
+	Window::RenderViewports(activeLevel);
 
 	glutPostRedisplay();
 

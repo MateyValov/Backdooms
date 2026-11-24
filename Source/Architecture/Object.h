@@ -17,13 +17,19 @@ class Object
 {
 private:
 	Level* level = nullptr;
+
 	Object* parent = nullptr;
+	std::vector<Object*> children;
 	Transform localTransform = Transform();
 
 	bool isActive = true;
 	bool begun = false;
 
+	void AddChild(Object* child);
+	void RemoveChild(Object* child);
+
 	void SweepRemoved();
+	void DetachFromHierarchy();
 
 	friend class Level;
 
@@ -66,6 +72,10 @@ public:
 	void RemoveParent();
 	Object* GetParent();
 	Object* GetGrandParent();
+
+	std::vector<Object*> GetChildren() const;
+	int GetChildCount() const;
+	Object* GetChild(int index) const;
 
 	Level* GetLevel();
 

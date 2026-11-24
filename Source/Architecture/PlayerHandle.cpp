@@ -9,14 +9,6 @@ PlayerHandle::PlayerHandle(Screenspace screenspace)
 	this->screenspace = screenspace;
 }
 
-void PlayerHandle::OnUpdate()
-{
-	if (viewport != nullptr)
-	{
-		viewport->UpdateViewport();
-	}
-}
-
 void PlayerHandle::AssignObject(Object* playerObject)
 {
 	this->playerObject = playerObject;

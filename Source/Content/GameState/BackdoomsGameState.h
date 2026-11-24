@@ -6,6 +6,7 @@
 
 class Pickup;
 class Monster;
+class MenuViewport;
 class BackdoomsPlayerHandle;
 
 class BackdoomsGameState : public GameState
@@ -27,6 +28,8 @@ private:
 	std::vector<BackdoomsPlayerHandle*> playerHandles;
 
 	std::vector<int> occupiedRooms;
+
+	MenuViewport* globalViewport;
 
 	Listener onPlayerReachedEnd;
 	Listener onPlayerDied;

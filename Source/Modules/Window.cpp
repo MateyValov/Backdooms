@@ -1,8 +1,47 @@
 #include "Window.h"
 
+#include "Architecture/Level.h"
+
+
 void Window::InitWindow(int width, int height)
 {
 	fullscreen = Screenspace(width, height);
+}
+
+void Window::RenderScene(Level* level)
+{
+	if (level == nullptr)
+	{
+		return;
+	}
+
+	size_t count = level->GetCameras().size();
+	for (size_t i = 0; i < count; ++i)
+	{
+		if (level->GetCameras()[i] == nullptr)
+		{
+			continue;
+		}
+		level->GetCameras()[i]->DrawLevel();
+	}
+}
+
+void Window::RenderViewports(Level* level)
+{
+	if (level == nullptr)
+	{
+		return;
+	}
+
+	size_t count = level->GetViewports().size();
+	for (size_t i = 0; i < count; ++i)
+	{
+		if (level->GetViewports()[i] == nullptr)
+		{
+			continue;
+		}
+		level->GetViewports()[i]->UpdateViewport();
+	}
 }
 
 Screenspace Window::Fullscreen()

@@ -17,8 +17,6 @@ protected:
 	
 	Screenspace screenspace;
 
-	virtual void OnUpdate() override;
-
 public:
 	PlayerHandle(Screenspace screenspace);
 	virtual ~PlayerHandle() = default;

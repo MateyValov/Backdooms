@@ -48,7 +48,7 @@ void BackdoomsPlayerHandle::OnStart()
 	camera = GetLevel()->Spawn<Camera>(Vector2(), 90.f, screenspace, 60, 20, 2, 1.f);
 	camera->SetParent(player);
 
-	viewport = new PlayerViewport(player, screenspace);
+	viewport = GetLevel()->Spawn<PlayerViewport>(Vector2(), 90.f, player, screenspace);
 }
 
 void BackdoomsPlayerHandle::OnUpdate()

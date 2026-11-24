@@ -149,8 +149,10 @@
     <ClCompile Include="Source\Content\GameState\BackdoomsGameState.cpp" />
     <ClCompile Include="Source\Content\GUI\GameOverWidget.cpp" />
     <ClCompile Include="Source\Content\GUI\MainMenu.cpp" />
+    <ClCompile Include="Source\Content\GUI\MenuViewport.cpp" />
     <ClCompile Include="Source\Content\GUI\PlayerHUD.cpp" />
     <ClCompile Include="Source\Content\GUI\PlayerViewport.cpp" />
+    <ClCompile Include="Source\Content\GUI\ScoreWidget.cpp" />
     <ClCompile Include="Source\Content\Levels\BackdoomsLevel.cpp" />
     <ClCompile Include="Source\Content\Objects\Ammo.cpp" />
     <ClCompile Include="Source\Content\Objects\Monster.cpp" />
@@ -187,8 +189,10 @@
     <ClInclude Include="Source\Content\GameState\BackdoomsGameState.h" />
     <ClInclude Include="Source\Content\GUI\GameOverWidget.h" />
     <ClInclude Include="Source\Content\GUI\MainMenu.h" />
+    <ClInclude Include="Source\Content\GUI\MenuViewport.h" />
     <ClInclude Include="Source\Content\GUI\PlayerHUD.h" />
     <ClInclude Include="Source\Content\GUI\PlayerViewport.h" />
+    <ClInclude Include="Source\Content\GUI\ScoreWidget.h" />
     <ClInclude Include="Source\Content\Levels\BackdoomsLevel.h" />
     <ClInclude Include="Source\Content\Objects\Ammo.h" />
     <ClInclude Include="Source\Content\Objects\Monster.h" />

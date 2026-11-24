@@ -162,6 +162,12 @@
     <ClCompile Include="Source\Content\Player\BackdoomsPlayerHandle.cpp">
       <Filter>Source Files\Source\Content\Player</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Content\GUI\MenuViewport.cpp">
+      <Filter>Source Files\Source\Content\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Content\GUI\ScoreWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Structs\Transform.h">
@@ -289,6 +295,12 @@
     </ClInclude>
     <ClInclude Include="Source\Content\Player\BackdoomsPlayerHandle.h">
       <Filter>Source Files\Source\Content\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\GUI\MenuViewport.h">
+      <Filter>Source Files\Source\Content\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\GUI\ScoreWidget.h">
+      <Filter>Source Files\Source\Content\GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

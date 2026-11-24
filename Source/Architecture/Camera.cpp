@@ -69,26 +69,20 @@ void Camera::Setup()
 		int x0 = c * columnWidth, x1 = min(GetWidth(), x0 + columnWidth);
 		angleAt(0.5f * (x0 + x1), colCos[c], colSin[c]);
 	}
-}
 
-int Camera::GetWidth()
-{
-	return screenspace.x();
-}
-
-int Camera::GetHeight()
-{
-	return screenspace.y();
-}
-
-Screenspace Camera::GetScreenspace()
-{
-	return screenspace;
-}
-
-void Camera::InitFloorBuffer()
-{
 	Textures::CreateImage(floorImage, GetWidth(), GetHeight(), floorBuf.data(), false, false);
+}
+
+void Camera::DrawLevel()
+{
+	if (GetLevel() == nullptr)
+	{
+		return;
+	}
+
+	DrawFloorAndRoof(GetLevel()->GetFloor(), GetLevel()->GetRoof());
+	DrawWalls(GetLevel()->GetWalls());
+	DrawObjects(GetLevel()->GetObjects());
 }
 
 void Camera::DrawWalls(const MapArray walls)
@@ -156,11 +150,6 @@ void Camera::DrawWalls(const MapArray walls)
 
 void Camera::DrawFloorAndRoof(const MapArray floor, const MapArray roof)
 {
-	if (!floorImage.texture) 
-	{ 
-		InitFloorBuffer(); 
-	}
-
 	const Image& atlas = Textures::Atlas::GetImage();
 	const unsigned char* atlasPx = atlas.pixels.data();
 	const int cell = Textures::Atlas::CellSize();
@@ -328,15 +317,20 @@ void Camera::OnStart()
 	//printf("projDist = %.2f\n", projDist);
 }
 
-void Camera::OnUpdate()
+int Camera::GetWidth()
 {
-	Level* level = GetLevel();
-
-	DrawFloorAndRoof(level->GetFloor(), level->GetRoof());
-	DrawWalls(level->GetWalls());
-	DrawObjects(level->GetObjects());
+	return screenspace.x();
 }
 
+int Camera::GetHeight()
+{
+	return screenspace.y();
+}
+
+Screenspace Camera::GetScreenspace()
+{
+	return screenspace;
+}
 
 
 
