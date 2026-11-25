@@ -229,8 +229,10 @@ void Level::Destroy(Object* object)
 	{
 		if (entry.object.get() == object) 
 		{ 
+			if (entry.destroyed) { return; }
 			entry.destroyed = true; 
 			Unregister(object);
+			object->OnDestroy();
 			object->DetachFromHierarchy();
 			return; 
 		}
@@ -254,6 +256,9 @@ vector<Camera*> Level::GetCameras() const
 
 vector<Viewport*> Level::GetViewports() const
 {
-	return viewports;
+	vector<Viewport*> sorted = viewports;
+	stable_sort(sorted.begin(), sorted.end(),
+		[](const Viewport* a, const Viewport* b) { return a->GetDrawOrder() < b->GetDrawOrder(); });
+	return sorted;
 }
 

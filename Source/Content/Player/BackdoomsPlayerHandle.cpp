@@ -1,6 +1,7 @@
 #include "BackdoomsPlayerHandle.h"
 
 #include "Modules/Input.h"
+#include "Modules/Engine.h"
 
 #include "Architecture/Level.h"
 #include "Architecture/Camera.h"
@@ -22,15 +23,42 @@ BackdoomsPlayerHandle::BackdoomsPlayerHandle(Screenspace screenspace, ControlSch
 void BackdoomsPlayerHandle::OnPlayerDied()
 {
 	PlayerViewport* pv = dynamic_cast<PlayerViewport*>(viewport);
-	if (pv == nullptr)
+	if (IsValid(pv) == false)
 	{
 		return;
 	}
 
 	pv->ShowPlayerHUD(false);
 	pv->ShowGameOverWidget(true);
+	pv->ShowWaitingWidget(false);
 
 	playerObject->Destroy();
+}
+
+void BackdoomsPlayerHandle::OnExitReached()
+{
+	PlayerViewport* pv = dynamic_cast<PlayerViewport*>(viewport);
+	if (IsValid(pv) == false)
+	{
+		return;
+	}
+
+	pv->ShowPlayerHUD(false);
+	pv->ShowGameOverWidget(false);
+	pv->ShowWaitingWidget(true);
+}
+
+void BackdoomsPlayerHandle::OnRespawned()
+{
+	PlayerViewport* pv = dynamic_cast<PlayerViewport*>(viewport);
+	if (IsValid(pv) == false)
+	{
+		return;
+	}
+
+	pv->ShowPlayerHUD(true);
+	pv->ShowGameOverWidget(false);
+	pv->ShowWaitingWidget(false);
 }
 
 void BackdoomsPlayerHandle::OnStart()
@@ -39,21 +67,23 @@ void BackdoomsPlayerHandle::OnStart()
 	playerObject = player;
 	playerRef = player;
 
-	if (player->GetHittableComponent() != nullptr)
-	{
-		onPlayerDied.Unsubscribe();
-		onPlayerDied += player->GetHittableComponent()->onKilled.Subscribe(this, &BackdoomsPlayerHandle::OnPlayerDied);
-	}
-
 	camera = GetLevel()->Spawn<Camera>(Vector2(), 90.f, screenspace, 60, 20, 2, 1.f);
 	camera->SetParent(player);
 
-	viewport = GetLevel()->Spawn<PlayerViewport>(Vector2(), 90.f, player, screenspace);
+	viewport = GetLevel()->Spawn<PlayerViewport>(Vector2(), 90.f, 0, screenspace, player);
+
+	onPlayerDied += player->GetHittableComponent()->onKilled.Subscribe(this, &BackdoomsPlayerHandle::OnPlayerDied);
+	onExitReached += player->exitTouched.Subscribe(this, &BackdoomsPlayerHandle::OnExitReached);
 }
 
 void BackdoomsPlayerHandle::OnUpdate()
 {
 	PlayerHandle::OnUpdate();
+
+	if (playerRef->IsActive() == false)
+	{
+		return;
+	}
 
 	if (playerRef == nullptr)
 	{
@@ -75,7 +105,7 @@ void BackdoomsPlayerHandle::OnUpdate()
 
 	playerRef->Move(playerRef->GetTransform().GetForward() * movementInput.y);
 
-	if (Input::GetKeyState(interactKey) == pressed)
+	if (Input::GetKeyState(interactKey) == pressed && Engine::GetTimeScale() != 0.f)
 	{
 		playerRef->InteractPressed();
 	}

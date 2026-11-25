@@ -84,6 +84,6 @@ void BackdoomsLevel::GenerateLevel()
 
 void BackdoomsLevel::GenerateInitialObjects()
 {
-	globalViewport = Spawn<MenuViewport>(Vector2(), 0.f, Window::Fullscreen());
+	globalViewport = Spawn<MenuViewport>(Vector2(), 0.f, 1, Window::Fullscreen());
 	gameState = Spawn<BackdoomsGameState>(Vector2(), 0.f);
 }

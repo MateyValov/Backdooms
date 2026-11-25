@@ -48,8 +48,10 @@ private:
 	Player* playerRef = nullptr;
 
 	Listener onPlayerDied;
+	Listener onExitReached;
 
 	void OnPlayerDied();
+	void OnExitReached();
 
 protected:
 	virtual void OnStart() override;
@@ -57,4 +59,5 @@ protected:
 
 public:
 	BackdoomsPlayerHandle(Screenspace screenspace, ControlScheme controlScheme);
+	void OnRespawned();
 };

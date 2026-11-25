@@ -15,11 +15,14 @@
 #include "Content/Player/BackdoomsPlayerHandle.h"
 #include "Content/Components/HittableComponent.h"
 #include "Content/GUI/MenuViewport.h"
+#include "Content/GUI/ScoreWidget.h"
 
 
 void BackdoomsGameState::OnStart()
 {
 	globalViewport = dynamic_cast<MenuViewport*>(GetLevel()->GetGlobalViewport());
+	save.InitSaveData("Backdooms", "save.bds");
+	save.Load();
 }
 
 void BackdoomsGameState::OnUpdate()
@@ -48,9 +51,15 @@ void BackdoomsGameState::StartGame(int playerCount)
 	{
 		return;
 	}
-	for (PlayerHandle* ph : playerHandles)
+
+	size_t n = playerHandles.size();
+	for (size_t i = 0; i < n; i++)
 	{
-		ph->Destroy();
+		if (IsValid(playerHandles[i]) == false)
+		{
+			continue;
+		}
+		playerHandles[i]->Destroy();
 	}
 	playerHandles.clear();
 
@@ -80,12 +89,18 @@ void BackdoomsGameState::StartGame(int playerCount)
 
 	SetupLevel();
 
+	score = 0;
+	highscore = playerCount == 2 ? save.GetMultiplayerHighscore() : save.GetSingleplayerHighscore();
+
 	if (globalViewport == nullptr)
 	{
 		globalViewport = dynamic_cast<MenuViewport*>(GetLevel()->GetGlobalViewport());
 	}
+
 	globalViewport->ShowMainMenu(false);
 	globalViewport->ShowScoreWidget(true);
+	globalViewport->GetScoreWidget()->SetScore(score);
+	globalViewport->GetScoreWidget()->SetHighscore(highscore);
 }
 
 void BackdoomsGameState::SetPlayerBindings(BackdoomsPlayerHandle* playerHandle)
@@ -130,15 +145,19 @@ void BackdoomsGameState::PositionPlayers()
 		return;
 	}
 
-	for (BackdoomsPlayerHandle* ph : playerHandles)
+	size_t n = playerHandles.size();
+	for (size_t i = 0; i < n; i++)
 	{
-		if (ph->GetPlayerObject() == nullptr)
+		if (IsValid(playerHandles[i]->GetPlayerObject()) == false)
 		{
 			continue;
 		}
+
 		Vector2 spawnpoint = TileCoordinatesToRealCoordinates(GetRoomCoordinates(rand() % 25));
 		int rotation = 90 * (rand() % 4);
-		ph->GetPlayerObject()->SetTransform(Transform(spawnpoint, rotation));
+		playerHandles[i]->GetPlayerObject()->SetTransform(Transform(spawnpoint, rotation));
+		playerHandles[i]->GetPlayerObject()->SetActive(true);
+		playerHandles[i]->OnRespawned();
 	}
 }
 
@@ -175,9 +194,14 @@ void BackdoomsGameState::GeneratePickups()
 	{
 		return;
 	}
-	for (Pickup* p : pickups)
+	size_t n = pickups.size();
+	for (size_t i = 0; i < n; i++)
 	{
-		p->Destroy();
+		if (IsValid(pickups[i]) == false)
+		{
+			continue;
+		}
+		pickups[i]->Destroy();
 	}
 	pickups.clear();
 
@@ -212,9 +236,14 @@ void BackdoomsGameState::GenerateMonsters()
 	{
 		return;
 	}
-	for (Monster* m : monsters)
+	size_t n = monsters.size();
+	for (size_t i = 0; i < n; i++)
 	{
-		m->Destroy();
+		if (IsValid(monsters[i]) == false)
+		{
+			continue;
+		}
+		monsters[i]->Destroy();
 	}
 	monsters.clear();
 
@@ -232,52 +261,83 @@ void BackdoomsGameState::GenerateMonsters()
 void BackdoomsGameState::OnDied()
 {
 	alivePlayers--;
-	if (alivePlayers <= 0)
+	if (alivePlayers > 0)
 	{
-		isOver = true;
-		printf("Game over!\n");
+		return;
 	}
+
+	isOver = true;
+	playerCount == 2 ? save.SubmitMultiplayerScore(highscore) : save.SubmitSingleplayerScore(highscore);
 }
 
 void BackdoomsGameState::OnEndReached()
 {
 	playersReachedEnd++;
-	printf("A player reached the end!\n");
 
 	if (playersReachedEnd < alivePlayers)
 	{
-		printf("Waiting for all players (%d/%d)\n", playersReachedEnd, alivePlayers);
 		return;
 	}
 
 	score++;
 	if (score > highscore) highscore = score;
-	printf("Level cleared! Score: %d, High Score: %d\n", score, highscore);
+
+	globalViewport->GetScoreWidget()->SetScore(score);
+	globalViewport->GetScoreWidget()->SetHighscore(highscore);
+
 	SetupLevel();
 }
 
 void BackdoomsGameState::EscPressed()
 {
+	if (isStarted == false)
+	{
+		Engine::Quit();
+		return;
+	}
+	if (isPaused || isOver)
+	{
+		isPaused = false;
+		isStarted = false;
+		isOver = false;
+		Engine::SetTimeScale(1.f);
+
+		globalViewport->ShowPauseWidget(false);
+		globalViewport->ShowScoreWidget(false);
+		globalViewport->ShowMainMenu(true);
+
+		return;
+	}
 	if (isPaused == false)
 	{
 		isPaused = true;
 		Engine::SetTimeScale(0.f);
-		printf("Paused, press again to exit\n");
+
+		globalViewport->ShowPauseWidget(true);
+
 		return;
-	}
-	if (isPaused)
-	{
-		Engine::SetTimeScale(1.f);
-		Engine::Quit();
 	}
 }
 
 void BackdoomsGameState::EnterPressed()
 {
+	if (isOver)
+	{
+		isPaused = false;
+		isStarted = false;
+		isOver = false;
+		Engine::SetTimeScale(1.f);
+
+		globalViewport->ShowPauseWidget(false);
+		globalViewport->ShowScoreWidget(false);
+		globalViewport->ShowMainMenu(true);
+	}
 	if (isPaused)
 	{
-		printf("UnPaused\n");
 		isPaused = false;
+		Engine::SetTimeScale(1.f);
+
+		globalViewport->ShowPauseWidget(false);
 	}
 }
 

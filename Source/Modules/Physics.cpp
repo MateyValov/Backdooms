@@ -117,12 +117,12 @@ RaycastHit Physics::Raycast(Level* level, Vector2 from, Vector2 to, const Object
 
 	for (Object* object : level->GetObjects())
 	{
-		if (object == nullptr || object == ignore)
+		if (object == nullptr || object == ignore || object->IsActive() == false)
 		{
 			continue;
 		}
 		Collider* collider = object->GetComponent<Collider>();
-		if (collider == nullptr || !collider->IsActive())
+		if (collider == nullptr || collider->IsActive() == false)
 		{
 			continue;
 		}

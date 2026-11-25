@@ -15,10 +15,10 @@ ScoreWidget::ScoreWidget()
 
 void ScoreWidget::SetScore(int score)
 {
-	currentScore->text = score;
+	currentScore->text = std::to_string(score);
 }
 
 void ScoreWidget::SetHighscore(int highscore)
 {
-	highScore->text = highscore;
+	highScore->text = std::to_string(highscore);
 }

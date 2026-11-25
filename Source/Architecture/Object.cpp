@@ -45,16 +45,21 @@ void Object::Update()
 		transform = parent->GetTransform() + localTransform;
 	}
 
-	size_t count = components.size();           
-	for (size_t i = 0; i < count; ++i) 
-	{ 
-		if (!components[i]->removed) 
-		{ 
-			components[i]->Update(); 
-		} 
-	}
+	if (isActive)
+	{
+		size_t count = components.size();
+		for (size_t i = 0; i < count; ++i)
+		{
+			if (components[i]->removed == false || components[i]->IsActive() == false)
+			{
+				continue;
+			}
+			components[i]->Update();
+		}
 
-	if(isActive) OnUpdate();                   
+		OnUpdate();
+	}
+	               
 	SweepRemoved();
 }
 
@@ -71,6 +76,11 @@ bool Object::IsActive()
 void Object::SetActive(bool value)
 {
 	isActive = value;
+}
+
+bool Object::IsValid(Object* object) const
+{
+	return !GetLevel()->IsMarked(object);
 }
 
 void Object::RemoveComponent(Component* component)
@@ -163,7 +173,7 @@ Object* Object::GetChild(int index) const
 	return children[index];
 }
 
-Level* Object::GetLevel()
+Level* Object::GetLevel() const
 {
 	return level;
 }

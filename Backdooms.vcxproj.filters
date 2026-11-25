@@ -52,6 +52,9 @@
     <Filter Include="Source Files\Source\Content\Player">
       <UniqueIdentifier>{8829beb1-6420-4679-8071-5c5e604f322b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Source\Content\Save">
+      <UniqueIdentifier>{1ac96c58-e003-4e3a-a359-ccd66ce1e5b6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Backdooms.cpp">
@@ -165,8 +168,17 @@
     <ClCompile Include="Source\Content\GUI\MenuViewport.cpp">
       <Filter>Source Files\Source\Content\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Content\Save\SaveData.cpp">
+      <Filter>Source Files\Source\Content\Save</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Content\GUI\WaitingWidget.cpp">
+      <Filter>Source Files\Source\Content\GUI</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Content\GUI\ScoreWidget.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Source\Content\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Content\GUI\PauseWidget.cpp">
+      <Filter>Source Files\Source\Content\GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -300,6 +312,15 @@
       <Filter>Source Files\Source\Content\GUI</Filter>
     </ClInclude>
     <ClInclude Include="Source\Content\GUI\ScoreWidget.h">
+      <Filter>Source Files\Source\Content\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\GUI\PauseWidget.h">
+      <Filter>Source Files\Source\Content\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\Save\SaveData.h">
+      <Filter>Source Files\Source\Content\Save</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\GUI\WaitingWidget.h">
       <Filter>Source Files\Source\Content\GUI</Filter>
     </ClInclude>
   </ItemGroup>

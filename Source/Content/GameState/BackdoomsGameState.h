@@ -2,6 +2,7 @@
 
 #include "Architecture/GameState.h"
 
+#include "Content/Save/SaveData.h"
 #include "Structs/Event.h"
 
 class Pickup;
@@ -12,6 +13,8 @@ class BackdoomsPlayerHandle;
 class BackdoomsGameState : public GameState
 {
 private:
+	SaveData save;
+
 	int playerCount;
 	int alivePlayers;
 	int playersReachedEnd = 0;

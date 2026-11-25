@@ -40,6 +40,7 @@ protected:
 
 	virtual void OnStart() {}
 	virtual void OnUpdate() {}
+	virtual void OnDestroy() {}
 
 public:
 	Object() = default;
@@ -53,6 +54,7 @@ public:
 
 	bool IsActive();
 	void SetActive(bool value);
+	bool IsValid(Object* object) const;
 
 	template <typename T, typename... Args>
 	T* AddComponent(Args&&... args);
@@ -77,7 +79,7 @@ public:
 	int GetChildCount() const;
 	Object* GetChild(int index) const;
 
-	Level* GetLevel();
+	Level* GetLevel() const;
 
 	void SetTransform(Transform newTrasform);
 	void SetPosition(Vector2 newPosition);

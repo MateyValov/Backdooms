@@ -17,6 +17,8 @@ protected:
 	
 	Screenspace screenspace;
 
+	virtual void OnDestroy() override;
+
 public:
 	PlayerHandle(Screenspace screenspace);
 	virtual ~PlayerHandle() = default;

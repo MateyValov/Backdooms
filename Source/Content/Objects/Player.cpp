@@ -54,6 +54,7 @@ void Player::OnWallEnter(int tileX, int tileY, int wallValue)
 {
 	if (wallValue == 2)
 	{
+		SetActive(false);
 		exitTouched.Invoke();
 	}
 }

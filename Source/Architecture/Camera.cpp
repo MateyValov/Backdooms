@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <cmath>
 
-#include "Components/Sprite.h"
+#include "Components/Renderer.h"
 #include "Level.h"  
 
 #include "Modules/Rendering.h"
@@ -231,18 +231,26 @@ void Camera::DrawObjects(const vector<Object*>& objects)
 	const float fx = transform.GetForward().x, fy = transform.GetForward().y;
 	const float rx = transform.GetRight().x, ry = transform.GetRight().y;
 
-	struct Visible { Sprite* sprite; float depth; float lateral; int texture; };
+	struct Visible { Renderer* renderer; float depth; float lateral; int texture; };
 	vector<Visible> visible;
 	for (Object* object : objects)
 	{
-		vector<Sprite*> sprites = object->GetAllComponentOfClass<Sprite>();
-		if (sprites.size() == 0)
+		if (object->IsActive() == false)
 		{
 			continue;
 		}
-		for (Sprite* s : sprites)
+		vector<Renderer*> renderers = object->GetAllComponentOfClass<Renderer>();
+		if (renderers.size() == 0)
 		{
-			int texture = s->GetTextureIdForPosition(transform.position);
+			continue;
+		}
+		for (Renderer* r : renderers)
+		{
+			if (r->IsActive() == false)
+			{
+				continue;
+			}
+			int texture = r->GetTextureIdForPosition(transform.position);
 			if (texture < 0)
 			{
 				continue;
@@ -256,7 +264,7 @@ void Camera::DrawObjects(const vector<Object*>& objects)
 				continue;
 			}
 
-			visible.push_back(Visible{ s, depth, dx * rx + dy * ry, texture });
+			visible.push_back(Visible{ r, depth, dx * rx + dy * ry, texture });
 		}
 	}
 	sort(visible.begin(), visible.end(), [](const Visible& a, const Visible& b) { return a.depth > b.depth; }); 
@@ -300,7 +308,7 @@ void Camera::DrawObjects(const vector<Object*>& objects)
 			Rendering::Draw(atlas,
 				Rect(screenspace.TopLeft.x + x0, screenspace.TopLeft.y + visibleTop, x1 - x0, visibleBottom - visibleTop),
 				Rect(tex.x + u * tex.w, tex.y + v0 * tex.h, 0, (v1 - v0) * tex.h),
-				v.sprite->GetColor());
+				v.renderer->GetColor());
 		}
 	}
 }

@@ -11,6 +11,8 @@ class GUI_Element;
 class Viewport : public Object
 {
 private:
+	int drawOrder = 0;
+
 	void UpdateViewport();
 
 	friend class Window;
@@ -20,8 +22,11 @@ protected:
 	std::vector<GUI_Element*> elements;
 
 public:
-	Viewport(Screenspace screenspace);
+	Viewport(int drawOrder, Screenspace screenspace);
 	virtual ~Viewport() = default;
 
 	Screenspace GetScreenspace() const;
+
+	int GetDrawOrder() const;
+	void SetDrawOrder(int value);
 };

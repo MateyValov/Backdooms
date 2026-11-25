@@ -2,8 +2,9 @@
 
 #include "Architecture/GUI/GUI_Element.h"
 
-Viewport::Viewport(Screenspace screenspace)
+Viewport::Viewport(int drawOrder, Screenspace screenspace)
 {
+	this->drawOrder = drawOrder;
 	this->screenspace = screenspace;
 }
 
@@ -22,6 +23,16 @@ void Viewport::UpdateViewport()
 Screenspace Viewport::GetScreenspace() const
 {
 	return screenspace;
+}
+
+int Viewport::GetDrawOrder() const
+{
+	return drawOrder;
+}
+
+void Viewport::SetDrawOrder(int value)
+{
+	drawOrder = value;
 }
 
 
