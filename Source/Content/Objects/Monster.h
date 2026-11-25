@@ -9,6 +9,10 @@ class Player;
 class Monster : public MovableObject
 {
 private:
+	bool isAttacking = false;
+	float timeElapsed = 0.f;
+	float attackInterval;
+
 	HittableComponent* hittableComp;
 	std::vector<Player*> players;
 	Player* currentTarget = nullptr;
@@ -17,6 +21,7 @@ private:
 
 protected:
 	float sightRange = 350.f;
+	float attackRange = 64.f;
 	float loseRange = 500.f;
 
 	virtual void OnStart() override;
@@ -29,9 +34,11 @@ protected:
 
 public:
 	Monster();
-	Monster(int health, float radius, int movementSpeed, int turnSpeed);
+	Monster(int health, float attackInterval, float radius, int movementSpeed, int turnSpeed);
 
 	HittableComponent* GetHittableComponent();
 
 	void OnCollisionEnter(Object* other) override;
+	void OnCollisionStay(Object* other) override;
+	void OnCollisionExit(Object* other) override;
 };

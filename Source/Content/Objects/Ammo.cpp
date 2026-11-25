@@ -1,6 +1,7 @@
 #include "Ammo.h"
 
-#include "../../Architecture/Components/Sprite.h"
+#include "Architecture/Components/Sprite.h"
+#include "Modules/Audio.h"
 
 #include "Player.h"
 
@@ -22,6 +23,7 @@ void Ammo::Obtain(Player* player)
 	}
 	if (player->AddAmmo(value))
 	{
+		Audio::PlaySoundEffect("pickup.wav");
 		Destroy();
 	}
 }

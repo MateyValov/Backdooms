@@ -180,6 +180,9 @@
     <ClCompile Include="Source\Content\GUI\PauseWidget.cpp">
       <Filter>Source Files\Source\Content\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Modules\Audio.cpp">
+      <Filter>Source Files\Source\Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Structs\Transform.h">
@@ -322,6 +325,9 @@
     </ClInclude>
     <ClInclude Include="Source\Content\GUI\WaitingWidget.h">
       <Filter>Source Files\Source\Content\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Modules\Audio.h">
+      <Filter>Source Files\Source\Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -6,6 +6,7 @@
 #include "Structs/MathFuncs.h"
 #include "Modules/Engine.h"
 #include "Modules/Physics.h"
+#include "Modules/Audio.h"
 
 #include "Content/Components/HittableComponent.h"
 #include "Pickup.h"
@@ -104,6 +105,7 @@ void Player::InteractPressed()
 		return;
 	}
 	SetAmmo(ammo - 1);
+	Audio::PlaySoundEffect("gunshot.wav");
 
 	RaycastHit hit = Physics::Raycast(GetLevel(), transform.position, transform.position + transform.GetForward() * 640, this);
 	if (hit.object == nullptr)

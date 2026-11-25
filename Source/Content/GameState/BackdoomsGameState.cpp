@@ -17,6 +17,14 @@
 #include "Content/GUI/MenuViewport.h"
 #include "Content/GUI/ScoreWidget.h"
 
+namespace
+{
+	const int ROOMS_X = 5;
+	const int ROOMS_Y = 5;
+	const int ROOM_STRIDE = 4;
+	const int EXIT_OFFSET = 2;
+	const int EXTRA_OPEN_PERCENT = 25;
+}
 
 void BackdoomsGameState::OnStart()
 {
@@ -185,7 +193,96 @@ void BackdoomsGameState::GenerateExit()
 
 void BackdoomsGameState::GenerateWalls()
 {
+	if (GetLevel() == nullptr)
+	{
+		return;
+	}
 
+	bool visited[ROOMS_X][ROOMS_Y] = {};
+	bool opened[ROOMS_X][ROOMS_Y][2] = {};
+
+	struct Cell { int x, y; };
+	std::vector<Cell> stack;
+
+	Cell start = { rand() % ROOMS_X, rand() % ROOMS_Y };
+	visited[start.x][start.y] = true;
+	stack.push_back(start);
+
+	const int DX[4] = { 1, 0, -1, 0 };
+	const int DY[4] = { 0, 1, 0, -1 };
+
+	while (stack.empty() == false)
+	{
+		Cell current = stack.back();
+
+		int options[4];
+		int optionCount = 0;
+		for (int d = 0; d < 4; ++d)
+		{
+			int nx = current.x + DX[d];
+			int ny = current.y + DY[d];
+			if (nx < 0 || ny < 0 || nx >= ROOMS_X || ny >= ROOMS_Y) { continue; }
+			if (visited[nx][ny]) { continue; }
+			options[optionCount++] = d;
+		}
+
+		if (optionCount == 0)
+		{
+			stack.pop_back();
+			continue;
+		}
+
+		int d = options[rand() % optionCount];
+		Cell next = { current.x + DX[d], current.y + DY[d] };
+
+		int ex = std::min(current.x, next.x);
+		int ey = std::min(current.y, next.y);
+		int dir = (d == 0 || d == 2) ? 0 : 1;
+		GenerateGap(ex, ey, dir, true);
+		opened[ex][ey][dir] = true;
+
+		visited[next.x][next.y] = true;
+		stack.push_back(next);
+	}
+
+	for (int ry = 0; ry < ROOMS_Y; ++ry)
+	{
+		for (int rx = 0; rx < ROOMS_X; ++rx)
+		{
+			for (int dir = 0; dir < 2; ++dir)
+			{
+				if (dir == 0 && rx == ROOMS_X - 1) 
+				{ 
+					continue; 
+				}
+				if (dir == 1 && ry == ROOMS_Y - 1) 
+				{ 
+					continue; 
+				}
+				if (opened[rx][ry][dir]) 
+				{
+					continue; 
+				}
+				if (rand() % 100 < EXTRA_OPEN_PERCENT)
+				{
+					GenerateGap(rx, ry, dir, true);
+				}
+			}
+		}
+	}
+}
+
+void BackdoomsGameState::GenerateGap(int roomX, int roomY, int dir, bool open)
+{
+	if (GetLevel() == nullptr)
+	{
+		return;
+	}
+
+	int x = dir == 0 ? (roomX + 1) * ROOM_STRIDE : roomX * ROOM_STRIDE + EXIT_OFFSET;
+	int y = dir == 0 ? roomY * ROOM_STRIDE + EXIT_OFFSET : (roomY + 1) * ROOM_STRIDE;
+
+	GetLevel()->SetWallTile(x, y, open ? 0 : 1);
 }
 
 void BackdoomsGameState::GeneratePickups()

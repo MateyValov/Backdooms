@@ -32,6 +32,7 @@ C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\Objects\Player.c
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\Objects\Soda.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Soda.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\Player\BackdoomsPlayerHandle.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\BackdoomsPlayerHandle.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\Save\SaveData.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\SaveData.obj
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Modules\Audio.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Audio.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Modules\Engine.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Engine.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Modules\Fonts.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Fonts.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Modules\Input.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Input.obj

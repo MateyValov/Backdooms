@@ -4,6 +4,7 @@
 #include "Architecture/Components/Sprite.h"
 #include "Architecture/Level.h"
 
+#include "Modules/Audio.h"
 #include "Modules/Engine.h"
 
 #include "Content/Components/HittableComponent.h"
@@ -11,15 +12,19 @@
 
 Monster::Monster()
 {
-	hittableComp = AddComponent<HittableComponent>(4);
+	attackInterval = 1.f;
+
+	hittableComp = AddComponent<HittableComponent>(3);
 	AddComponent<Sprite>(20);
 	AddComponent<Collider>(20);
 
 	onHealthDepleted = hittableComp->onKilled.Subscribe(this, &Monster::Die);
 }
 
-Monster::Monster(int health, float radius, int movementSpeed, int turnSpeed) : MovableObject(movementSpeed, turnSpeed)
+Monster::Monster(int health, float attackInterval, float radius, int movementSpeed, int turnSpeed) : MovableObject(movementSpeed, turnSpeed)
 {
+	this->attackInterval = attackInterval;
+
 	hittableComp = AddComponent<HittableComponent>(health);
 	AddComponent<Sprite>(20);
 	AddComponent<Collider>(radius);
@@ -38,7 +43,7 @@ void Monster::OnStart()
 
 void Monster::OnUpdate()
 {
-	if (currentTarget == nullptr)
+	if (IsValid(currentTarget))
 	{
 		Idle();
 	}
@@ -50,15 +55,17 @@ void Monster::OnUpdate()
 
 void Monster::Idle()
 {
-	for (Player* p : players)
+	size_t n = players.size();
+	for (size_t i = 0; i < n; i++)
 	{
-		if (p == nullptr)
+		if (IsValid(players[i]) == false)
 		{
 			continue;
 		}
-		if (Vector2::distance(p->GetTransform().position, transform.position) < sightRange)
+		if (Vector2::distance(players[i]->GetTransform().position, transform.position) < sightRange)
 		{
-			currentTarget = p;
+			Audio::PlaySoundEffect("monster.wav");
+			currentTarget = players[i];
 			return;
 		}
 	}
@@ -89,7 +96,30 @@ HittableComponent* Monster::GetHittableComponent()
 void Monster::OnCollisionEnter(Object* other)
 {
 	Player* player = dynamic_cast<Player*>(other);
-	if (player == nullptr)
+	if (IsValid(player) == false)
+	{
+		return;
+	}
+	isAttacking = true;
+	timeElapsed = attackInterval;
+}
+
+void Monster::OnCollisionStay(Object* other)
+{
+	if (isAttacking == false)
+	{
+		return;
+	}
+	timeElapsed += Engine::GetDeltaTime();
+
+	if (timeElapsed < attackInterval)
+	{
+		return;
+	}
+	timeElapsed = 0.f;
+
+	Player* player = dynamic_cast<Player*>(other);
+	if (IsValid(player) == false)
 	{
 		return;
 	}
@@ -97,5 +127,17 @@ void Monster::OnCollisionEnter(Object* other)
 	{
 		return;
 	}
+
+	Audio::PlaySoundEffect("monsterAttack.wav");
 	player->GetHittableComponent()->TakeDamage(1);
+}
+
+void Monster::OnCollisionExit(Object* other)
+{
+	Player* player = dynamic_cast<Player*>(other);
+	if (IsValid(player) == false)
+	{
+		return;
+	}
+	isAttacking = false;
 }

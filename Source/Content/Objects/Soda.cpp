@@ -1,6 +1,7 @@
 #include "Soda.h"
 
-#include "../../Architecture/Components/Sprite.h"
+#include "Architecture/Components/Sprite.h"
+#include "Modules/Audio.h"
 
 #include "../Components/HittableComponent.h"
 #include "Player.h"
@@ -27,6 +28,7 @@ void Soda::Obtain(Player* player)
 	}
 	if(player->GetHittableComponent()->RestoreHealth(value))
 	{
+		Audio::PlaySoundEffect("pickup.wav");
 		Destroy();
 	}
 }

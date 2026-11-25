@@ -43,6 +43,7 @@ private:
 	void PositionPlayers();
 	void GenerateExit();
 	void GenerateWalls();
+	void GenerateGap(int roomX, int roomY, int dir, bool open);
 	void GeneratePickups();
 	void GenerateMonsters();
 

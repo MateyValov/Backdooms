@@ -4,6 +4,10 @@
 
 #include "../Structs/Image.h"
 
+#define ATLAS_COLUMNS 8
+#define ATLAS_ROWS 8
+#define ATLAS_COUNT (ATLAS_COLUMNS * ATLAS_ROWS)
+
 using namespace std;
 
 namespace Textures
@@ -12,10 +16,6 @@ namespace Textures
 
 	namespace Atlas
 	{
-#define ATLAS_COLUMNS 8
-#define ATLAS_ROWS 8
-#define ATLAS_COUNT (ATLAS_COLUMNS * ATLAS_ROWS)
-
 		bool Load();
 
 		const Image& GetImage();     

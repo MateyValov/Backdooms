@@ -163,6 +163,7 @@
     <ClCompile Include="Source\Content\Objects\Soda.cpp" />
     <ClCompile Include="Source\Content\Player\BackdoomsPlayerHandle.cpp" />
     <ClCompile Include="Source\Content\Save\SaveData.cpp" />
+    <ClCompile Include="Source\Modules\Audio.cpp" />
     <ClCompile Include="Source\Modules\Engine.cpp" />
     <ClCompile Include="Source\Modules\Fonts.cpp" />
     <ClCompile Include="Source\Modules\Input.cpp" />
@@ -206,6 +207,7 @@
     <ClInclude Include="Source\Content\Objects\Soda.h" />
     <ClInclude Include="Source\Content\Player\BackdoomsPlayerHandle.h" />
     <ClInclude Include="Source\Content\Save\SaveData.h" />
+    <ClInclude Include="Source\Modules\Audio.h" />
     <ClInclude Include="Source\Modules\Engine.h" />
     <ClInclude Include="Source\Modules\Fonts.h" />
     <ClInclude Include="Source\Modules\Input.h" />

@@ -7,6 +7,7 @@
 #include "Fonts.h"
 #include "Physics.h"
 #include "Input.h"
+#include "Audio.h"
 
 #include "Architecture/Object.h"
 
@@ -65,7 +66,7 @@ bool Engine::InitEngine(int* argc, char** argv, int screenWidth, int screenHeigh
 	Window::InitWindow(screenWidth, screenHeight);
 	Input::InitKeyStates();
 
-	if (Textures::LoadTextures() == false || Fonts::InitFont("UFO50Tall.ttf") == false)
+	if (Textures::LoadTextures() == false || Fonts::InitFont("UFO50Tall.ttf") == false || Audio::Init() == false)
 	{
 		return false;
 	}
@@ -91,6 +92,7 @@ void Engine::OpenLevel(Level* level)
 void Engine::Quit()
 {
 	Fonts::ShutdownFont();
+	Audio::Shutdown();
 	glutLeaveMainLoop();
 }
 
