@@ -34,13 +34,14 @@ void Audio::Shutdown()
 		return;
 	}
 	StopAllLoops();
+
 	ma_engine_uninit(&engine);
 	initialized = false;
 }
 
 void Audio::PlaySoundEffect(const std::string& filename)
 {
-	if (initialized == false)
+	if (!initialized)
 	{
 		return;
 	}

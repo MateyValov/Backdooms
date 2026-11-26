@@ -1,69 +1,20 @@
-﻿  BackdoomsGameState.cpp
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\MathFuncs.h(9,14): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Source/Content/GameState/BackdoomsGameState.cpp')
-  
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(30,14): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Source/Content/GameState/BackdoomsGameState.cpp')
-  
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(56,40): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Source/Content/GameState/BackdoomsGameState.cpp')
-  
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(56,21): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Source/Content/GameState/BackdoomsGameState.cpp')
-  
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(61,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Source/Content/GameState/BackdoomsGameState.cpp')
-  
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(61,21): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Source/Content/GameState/BackdoomsGameState.cpp')
-  
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GameState\BackdoomsGameState.cpp(132,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GameState\BackdoomsGameState.cpp(166,75): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GameState\BackdoomsGameState.cpp(448,56): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GameState\BackdoomsGameState.cpp(448,30): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GameState\BackdoomsGameState.cpp(462,30): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GameState\BackdoomsGameState.cpp(462,19): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GameState\BackdoomsGameState.cpp(468,102): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GameState\BackdoomsGameState.cpp(468,62): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\memory(3465,56): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\memory(3465,56): warning C4244:         with
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\memory(3465,56): warning C4244:         [
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\memory(3465,56): warning C4244:             _Ty=int
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\memory(3465,56): warning C4244:         ]
-  (compiling source file 'Source/Content/GameState/BackdoomsGameState.cpp')
-      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\memory(3465,56):
-      the template instantiation context (the oldest one first) is
-          C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GameState\BackdoomsGameState.cpp(316,26):
-          see reference to function template instantiation 'T *Level::Spawn<Soda,int>(Vector2,float,int &&)' being compiled
-          with
-          [
-              T=Soda
-          ]
-          C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\Level.h(120,24):
-          see reference to function template instantiation 'std::unique_ptr<Soda,std::default_delete<Soda>> std::make_unique<Soda,_Ty,0>(_Ty &&)' being compiled
-          with
-          [
-              _Ty=int
-          ]
-  
-  BackdoomsLevel.cpp
-  Monster.cpp
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\MathFuncs.h(9,14): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+﻿  Monster.cpp
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\MathFuncs.h(11,15): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
   (compiling source file 'Source/Content/Objects/Monster.cpp')
   
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(30,14): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
   (compiling source file 'Source/Content/Objects/Monster.cpp')
   
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(56,40): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(70,46): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   (compiling source file 'Source/Content/Objects/Monster.cpp')
   
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(56,21): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(70,21): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   (compiling source file 'Source/Content/Objects/Monster.cpp')
   
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(61,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(75,49): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   (compiling source file 'Source/Content/Objects/Monster.cpp')
   
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(61,21): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(75,21): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   (compiling source file 'Source/Content/Objects/Monster.cpp')
   
 C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\memory(3465,56): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
@@ -87,25 +38,4 @@ C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.3313
               _Ty=int
           ]
   
-  Engine.cpp
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\MathFuncs.h(9,14): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Source/Modules/Engine.cpp')
-  
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(30,14): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Source/Modules/Engine.cpp')
-  
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(56,40): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Source/Modules/Engine.cpp')
-  
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(56,21): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Source/Modules/Engine.cpp')
-  
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(61,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Source/Modules/Engine.cpp')
-  
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(61,21): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Source/Modules/Engine.cpp')
-  
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Modules\Engine.cpp(30,12): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-  Generating Code...
   Backdooms.vcxproj -> C:\Users\matey\Documents\University\CG\Backdooms\x64\Debug\Backdooms.exe

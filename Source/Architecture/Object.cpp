@@ -195,6 +195,6 @@ void Object::SetPosition(Vector2 newPosition)
 
 void Object::SetAngle(float newAngle)
 {
-	transform.angle = clampAngle(newAngle);
+	transform.angle = Math::clampAngle(newAngle);
 }
 

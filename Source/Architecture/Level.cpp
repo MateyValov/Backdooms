@@ -107,6 +107,10 @@ bool Level::OverlapsWall(const Vector2& centre, float radius) const
 
 bool Level::IsMarked(const Object* object) const
 {
+	if (object == nullptr)
+	{
+		return true;
+	}
 	for (const ObjectEntry& entry : objects)
 	{
 		if (entry.object.get() == object) 

@@ -2,36 +2,44 @@
 
 #include <math.h>
 
-const float PI = 3.14159265f;
-
-static float dist(float ax, float ay, float bx, float by, float ang)
+namespace Math
 {
-	return (sqrt((bx - ax) * (bx - ax) + (by - ay) * (by - ay)));
-}
+	const float PI = 3.14159265f;
 
-static float degToRad(float a)
-{
-	return a * PI / 180;
-}
+	static float dist(float ax, float ay, float bx, float by, float ang)
+	{
+		return (sqrt((bx - ax) * (bx - ax) + (by - ay) * (by - ay)));
+	}
 
-static float clampAngle(float a)
-{
-	if (a >= 360) { a -= 360; }
-	if (a < 0) { a += 360; }
-	return a;
-}
+	static float degToRad(float a)
+	{
+		return a * PI / 180;
+	}
 
-static float clamp(float n, float min, float max)
-{
-	if (n < min) return min;
-	if (n > max) return max;
-	return n;
-}
+	static float radToDeg(float a)
+	{
+		return a * 180 / PI;
+	}
 
-static int clamp(int n, int min, int max)
-{
-	if (n < min) return min;
-	if (n > max) return max;
-	return n;
+	static float clampAngle(float a)
+	{
+		if (a >= 360) { a -= 360; }
+		if (a < 0) { a += 360; }
+		return a;
+	}
+
+	static float clamp(float n, float min, float max)
+	{
+		if (n < min) return min;
+		if (n > max) return max;
+		return n;
+	}
+
+	static int clamp(int n, int min, int max)
+	{
+		if (n < min) return min;
+		if (n > max) return max;
+		return n;
+	}
 }
 

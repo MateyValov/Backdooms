@@ -29,6 +29,20 @@ struct Vector2
 	{
 		return sqrt((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y));
 	}
+
+	static float angle(const Vector2& a, const Vector2& b)
+	{
+		float dot = a.x * b.x + a.y * b.y;
+		float cross = a.x * b.y - a.y * b.x;
+		return Math::degToRad(atan2f(fabsf(cross), dot));
+	}
+
+	static float angleSigned(const Vector2& a, const Vector2& b)
+	{
+		float dot = a.x * b.x + a.y * b.y;
+		float cross = a.x * b.y - a.y * b.x;
+		return Math::degToRad(atan2f(cross, dot));
+	}
 };
 
 inline Vector2 operator*(float s, const Vector2& v) { return v * s; }
@@ -53,12 +67,24 @@ struct Transform
 
 	Vector2 GetForward() const
 	{
-		return Vector2(cos(degToRad(angle)), -sin(degToRad(angle)));
+		return Vector2(cos(Math::degToRad(angle)), -sin(Math::degToRad(angle)));
 	}
 
 	Vector2 GetRight() const
 	{
-		return Vector2(sin(degToRad(angle)), cos(degToRad(angle)));
+		return Vector2(sin(Math::degToRad(angle)), cos(Math::degToRad(angle)));
+	}
+
+	static float angleToSigned(const Transform& a, const Vector2& b)
+	{
+		Vector2 forward = a.GetForward();
+		Vector2 right = a.GetRight();
+		Vector2 toTarget(b.x - a.position.x, b.y - a.position.y);
+
+		float ahead = toTarget.x * forward.x + toTarget.y * forward.y;
+		float side = toTarget.x * right.x + toTarget.y * right.y;
+
+		return Math::radToDeg(atan2f(-side, ahead));
 	}
 
 	bool operator==(const Transform& o) const { return position == o.position && angle == o.angle; }

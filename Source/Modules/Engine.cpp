@@ -38,8 +38,9 @@ static void Update()
 		printf("========OBJECTS IN MAP========\n");
 		for (Object* obj : activeLevel->GetObjects())
 		{
-			printf("Object: x - %.3f, y - %.3f, forward vector - %.3f, %.3f\n",
-				obj->GetTransform().position.x, obj->GetTransform().position.y, obj->GetTransform().GetForward().x, obj->GetTransform().GetForward().y);
+			printf("Object: x - %.3f, y - %.3f, angle - %.3f, forward vector - %.3f, %.3f\n",
+				obj->GetTransform().position.x, obj->GetTransform().position.y, obj->GetTransform().angle,
+				obj->GetTransform().GetForward().x, obj->GetTransform().GetForward().y);
 		}
 	}
 

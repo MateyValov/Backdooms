@@ -15,7 +15,7 @@ Monster::Monster()
 	attackInterval = 1.f;
 
 	hittableComp = AddComponent<HittableComponent>(3);
-	AddComponent<Sprite>(20);
+	AddComponent<Sprite>(20, 21, 22, 23);
 	AddComponent<Collider>(20);
 
 	onHealthDepleted = hittableComp->onKilled.Subscribe(this, &Monster::Die);
@@ -43,17 +43,37 @@ void Monster::OnStart()
 
 void Monster::OnUpdate()
 {
-	if (IsValid(currentTarget))
+	EvaluateTarget();
+	if (IsValid(currentTarget) == false)
 	{
-		Idle();
+		IdleState();
+		return;
 	}
-	else
+	if (IsValid(currentTarget) && Vector2::distance(transform.position, currentTarget->GetTransform().position) <= attackRange)
 	{
-		Persue();
+		AttackState();
+		return;
+	}
+	if (IsValid(currentTarget) && Vector2::distance(transform.position, currentTarget->GetTransform().position) <= loseRange)
+	{
+		ChaseState();
+		return;
 	}
 }
 
-void Monster::Idle()
+void Monster::EvaluateTarget()
+{
+	if (IsValid(currentTarget) == false)
+	{
+		return;
+	}
+	if (Vector2::distance(currentTarget->GetTransform().position, transform.position) > loseRange)
+	{
+		currentTarget = nullptr;
+	}
+}
+
+void Monster::IdleState()
 {
 	size_t n = players.size();
 	for (size_t i = 0; i < n; i++)
@@ -71,16 +91,35 @@ void Monster::Idle()
 	}
 }
 
-void Monster::Persue()
+void Monster::ChaseState()
 {
-	if (currentTarget == nullptr)
+	float angleToTarget = Transform::angleToSigned(transform, currentTarget->GetTransform().position);
+	Turn(angleToTarget > 0.f);
+	
+	if (fabsf(angleToTarget) > targetAngle)
 	{
 		return;
 	}
-	if (Vector2::distance(currentTarget->GetTransform().position, transform.position) > loseRange)
+
+	Move(transform.GetForward());
+}
+
+void Monster::AttackState()
+{
+	if (IsValid(currentTarget) == false || currentTarget->GetHittableComponent() == nullptr)
 	{
-		currentTarget = nullptr;
+		return;
 	}
+
+	attackCooldown -= Engine::GetDeltaTime();
+	if (attackCooldown > 0.f)
+	{
+		return;
+	}
+
+	attackCooldown = attackInterval;
+	currentTarget->GetHittableComponent()->TakeDamage(1);
+	Audio::PlaySoundEffect("monsterAttack.wav");
 }
 
 void Monster::Die()
@@ -91,53 +130,4 @@ void Monster::Die()
 HittableComponent* Monster::GetHittableComponent()
 {
 	return hittableComp;
-}
-
-void Monster::OnCollisionEnter(Object* other)
-{
-	Player* player = dynamic_cast<Player*>(other);
-	if (IsValid(player) == false)
-	{
-		return;
-	}
-	isAttacking = true;
-	timeElapsed = attackInterval;
-}
-
-void Monster::OnCollisionStay(Object* other)
-{
-	if (isAttacking == false)
-	{
-		return;
-	}
-	timeElapsed += Engine::GetDeltaTime();
-
-	if (timeElapsed < attackInterval)
-	{
-		return;
-	}
-	timeElapsed = 0.f;
-
-	Player* player = dynamic_cast<Player*>(other);
-	if (IsValid(player) == false)
-	{
-		return;
-	}
-	if (player->GetHittableComponent() == nullptr)
-	{
-		return;
-	}
-
-	Audio::PlaySoundEffect("monsterAttack.wav");
-	player->GetHittableComponent()->TakeDamage(1);
-}
-
-void Monster::OnCollisionExit(Object* other)
-{
-	Player* player = dynamic_cast<Player*>(other);
-	if (IsValid(player) == false)
-	{
-		return;
-	}
-	isAttacking = false;
 }

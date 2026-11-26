@@ -50,7 +50,7 @@ void Camera::Setup()
 
 	auto angleAt = [&](float xf, float& c, float& s)
 		{
-			float theta = (fov / 2.0f - xf * ((float)fov / GetWidth())) * PI / 180.0f;
+			float theta = (fov / 2.0f - xf * ((float)fov / GetWidth())) * Math::PI / 180.0f;
 			c = cosf(theta);
 			s = sinf(theta);
 		};
@@ -90,7 +90,7 @@ void Camera::DrawWalls(const MapArray walls)
 	const Image& atlas = Textures::Atlas::GetImage();
 	const float T = (float)TILE_SIZE;
 	const float px = transform.position.x, py = transform.position.y;
-	const float angle = transform.angle * PI / 180.0f;
+	const float angle = transform.angle * Math::PI / 180.0f;
 	const float ca = cosf(angle), sa = sinf(angle);
 
 	fill(wallDepth.begin(), wallDepth.end(), FLT_MAX);
@@ -165,7 +165,7 @@ void Camera::DrawFloorAndRoof(const MapArray floor, const MapArray roof)
 		ceilingX[i] = (roof[i] > 0 && hasAtlas) ? (int)r.x : -1;  ceilingY[i] = (int)r.y;
 	}
 
-	const float angle = transform.angle * PI / 180.0f;
+	const float angle = transform.angle * Math::PI / 180.0f;
 	const float ca = cosf(angle), sa = sinf(angle);
 	for (int x = 0; x < GetWidth(); ++x)
 	{
@@ -275,8 +275,8 @@ void Camera::DrawObjects(const vector<Object*>& objects)
 		float size = TILE_SIZE * scale;
 		float pixelsPerDegree = (float)GetWidth() / fov;
 
-		float left = (fov / 2.0f + atan2f(v.lateral - TILE_SIZE / 2, v.depth) * 180.0f / PI) * pixelsPerDegree;
-		float right = (fov / 2.0f + atan2f(v.lateral + TILE_SIZE / 2, v.depth) * 180.0f / PI) * pixelsPerDegree;
+		float left = (fov / 2.0f + atan2f(v.lateral - TILE_SIZE / 2, v.depth) * 180.0f / Math::PI) * pixelsPerDegree;
+		float right = (fov / 2.0f + atan2f(v.lateral + TILE_SIZE / 2, v.depth) * 180.0f / Math::PI) * pixelsPerDegree;
 		float bottom = GetHeight() / 2.0f + (TILE_SIZE / 2.0f) * scale;
 		float top = bottom - size;
 
@@ -302,7 +302,7 @@ void Camera::DrawObjects(const vector<Object*>& objects)
 			{ 
 				continue; 
 			}
-			float direction = (0.5f * (x0 + x1) / pixelsPerDegree - fov / 2.0f) * PI / 180.0f;
+			float direction = (0.5f * (x0 + x1) / pixelsPerDegree - fov / 2.0f) * Math::PI / 180.0f;
 			float u = min(max((v.depth * tanf(direction) - (v.lateral - TILE_SIZE / 2)) / TILE_SIZE, 0.0f), 0.9999f);
 
 			Rendering::Draw(atlas,

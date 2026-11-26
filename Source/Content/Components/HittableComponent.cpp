@@ -1,6 +1,7 @@
 #include "HittableComponent.h"
 
-#include "../../Structs/MathFuncs.h"
+#include "Modules/Audio.h"
+#include "Structs/MathFuncs.h"
 
 HittableComponent::HittableComponent(int health)
 {
@@ -49,6 +50,7 @@ bool HittableComponent::RestoreHealth(unsigned int amount)
 
 void HittableComponent::TakeDamage(unsigned int amount)
 {
+	Audio::PlaySoundEffect("hurt.wav");
 	SetHealth(health - amount);
 }
 

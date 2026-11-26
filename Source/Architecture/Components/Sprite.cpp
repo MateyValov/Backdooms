@@ -49,22 +49,17 @@ int Sprite::GetTextureIdForPosition(Vector2 viewerPosition) const
 		return textureFront;
 	}
 
-	float toViewer = atan2f(-(viewerPosition.y - owner->GetTransform().position.y), viewerPosition.x - owner->GetTransform().position.x) * 180.0f / PI;
-	float relative = clampAngle(fmodf(toViewer - owner->GetTransform().angle + 180.0f, 360.0f));
-	relative -= 180.0f;
+	float relative = Transform::angleToSigned(owner->GetTransform(), viewerPosition);
+	float magnitude = fabsf(relative);
 
 	int texture = textureFront;
-	if (relative >= 45.0f && relative < 135.0f)
-	{
-		texture = textureLeft;
-	}
-	else if (relative >= -135.0f && relative < -45.0f)
-	{
-		texture = textureRight;
-	}
-	else if (relative >= 135.0f || relative < -135.0f)
+	if (magnitude >= 135.0f)
 	{
 		texture = textureBack;
+	}
+	else if (magnitude >= 45.0f)
+	{
+		texture = relative > 0.0f ? textureLeft : textureRight;
 	}
 
 	return texture >= 0 ? texture : textureFront;
