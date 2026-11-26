@@ -1,41 +1,17 @@
-﻿  Monster.cpp
+﻿  AnimationHandlerComponent.cpp
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\MathFuncs.h(11,15): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Source/Content/Objects/Monster.cpp')
+  (compiling source file 'Source/Content/Components/AnimationHandlerComponent.cpp')
   
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(30,14): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Source/Content/Objects/Monster.cpp')
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(109,46): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Source/Content/Components/AnimationHandlerComponent.cpp')
   
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(70,46): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Source/Content/Objects/Monster.cpp')
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(109,21): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Source/Content/Components/AnimationHandlerComponent.cpp')
   
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(70,21): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Source/Content/Objects/Monster.cpp')
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(114,49): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Source/Content/Components/AnimationHandlerComponent.cpp')
   
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(75,49): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Source/Content/Objects/Monster.cpp')
-  
-C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(75,21): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Source/Content/Objects/Monster.cpp')
-  
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\memory(3465,56): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\memory(3465,56): warning C4244:         with
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\memory(3465,56): warning C4244:         [
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\memory(3465,56): warning C4244:             _Ty=int
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\memory(3465,56): warning C4244:         ]
-  (compiling source file 'Source/Content/Objects/Monster.cpp')
-      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\memory(3465,56):
-      the template instantiation context (the oldest one first) is
-          C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\Objects\Monster.cpp(19,2):
-          see reference to function template instantiation 'T *Object::AddComponent<Collider,int>(int &&)' being compiled
-          with
-          [
-              T=Collider
-          ]
-          C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\Object.h(101,34):
-          see reference to function template instantiation 'std::unique_ptr<Collider,std::default_delete<Collider>> std::make_unique<Collider,_Ty,0>(_Ty &&)' being compiled
-          with
-          [
-              _Ty=int
-          ]
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Structs\Transform.h(114,21): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Source/Content/Components/AnimationHandlerComponent.cpp')
   
   Backdooms.vcxproj -> C:\Users\matey\Documents\University\CG\Backdooms\x64\Debug\Backdooms.exe

@@ -25,23 +25,62 @@ struct Vector2
 	bool operator==(const Vector2& o) const { return x == o.x && y == o.y; }
 	bool operator!=(const Vector2& o) const { return !(*this == o); }
 
+	void normalize()
+	{
+		float m = magnitude();
+		if (m < 0.0001f) 
+		{
+			x = 0.f;
+			y = 0.f; 
+			return; 
+		}
+
+		x /= m;
+		y /= m;
+	}
+
+	float magnitude() const
+	{
+		return sqrtf(x * x + y * y);
+	}
+
 	static float distance(const Vector2& a, const Vector2& b)
 	{
-		return sqrt((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y));
+		return sqrtf((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y));
+	}
+
+	static float dot(const Vector2& a, const Vector2& b)
+	{
+		return a.x * b.x + a.y * b.y;
+	}
+
+	static float cross(const Vector2& a, const Vector2& b)
+	{
+		return a.x * b.y - a.y * b.x;
 	}
 
 	static float angle(const Vector2& a, const Vector2& b)
 	{
-		float dot = a.x * b.x + a.y * b.y;
-		float cross = a.x * b.y - a.y * b.x;
-		return Math::degToRad(atan2f(fabsf(cross), dot));
+		float dot = Vector2::dot(a, b);
+		float cross = Vector2::cross(a, b);
+		return Math::radToDeg(atan2f(fabsf(cross), dot));
+	}
+
+	static float angleRad(const Vector2& a, const Vector2& b)
+	{
+		return Math::degToRad(angle(a, b));
 	}
 
 	static float angleSigned(const Vector2& a, const Vector2& b)
 	{
-		float dot = a.x * b.x + a.y * b.y;
-		float cross = a.x * b.y - a.y * b.x;
-		return Math::degToRad(atan2f(cross, dot));
+		float dot = Vector2::dot(a, b);
+		float cross = Vector2::cross(a, b);
+		return Math::radToDeg(atan2f(cross, dot));
+	}
+
+	static float angleRadSigned(const Vector2& a, const Vector2& b)
+	{
+		return Math::degToRad(angleSigned(a, b));
 	}
 };
 

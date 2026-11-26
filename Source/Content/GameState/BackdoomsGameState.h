@@ -61,6 +61,7 @@ public:
 	BackdoomsGameState() = default;
 
 	void SetupLevel();
+	void ClearLevel();
 
 	bool IsValidRoomId(int id);
 	Vector2 TileCoordinatesToRealCoordinates(Vector2 in);

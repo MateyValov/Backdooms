@@ -1,6 +1,6 @@
 #include "Sprite.h"
 
-#include "../Object.h"
+#include "Architecture/Object.h"
 
 
 Sprite::Sprite(int texture)
@@ -62,5 +62,5 @@ int Sprite::GetTextureIdForPosition(Vector2 viewerPosition) const
 		texture = relative > 0.0f ? textureLeft : textureRight;
 	}
 
-	return texture >= 0 ? texture : textureFront;
+	return texture;
 }

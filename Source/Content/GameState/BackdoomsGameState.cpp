@@ -138,12 +138,45 @@ void BackdoomsGameState::SetupLevel()
 	GetLevel()->GenerateLevel();
 
 	playersReachedEnd = 0;
+	ClearLevel();
 
 	PositionPlayers();
 	GenerateExit();
 	GenerateWalls();
 	GeneratePickups();
 	GenerateMonsters();
+}
+
+void BackdoomsGameState::ClearLevel()
+{
+	if (GetLevel() == nullptr)
+	{
+		return;
+	}
+	occupiedRooms.clear();
+	size_t n;
+
+	n = pickups.size();
+	for (size_t i = 0; i < n; i++)
+	{
+		if (IsValid(pickups[i]) == false)
+		{
+			continue;
+		}
+		pickups[i]->Destroy();
+	}
+	pickups.clear();
+
+	n = monsters.size();
+	for (size_t i = 0; i < n; i++)
+	{
+		if (IsValid(monsters[i]) == false)
+		{
+			continue;
+		}
+		monsters[i]->Destroy();
+	}
+	monsters.clear();
 }
 
 void BackdoomsGameState::PositionPlayers()
@@ -291,20 +324,9 @@ void BackdoomsGameState::GeneratePickups()
 	{
 		return;
 	}
-	size_t n = pickups.size();
-	for (size_t i = 0; i < n; i++)
-	{
-		if (IsValid(pickups[i]) == false)
-		{
-			continue;
-		}
-		pickups[i]->Destroy();
-	}
-	pickups.clear();
 
 	Vector2 SpawnCoordinates;
 	std::vector<Vector2> used;
-
 	for (int i = 0; i < playerCount * 2; i++)
 	{
 		do
@@ -334,19 +356,8 @@ void BackdoomsGameState::GenerateMonsters()
 		return;
 	}
 	size_t n = monsters.size();
-	for (size_t i = 0; i < n; i++)
-	{
-		if (IsValid(monsters[i]) == false)
-		{
-			continue;
-		}
-		monsters[i]->Destroy();
-	}
-	monsters.clear();
 
 	Vector2 RoomCoordinates;
-	std::vector<Vector2> used;
-
 	for (int i = 0; i < playerCount; i++)
 	{
 		RoomCoordinates = GetRoomCoordinates(rand() % 25);
@@ -403,15 +414,7 @@ void BackdoomsGameState::EscPressed()
 		globalViewport->ShowScoreWidget(false);
 		globalViewport->ShowMainMenu(true);
 
-		return;
-	}
-	if (isPaused == false)
-	{
-		isPaused = true;
-		Engine::SetTimeScale(0.f);
-
-		globalViewport->ShowPauseWidget(true);
-
+		ClearLevel();
 		return;
 	}
 }
@@ -428,13 +431,23 @@ void BackdoomsGameState::EnterPressed()
 		globalViewport->ShowPauseWidget(false);
 		globalViewport->ShowScoreWidget(false);
 		globalViewport->ShowMainMenu(true);
+		return;
 	}
-	if (isPaused)
+	if (isPaused && isStarted)
 	{
 		isPaused = false;
 		Engine::SetTimeScale(1.f);
 
 		globalViewport->ShowPauseWidget(false);
+		return;
+	}
+	if (isPaused == false && isStarted)
+	{
+		isPaused = true;
+		Engine::SetTimeScale(0.f);
+
+		globalViewport->ShowPauseWidget(true);
+		return;
 	}
 }
 

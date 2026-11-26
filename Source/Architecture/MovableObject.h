@@ -6,7 +6,7 @@
 
 class MovableObject : public Object
 {
-private:
+protected:
 	int movementSpeed;
 	int turnSpeed;
 

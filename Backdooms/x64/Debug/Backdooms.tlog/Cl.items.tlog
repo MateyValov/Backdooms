@@ -1,4 +1,5 @@
 C:\Users\matey\Documents\University\CG\Backdooms\Backdooms.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Backdooms.obj
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\Components\AnimatedSprite.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\AnimatedSprite.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\Components\Collider.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Collider.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\Components\Component.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Component.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\Components\Renderer.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Renderer.obj
@@ -14,6 +15,7 @@ C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\Object.cpp;
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\Camera.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Camera.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\PlayerHandle.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\PlayerHandle.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Architecture\Viewport.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\Viewport.obj
+C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\Components\AnimationHandlerComponent.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\AnimationHandlerComponent.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\Components\HittableComponent.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\HittableComponent.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GameState\BackdoomsGameState.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\BackdoomsGameState.obj
 C:\Users\matey\Documents\University\CG\Backdooms\Source\Content\GUI\GameOverWidget.cpp;C:\Users\matey\Documents\University\CG\Backdooms\Backdooms\x64\Debug\GameOverWidget.obj

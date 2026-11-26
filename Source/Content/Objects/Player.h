@@ -15,6 +15,8 @@ private:
 
 	HittableComponent* hittableComp;
 
+	void InitRenderer();
+
 public:
 	Player();
 	Player(int health, int ammo);

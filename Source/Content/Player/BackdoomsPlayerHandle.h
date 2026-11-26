@@ -25,7 +25,7 @@ struct ControlScheme
 
 	static ControlScheme PlayerOne()
 	{
-		return ControlScheme('W', 'A', 'S', 'D', 'Q');
+		return ControlScheme('W', 'A', 'S', 'D', 'E');
 	}
 
 	static ControlScheme PlayerTwo()

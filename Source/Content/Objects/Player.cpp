@@ -1,16 +1,31 @@
 #include "Player.h"
 
+#include "Architecture/Components/AnimatedSprite.h"
 #include "Architecture/Components/Collider.h"
-#include "Architecture/Components/Sprite.h"
 #include "Architecture/Level.h"
 #include "Structs/MathFuncs.h"
 #include "Modules/Engine.h"
 #include "Modules/Physics.h"
 #include "Modules/Audio.h"
 
+#include "Content/Components/AnimationHandlerComponent.h"
 #include "Content/Components/HittableComponent.h"
 #include "Pickup.h"
 
+
+void Player::InitRenderer()
+{
+	AnimatedSprite* renderer = AddComponent<AnimatedSprite>(Animation(std::vector<Frame>
+	{
+		Frame(16, 17, 18, 19)
+	}));
+	renderer->AddAnimation(Animation(std::vector<Frame>
+	{
+		Frame(24, 25, 26, 27),
+			Frame(32, 33, 34, 35),
+			Frame(40, 41, 42, 43),
+	}), "walk");
+}
 
 Player::Player() : MovableObject()
 {
@@ -18,8 +33,9 @@ Player::Player() : MovableObject()
 	this->ammo = maxAmmo;
 
 	hittableComp = AddComponent<HittableComponent>(8);
-	AddComponent<Sprite>(16, 17, 18, 19);
+	InitRenderer();
 	AddComponent<Collider>(20);
+	AddComponent<AnimationHandlerComponent>();
 }
 
 Player::Player(int health, int ammo) : MovableObject()
@@ -28,8 +44,9 @@ Player::Player(int health, int ammo) : MovableObject()
 	this->ammo = maxAmmo;
 
 	hittableComp = AddComponent<HittableComponent>(health);
-	AddComponent<Sprite>(16, 17, 18, 19);
+	InitRenderer();
 	AddComponent<Collider>(20);
+	AddComponent<AnimationHandlerComponent>();
 }
 
 Player::Player(int health, int ammo, float radius, int movementSpeed, int turnSpeed) : MovableObject(movementSpeed, turnSpeed)
@@ -37,9 +54,10 @@ Player::Player(int health, int ammo, float radius, int movementSpeed, int turnSp
 	this->maxAmmo = ammo;
 	this->ammo = maxAmmo;
 
-	hittableComp = AddComponent<HittableComponent>(8);
-	AddComponent<Sprite>(16, 17, 18, 19);
-	AddComponent<Collider>(radius);
+	hittableComp = AddComponent<HittableComponent>(health);
+	InitRenderer();
+	AddComponent<Collider>(20);
+	AddComponent<AnimationHandlerComponent>();
 }
 
 void Player::OnCollisionEnter(Object* other)

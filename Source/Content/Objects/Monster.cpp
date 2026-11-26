@@ -1,22 +1,40 @@
 #include "Monster.h"
 
+#include "Architecture/Components/AnimatedSprite.h"
 #include "Architecture/Components/Collider.h"
-#include "Architecture/Components/Sprite.h"
 #include "Architecture/Level.h"
 
 #include "Modules/Audio.h"
 #include "Modules/Engine.h"
 
+#include "Content/Components/AnimationHandlerComponent.h"
 #include "Content/Components/HittableComponent.h"
 #include "Player.h"
+
+
+void Monster::InitRenderer()
+{
+	AnimatedSprite* renderer = AddComponent<AnimatedSprite>(Animation(std::vector<Frame>
+	{
+		Frame(20, 21, 22, 23)
+	}));
+	renderer->AddAnimation(Animation(std::vector<Frame>
+	{
+		Frame(28, 29, 30, 31),
+		Frame(36, 37, 38, 39),
+		Frame(44, 45, 46, 47),
+	}), "walk");
+}
 
 Monster::Monster()
 {
 	attackInterval = 1.f;
+	movementSpeed = 180;
 
 	hittableComp = AddComponent<HittableComponent>(3);
-	AddComponent<Sprite>(20, 21, 22, 23);
+	InitRenderer();
 	AddComponent<Collider>(20);
+	AddComponent<AnimationHandlerComponent>();
 
 	onHealthDepleted = hittableComp->onKilled.Subscribe(this, &Monster::Die);
 }
@@ -26,8 +44,9 @@ Monster::Monster(int health, float attackInterval, float radius, int movementSpe
 	this->attackInterval = attackInterval;
 
 	hittableComp = AddComponent<HittableComponent>(health);
-	AddComponent<Sprite>(20);
+	InitRenderer();
 	AddComponent<Collider>(radius);
+	AddComponent<AnimationHandlerComponent>();
 
 	onHealthDepleted = hittableComp->onKilled.Subscribe(this, &Monster::Die);
 }

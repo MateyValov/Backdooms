@@ -55,6 +55,9 @@
     <Filter Include="Source Files\Source\Content\Save">
       <UniqueIdentifier>{1ac96c58-e003-4e3a-a359-ccd66ce1e5b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Source\Content\Misc">
+      <UniqueIdentifier>{ce06d1a6-2777-4b40-ad23-4bb9894d2751}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Backdooms.cpp">
@@ -182,6 +185,12 @@
     </ClCompile>
     <ClCompile Include="Source\Modules\Audio.cpp">
       <Filter>Source Files\Source\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Architecture\Components\AnimatedSprite.cpp">
+      <Filter>Source Files\Source\Architecture\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Content\Components\AnimationHandlerComponent.cpp">
+      <Filter>Source Files\Source\Content\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -328,6 +337,12 @@
     </ClInclude>
     <ClInclude Include="Source\Modules\Audio.h">
       <Filter>Source Files\Source\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Architecture\Components\AnimatedSprite.h">
+      <Filter>Source Files\Source\Architecture\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\Components\AnimationHandlerComponent.h">
+      <Filter>Source Files\Source\Content\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

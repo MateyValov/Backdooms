@@ -25,6 +25,10 @@ private:
 	bool isActive = true;
 	bool begun = false;
 
+	Vector2 lastFramePosition = Vector2();
+	Vector2 frameDelta = Vector2();
+	Vector2 velocity = Vector2();
+
 	void AddChild(Object* child);
 	void RemoveChild(Object* child);
 
@@ -70,6 +74,9 @@ public:
 	Transform GetTransform() const;
 	Transform GetLocalTransform() const;
 
+	Vector2 GetVelocity() const;
+	float GetSpeed() const;
+
 	void SetParent(Object* parent, Transform offset = Transform());
 	void RemoveParent();
 	Object* GetParent();
@@ -102,7 +109,7 @@ T* Object::AddComponent(Args&&... args)
 	T* component = owned.get();
 	components.push_back(std::move(owned));
 	component->owner = this;
-	if (begun) { component->Start(); }
+	if (begun) { static_cast<Component*>(component)->Start(); }
 	return component;
 }
 

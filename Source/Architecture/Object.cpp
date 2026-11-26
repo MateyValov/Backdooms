@@ -30,6 +30,8 @@ void Object::DetachFromHierarchy()
 
 void Object::Start()
 {
+	lastFramePosition = transform.position;
+
 	size_t n = components.size();
 	for (size_t i = 0; i < n; ++i) 
 	{ 
@@ -44,19 +46,28 @@ void Object::Update()
 	{
 		transform = parent->GetTransform() + localTransform;
 	}
-
+	
 	if (isActive)
 	{
+		frameDelta = Vector2(transform.position.x - lastFramePosition.x, transform.position.y - lastFramePosition.y);
+		lastFramePosition = transform.position;
+
+		float dt =Engine::GetDeltaTime();
+		if (dt > 0.f)
+		{
+			velocity = Vector2(frameDelta.x / (dt * TILE_SIZE),
+				frameDelta.y / (dt * TILE_SIZE));
+		}
+
 		size_t count = components.size();
 		for (size_t i = 0; i < count; ++i)
 		{
-			if (components[i]->removed == false || components[i]->IsActive() == false)
+			if (components[i]->removed || components[i]->IsActive() == false)
 			{
 				continue;
 			}
 			components[i]->Update();
 		}
-
 		OnUpdate();
 	}
 	               
@@ -102,6 +113,16 @@ Transform Object::GetTransform() const
 Transform Object::GetLocalTransform() const
 {
 	return parent != nullptr ? localTransform : transform;
+}
+
+Vector2 Object::GetVelocity() const
+{
+	return velocity;
+}
+
+float Object::GetSpeed() const
+{
+	return velocity.magnitude();
 }
 
 void Object::SetParent(Object* parent, Transform offset)

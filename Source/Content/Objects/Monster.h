@@ -18,6 +18,8 @@ private:
 
 	Listener onHealthDepleted;
 
+	void InitRenderer();
+
 protected:
 	float sightRange = 350.f;
 	float attackRange = 64.f;
