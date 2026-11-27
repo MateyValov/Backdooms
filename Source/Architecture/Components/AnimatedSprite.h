@@ -20,7 +20,7 @@ struct Frame
 struct Animation
 {
 	std::vector<Frame> frames = {Frame(0)};
-	float frameLength = 0.25f;
+	float frameLength = 0.15f;
 
 	Animation() = default;
 	Animation(std::vector<Frame> frames) : frames(frames) {}

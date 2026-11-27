@@ -50,7 +50,6 @@ bool HittableComponent::RestoreHealth(unsigned int amount)
 
 void HittableComponent::TakeDamage(unsigned int amount)
 {
-	Audio::PlaySoundEffect("hurt.wav");
 	SetHealth(health - amount);
 }
 

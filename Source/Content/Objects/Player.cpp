@@ -24,6 +24,7 @@ void Player::InitRenderer()
 		Frame(24, 25, 26, 27),
 			Frame(32, 33, 34, 35),
 			Frame(40, 41, 42, 43),
+			Frame(48, 49, 50, 51),
 	}), "walk");
 }
 

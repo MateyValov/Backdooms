@@ -23,6 +23,7 @@ void Monster::InitRenderer()
 		Frame(28, 29, 30, 31),
 		Frame(36, 37, 38, 39),
 		Frame(44, 45, 46, 47),
+		Frame(52, 53, 54, 55),
 	}), "walk");
 }
 
